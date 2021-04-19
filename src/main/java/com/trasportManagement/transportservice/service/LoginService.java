@@ -53,7 +53,7 @@ public class LoginService implements UserDetailsService {
 
         loginRepo.save(login);
 
-        return "Sign Up Success";
+        return "Sign Up Successfully";
     }
 
     public String changePassword(ChangePasswordRequest data) {
