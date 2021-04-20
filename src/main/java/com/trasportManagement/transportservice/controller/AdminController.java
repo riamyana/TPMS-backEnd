@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
-public class adminController {
+public class AdminController {
 
     @Autowired
     private LoginService loginService;
