@@ -23,7 +23,7 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/authenticate")
-    public JWTResponse authenticate(@RequestBody JWTRequest jwtRequest) throws Exception{
+    public JWTResponse authenticate(@RequestBody(required=true) JWTRequest jwtRequest) throws Exception{
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
