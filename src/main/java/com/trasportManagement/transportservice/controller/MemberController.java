@@ -14,30 +14,41 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@RequestMapping(path="/admin/member")
-
-public class MemberControllerForAdmin {
+public class MemberController {
     @Autowired
     MemberService memberService;
 
-    @GetMapping(path="/members")
-    @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<Result<List<MemberWithMemberType>>> getAllMembers(){
+    @PostMapping("members")
+    public ResponseEntity<Result<Member>> addMember(@RequestBody(required=true) Member m) {
+        Result<Member> memberResult = memberService.addMember(m);
+        return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
+    }
+
+    @PutMapping("members/{memberId}")
+    public ResponseEntity<Result<Member>> updateMember(@PathVariable int memberId, @RequestBody(required=true) Member m) {
+        Result<Member> memberResult = memberService.updateMember(memberId, m);
+        return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("members/{memberId}")
+    public ResponseEntity<Result<Member>> deleteMember(@PathVariable int memberId) {
+        Result<Member> memberResult = memberService.deleteMember(memberId);
+        return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/members")
+    public ResponseEntity<Result<List<MemberWithMemberType>>> getMembers(){
         Result<List<MemberWithMemberType>> memberResult =memberService.findAllMembers();
         System.out.println(memberResult.getMessage());
         return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
     }
 
-    @GetMapping(path="/members/{memberId}")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("members/{memberId}")
     public ResponseEntity<Result<MemberWithMemberType>> getMemberById(@PathVariable int memberId) {
         Result<MemberWithMemberType> memberResult = memberService.findMemberById(memberId);
-        return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
-    }
-
-    @DeleteMapping("/{memberId}")
-    public ResponseEntity<Result<Member>> deleteMember(@PathVariable int memberId) {
-        Result<Member> memberResult = memberService.deleteMember(memberId);
         return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
     }
 

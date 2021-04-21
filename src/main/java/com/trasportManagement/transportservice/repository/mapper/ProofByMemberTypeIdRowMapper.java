@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ProofByMemberTypeRowMapper implements RowMapper<Proof> {
+public class ProofByMemberTypeIdRowMapper implements RowMapper<Proof> {
 
     @Override
     public Proof mapRow(ResultSet rs, int rowNum) throws SQLException {

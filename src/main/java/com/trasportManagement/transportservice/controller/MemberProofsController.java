@@ -8,17 +8,24 @@ import com.trasportManagement.transportservice.service.MemberProofService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/admin/membersProof")
-public class MemberProofControllerForAdmin {
+public class MemberProofsController {
 
     @Autowired
     MemberProofService memberProofService;
 
+    @PostMapping("/member-proofs")
+    public ResponseEntity<Result<MemberProof>> addMemberProof(@RequestBody(required=true) MemberProof mp) {
+        Result<MemberProof> memProofResult = memberProofService.addMemberProof(mp);
+        return new ResponseEntity<>(memProofResult, HttpStatus.valueOf(memProofResult.getCode()));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/member-proofs")
     public ResponseEntity<Result<List<MemberProofsWithMemberDetails>>> getAllMembersProofDetails(){
         Result<List<MemberProofsWithMemberDetails>> proofDetailResult =memberProofService.findAllMembersProofDetails();
@@ -26,9 +33,5 @@ public class MemberProofControllerForAdmin {
         return new ResponseEntity<>(proofDetailResult, HttpStatus.valueOf(proofDetailResult.getCode()));
     }
 
-    @PostMapping("/member-proofs")
-    public ResponseEntity<Result<MemberProof>> addMemberProof(@RequestBody(required=true) MemberProof mp) {
-        Result<MemberProof> memProofResult = memberProofService.addMemberProof(mp);
-        return new ResponseEntity<>(memProofResult, HttpStatus.valueOf(memProofResult.getCode()));
-    }
+
 }

@@ -1,7 +1,6 @@
 package com.trasportManagement.transportservice.repository;
 
 import com.trasportManagement.transportservice.model.Member;
-import com.trasportManagement.transportservice.model.MemberType;
 import com.trasportManagement.transportservice.model.MemberWithMemberType;
 
 import java.util.List;

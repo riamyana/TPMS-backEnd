@@ -22,7 +22,17 @@ public class ProofService {
             return new Result<>(200, proofList);
         }
         else{
-            return new Result<>(400, "No proof found.");
+            return new Result<>(400, "No proofs found.");
+        }
+    }
+
+    public Result<List<Proof>> findProofsByMemberTypeId(int memberTypeId) {
+        List<Proof> proofList = proofRepo.findProofsByMemberTypeId(memberTypeId);
+        if(proofList.size() > 0){
+            return new Result<>(200, proofList);
+        }
+        else{
+            return new Result<>(400,"No proofs found for MemberType ID : " + memberTypeId);
         }
     }
 
