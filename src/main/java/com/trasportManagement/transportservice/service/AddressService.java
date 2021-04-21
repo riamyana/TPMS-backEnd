@@ -47,8 +47,8 @@ public class AddressService {
         }
     }
 
-    public Result<Address> updateAddress(int addressId,int memberId, Address a) {
-        int n = addressRepo.updateAddress(addressId,memberId,a);
+    public Result<Address> updateAddress(int memberId,int addressId,Address a) {
+        int n = addressRepo.updateAddress(memberId,addressId,a);
         if(n > 0){
             return new Result<>(200, a);
         }
@@ -57,8 +57,8 @@ public class AddressService {
         }
     }
 
-    public Result<Address> deleteAddress(int addressId,int memberId) {
-        int n = addressRepo.deleteAddress(addressId,memberId);
+    public Result<Address> deleteAddress(int memberId,int addressId) {
+        int n = addressRepo.deleteAddress(memberId,addressId);
         if(n > 0){
             return new Result<>(200, "Address of member with address id : " + addressId + " deleted successfully.");
         }

@@ -37,4 +37,14 @@ public class MemberProofService {
             return new Result<>(400, "No Member's proofs details found.");
         }
     }
+
+    public Result<List<MemberProofsWithMemberDetails>> findMemberProofById(int memberId) {
+        List<MemberProofsWithMemberDetails> memberProofList = memberProofRepo.findMemberProofById(memberId);
+        if(memberProofList.size() > 0){
+            return new Result<>(200, memberProofList);
+        }
+        else{
+            return new Result<>(400, "No proofs found for member id :"+memberId);
+        }
+    }
 }

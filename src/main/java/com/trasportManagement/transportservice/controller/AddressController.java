@@ -27,15 +27,15 @@ public class AddressController {
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/member/{memberId}/member-address/{addressId}")
 
-    public ResponseEntity<Result<Address>> updateAddress(@PathVariable int addressId,@PathVariable int memberId,@RequestBody(required=true) Address a) {
-        Result<Address> addressResult = addressService.updateAddress(addressId,memberId,a);
+    public ResponseEntity<Result<Address>> updateAddress(@PathVariable int memberId,@PathVariable int addressId,@RequestBody(required=true) Address a) {
+        Result<Address> addressResult = addressService.updateAddress(memberId,addressId,a);
         return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
     }
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/member/{memberId}/member-address/{addressId}")
-    public ResponseEntity<Result<Address>> deleteAddress(@PathVariable int addressId,@PathVariable int memberId) {
-        Result<Address> addressResult = addressService.deleteAddress(addressId,memberId);
+    public ResponseEntity<Result<Address>> deleteAddress(@PathVariable int memberId,@PathVariable int addressId) {
+        Result<Address> addressResult = addressService.deleteAddress(memberId,addressId);
         return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
     }
 

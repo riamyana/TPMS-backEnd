@@ -46,17 +46,19 @@ public class AddressRepoImpl implements AddressRepo{
     }
 
     @Override
-    public int updateAddress(int addressId,int memberId, Address a) {
+    public int updateAddress(int memberId,int addressId,Address a) {
         a.setAddressId(addressId);
+        a.setMemberId(memberId);
         String sql = "UPDATE Address SET addLine1=:addLine1, addLine2=:addLine2, city=:city, zipCode=:zipCode WHERE memberId=:memberId and addressId=:addressId";
         int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(a));
         return n;
     }
 
     @Override
-    public int deleteAddress(int addressId,int memberId) {
+    public int deleteAddress(int memberId,int addressId) {
         Address m = new Address();
         m.setAddressId(addressId);
+        m.setMemberId(memberId);
         String sql = "DELETE FROM Address WHERE memberId=:memberId and addressId=:addressId";
         return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(m));
     }

@@ -10,4 +10,6 @@ public interface MemberProofRepo {
     int addMemberProof(MemberProof mp);
 
     List<MemberProofsWithMemberDetails> findAllMembersProofDetails();
+
+    List<MemberProofsWithMemberDetails> findMemberProofById(int memberId);
 }

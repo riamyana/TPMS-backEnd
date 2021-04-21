@@ -37,4 +37,11 @@ public class MemberProofRepoImpl implements MemberProofRepo{
         List<MemberProofsWithMemberDetails> memProofDetailList = jdbcTemplate.query(sql, new MemberProofRowMapper());
         return memProofDetailList;
     }
+
+    @Override
+    public List<MemberProofsWithMemberDetails> findMemberProofById(int memberId) {
+        String sql="SELECT mp.memberId as memberid,firstName,lastName,mobileNo,dob,memProofId,proofId,uidNo,proofImage FROM MemberProof as mp INNER JOIN Member as m ON mp.memberId=m.memberId AND mp.memberId="+memberId;
+        List<MemberProofsWithMemberDetails> memProofList = jdbcTemplate.query(sql, new MemberProofRowMapper());
+        return memProofList;
+    }
 }

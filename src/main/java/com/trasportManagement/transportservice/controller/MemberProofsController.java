@@ -33,5 +33,11 @@ public class MemberProofsController {
         return new ResponseEntity<>(proofDetailResult, HttpStatus.valueOf(proofDetailResult.getCode()));
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/member/{memberId}/member-proofs")
+    public ResponseEntity<Result<List<MemberProofsWithMemberDetails>>> getMemberProofById(@PathVariable int memberId){
+        Result<List<MemberProofsWithMemberDetails>> proofDetailResult =memberProofService.findMemberProofById(memberId);
+        System.out.println(proofDetailResult.getMessage());
+        return new ResponseEntity<>(proofDetailResult, HttpStatus.valueOf(proofDetailResult.getCode()));
+    }
 }
