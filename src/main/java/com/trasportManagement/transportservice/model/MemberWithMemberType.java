@@ -8,5 +8,4 @@ import lombok.*;
 @Setter
 public class MemberWithMemberType extends Member{
     private String memberTypeName;
-
 }

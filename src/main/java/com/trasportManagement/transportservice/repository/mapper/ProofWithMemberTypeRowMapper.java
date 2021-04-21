@@ -1,6 +1,5 @@
 package com.trasportManagement.transportservice.repository.mapper;
 
-import com.trasportManagement.transportservice.model.MemberWithMemberType;
 import com.trasportManagement.transportservice.model.ProofWithMemberType;
 import org.springframework.jdbc.core.RowMapper;
 

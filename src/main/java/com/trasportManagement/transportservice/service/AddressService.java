@@ -1,7 +1,6 @@
 package com.trasportManagement.transportservice.service;
 
 import com.trasportManagement.transportservice.model.Address;
-import com.trasportManagement.transportservice.model.MemberWithMemberType;
 import com.trasportManagement.transportservice.repository.AddressRepo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +44,26 @@ public class AddressService {
             a.setAddressId(addressId);
             // Code : 201 for Insert (POST)
             return new Result<>(201, a);
+        }
+    }
+
+    public Result<Address> updateAddress(int memberId,int addressId,Address a) {
+        int n = addressRepo.updateAddress(memberId,addressId,a);
+        if(n > 0){
+            return new Result<>(200, a);
+        }
+        else{
+            return new Result<>(400, "Unable to update the member's address. Given Address id : " + addressId   + " not found.");
+        }
+    }
+
+    public Result<Address> deleteAddress(int memberId,int addressId) {
+        int n = addressRepo.deleteAddress(memberId,addressId);
+        if(n > 0){
+            return new Result<>(200, "Address of member with address id : " + addressId + " deleted successfully.");
+        }
+        else{
+            return new Result<>(400, "Unable to delete member's address. Given address id : " + addressId + " not found.");
         }
     }
 }
