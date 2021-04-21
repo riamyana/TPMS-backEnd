@@ -32,7 +32,7 @@ public class LoginRepoImpl implements LoginRepo {
 
     @Override
     public Optional<Login> findByUsername(String name){
-        final String SELECT_USER = "select * from Login where userName=:name";
+        final String SELECT_USER = "SELECT * FROM Login WHERE userName=:name";
 
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("name", name);
@@ -55,7 +55,7 @@ public class LoginRepoImpl implements LoginRepo {
     @Override
     public int save(Login login) {
         System.out.println(login);
-        final String INSERT_LOGIN = "insert into Login(userName, password, email, role) values(:userName, :password, :email, :role)";
+        final String INSERT_LOGIN = "INSERT INTO Login(userName, password, email, role) VALUES(:userName, :password, :email, :role)";
         System.out.println(INSERT_LOGIN);
 
         KeyHolder holder = new GeneratedKeyHolder();
@@ -77,7 +77,7 @@ public class LoginRepoImpl implements LoginRepo {
                 .getPrincipal();
         String username = userDetails.getUsername();
 
-        final String SELECT_PASSWORD = "select password from Login where userName=:name";
+        final String SELECT_PASSWORD = "SELECT password FROM Login WHERE userName=:name";
 
         SqlParameterSource name = new MapSqlParameterSource()
                 .addValue("name", username);
@@ -89,7 +89,7 @@ public class LoginRepoImpl implements LoginRepo {
         }
 
         String encodedNewPassword = bCryptPasswordEncoder.encode(data.getNewPassword());
-        final String CHANGE_PASSWORD = "update Login set password=:newPassword where userName=:userName";
+        final String CHANGE_PASSWORD = "UPDATE Login SET password=:newPassword WHERE userName=:userName";
 
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("userName", username)
