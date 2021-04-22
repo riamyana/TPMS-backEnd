@@ -9,10 +9,11 @@ import java.util.List;
 @Repository
 public interface ProofRepo {
     List<ProofWithMemberType> findAllProofs();
-
     int addProof(Proof p);
 
     int updateProof(int proofId,Proof p);
 
     int deleteProof(int proofId);
+
+    List<Proof> findProofsByMemberTypeId(int memberTypeId);
 }

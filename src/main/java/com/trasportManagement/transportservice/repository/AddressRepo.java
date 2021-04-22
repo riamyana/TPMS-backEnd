@@ -11,8 +11,8 @@ public interface AddressRepo {
 
     int addAddress(Address a);
 
-    //int updateAddress(int memberId,Member m);
+    int updateAddress(int memberId,int addressId,Address a);
 
-    //int deleteMember(int memberId);
+    int deleteAddress(int memberId,int addressId);
 
 }

@@ -1,7 +1,6 @@
 package com.trasportManagement.transportservice.repository.mapper;
 
 import com.trasportManagement.transportservice.model.Address;
-import com.trasportManagement.transportservice.model.Member;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

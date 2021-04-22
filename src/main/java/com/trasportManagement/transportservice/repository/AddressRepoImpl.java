@@ -1,9 +1,7 @@
 package com.trasportManagement.transportservice.repository;
 
 import com.trasportManagement.transportservice.model.Address;
-import com.trasportManagement.transportservice.model.MemberWithMemberType;
 import com.trasportManagement.transportservice.repository.mapper.AddressRowMapper;
-import com.trasportManagement.transportservice.repository.mapper.MemberWithMemberTypeRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -43,8 +41,25 @@ public class AddressRepoImpl implements AddressRepo{
         if(n > 0){
             return holder.getKey().intValue();
         }
-        else{
+        else
             return 0;
-        }
+    }
+
+    @Override
+    public int updateAddress(int memberId,int addressId,Address a) {
+        a.setAddressId(addressId);
+        a.setMemberId(memberId);
+        String sql = "UPDATE Address SET addLine1=:addLine1, addLine2=:addLine2, city=:city, zipCode=:zipCode WHERE memberId=:memberId and addressId=:addressId";
+        int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(a));
+        return n;
+    }
+
+    @Override
+    public int deleteAddress(int memberId,int addressId) {
+        Address m = new Address();
+        m.setAddressId(addressId);
+        m.setMemberId(memberId);
+        String sql = "DELETE FROM Address WHERE memberId=:memberId and addressId=:addressId";
+        return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(m));
     }
 }

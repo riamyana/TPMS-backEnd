@@ -1,10 +1,8 @@
 package com.trasportManagement.transportservice.repository;
 
-import com.trasportManagement.transportservice.model.MemberType;
-import com.trasportManagement.transportservice.model.MemberWithMemberType;
 import com.trasportManagement.transportservice.model.Proof;
 import com.trasportManagement.transportservice.model.ProofWithMemberType;
-import com.trasportManagement.transportservice.repository.mapper.MemberWithMemberTypeRowMapper;
+import com.trasportManagement.transportservice.repository.mapper.ProofByMemberTypeIdRowMapper;
 import com.trasportManagement.transportservice.repository.mapper.ProofWithMemberTypeRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -28,6 +26,14 @@ public class ProofRepoImpl implements ProofRepo{
         List<ProofWithMemberType> proofList = jdbcTemplate.query(sql, new ProofWithMemberTypeRowMapper());
         return proofList;
     }
+
+    @Override
+    public List<Proof> findProofsByMemberTypeId(int memberTypeId) {
+        String sql="SELECT proofId,proofName FROM Proof as p INNER JOIN MemberType as mt ON p.memberTypeId=mt.memberTypeId AND mt.memberTypeId=" + memberTypeId;
+        List<Proof> proofList = jdbcTemplate.query(sql, new ProofByMemberTypeIdRowMapper());
+        return proofList;
+    }
+
 
     @Override
     public int addProof(Proof p) {
