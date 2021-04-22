@@ -1,6 +1,5 @@
 package com.trasportManagement.transportservice.service;
 
-import com.trasportManagement.transportservice.model.MemberWithMemberType;
 import com.trasportManagement.transportservice.model.Pass;
 import com.trasportManagement.transportservice.model.PassWithMemberDetails;
 import com.trasportManagement.transportservice.repository.PassRepo;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
