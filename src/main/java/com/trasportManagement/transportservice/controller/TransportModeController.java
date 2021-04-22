@@ -1,5 +1,6 @@
 package com.trasportManagement.transportservice.controller;
 
+import com.trasportManagement.transportservice.model.Package;
 import com.trasportManagement.transportservice.model.TransportMode;
 import com.trasportManagement.transportservice.response.Result;
 import com.trasportManagement.transportservice.service.TransportModeService;
@@ -17,7 +18,7 @@ public class TransportModeController {
     @Autowired
     TransportModeService transportModeService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/transport-modes")
     public ResponseEntity<Result<TransportMode>> addTransportMode(@RequestBody(required=true) TransportMode t) {
 
@@ -26,7 +27,15 @@ public class TransportModeController {
         return new ResponseEntity<>(modeResult, HttpStatus.valueOf(modeResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/transport-modes")
+    public ResponseEntity<Result<List<TransportMode>>> findAllTransportMode() {
+
+        Result<List<TransportMode>>  modeResult= transportModeService.findAllTransportMode();
+        return new ResponseEntity<>(modeResult, HttpStatus.valueOf(modeResult.getCode()));
+
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/transport-modes/{id}")
     public ResponseEntity<Result<TransportMode>> updateTransportMode(@PathVariable int id, @RequestBody(required=true) TransportMode t) {
 
@@ -34,19 +43,11 @@ public class TransportModeController {
         return new ResponseEntity<>(modeResult, HttpStatus.valueOf(modeResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/transport-modes/{id}")
     public ResponseEntity<Result<TransportMode>> deleteTransportMode(@PathVariable int id) {
 
         Result<TransportMode>  modeResult= transportModeService.deleteTransportMode(id);
-        return new ResponseEntity<>(modeResult, HttpStatus.valueOf(modeResult.getCode()));
-
-    }
-
-    @GetMapping("/transport-modes")
-    public ResponseEntity<Result<List<TransportMode>>> findAllTransportMode() {
-
-        Result<List<TransportMode>>  modeResult= transportModeService.findAllTransportMode();
         return new ResponseEntity<>(modeResult, HttpStatus.valueOf(modeResult.getCode()));
 
     }

@@ -1,23 +1,16 @@
 package com.trasportManagement.transportservice.repository;
 
-import com.trasportManagement.transportservice.model.Login;
-import com.trasportManagement.transportservice.model.MemberWithMemberType;
 import com.trasportManagement.transportservice.model.Pass;
 import com.trasportManagement.transportservice.model.PassWithMemberDetails;
-import com.trasportManagement.transportservice.repository.mapper.MemberWithMemberTypeRowMapper;
 import com.trasportManagement.transportservice.repository.mapper.PassWithMemberDetailsRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Repository(value = "passRepo")
 public class PassRepoImpl implements PassRepo{

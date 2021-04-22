@@ -21,7 +21,7 @@ public class TransportModeService {
         int result = transportModeRepo.addTransportMode(t);
 
         if(result == 0){
-            return new Result<>(400, "Error in adding pass details.");
+            return new Result<>(400, "Error in adding transport mode details.");
         }else if(result < 0){
             return new Result<>(400, "Transport mode name already exists.");
         }

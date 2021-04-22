@@ -18,21 +18,21 @@ public class PassController {
     @Autowired
     PassService passService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/passes")
     public ResponseEntity<Result<Pass>> addPass(@RequestBody(required=true) Pass p) {
         Result<Pass> passResult = passService.addPass(p);
         return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/passes/{passId}")
-    public ResponseEntity<Result<Pass>> updatePass(@PathVariable int passId, @RequestBody(required=true) Pass p) {
+    public ResponseEntity<Result<Pass>> updatePass(@PathVariable int passId,   Pass p) {
         Result<Pass> passResult = passService.updatePass(passId,p);
         return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/passes/{passId}")
     public ResponseEntity<Result<Pass>> deletePass(@PathVariable int passId) {
         Result<Pass> passResult = passService.deletePass(passId);
@@ -51,14 +51,14 @@ public class PassController {
         return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/passes/member")
     public ResponseEntity<Result<List<PassWithMemberDetails>>> getMemberPass(){
         Result<List<PassWithMemberDetails>> passResult =passService.findAllMemberPasses();
         return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/passes")
     public ResponseEntity<Result<List<Pass>>> getPass(){
         Result<List<Pass>> passResult =passService.findAllPasses();
