@@ -1,6 +1,8 @@
 package com.trasportManagement.transportservice.controller;
 
+import com.trasportManagement.transportservice.model.PackageByTransportDTO;
 import com.trasportManagement.transportservice.model.TransportPackage;
+import com.trasportManagement.transportservice.model.TransportPackageDTO;
 import com.trasportManagement.transportservice.response.Result;
 import com.trasportManagement.transportservice.service.TransportPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class TransportPackageController {
@@ -34,5 +38,11 @@ public class TransportPackageController {
     public ResponseEntity<Result<TransportPackage>> deleteTransportPackage(@PathVariable int id) {
         Result<TransportPackage> result = transportPackageService.deleteTransportPackage(id);
         return new ResponseEntity<>(result, HttpStatus.valueOf(result.getCode()));
+    }
+
+    @GetMapping("/transport-modes-packages")
+    public ResponseEntity<Result<List<PackageByTransportDTO>>> findAllTransportModePackages(){
+        Result<List<PackageByTransportDTO>> passResult =transportPackageService.findAllTransportModePackages();
+        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
     }
 }

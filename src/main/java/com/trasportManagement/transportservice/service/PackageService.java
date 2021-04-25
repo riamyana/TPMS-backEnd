@@ -2,6 +2,7 @@ package com.trasportManagement.transportservice.service;
 
 import com.trasportManagement.transportservice.model.Package;
 import com.trasportManagement.transportservice.model.Pass;
+import com.trasportManagement.transportservice.model.SubscriptionType;
 import com.trasportManagement.transportservice.repository.PackageRopo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,27 @@ public class PackageService {
             return new Result<>(200, packages);
         }
         else{
-            return new Result<>(400, "No pass found.");
+            return new Result<>(400, "No package found.");
+        }
+    }
+
+    public Result<List<Package>> findPackageById(int id){
+        List<Package> packages = packageRopo.findPackageById(id);
+        if(packages.size() > 0){
+            return new Result<>(200, packages);
+        }
+        else{
+            return new Result<>(400, "No package found.");
+        }
+    }
+
+    public Result<List<SubscriptionType>> findAllSubscriptionType(){
+        List<SubscriptionType> types = packageRopo.findAllSubscriptionType();
+        if(types.size() > 0){
+            return new Result<>(200, types);
+        }
+        else{
+            return new Result<>(400, "No subscription type found.");
         }
     }
 

@@ -9,14 +9,11 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Package {
-
+public class Discount {
     private int id;
-    private int memberType;
-    private String name;
-    private int subscriptionType;
-    private int counts;
-    private int validity;
-    private int balance;
-    private int price;
+    private int packageId;
+    private Date startDate;
+    private Date endDate;
+    private int percentage;
+    private String description;
 }

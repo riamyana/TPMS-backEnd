@@ -1,7 +1,9 @@
 package com.trasportManagement.transportservice.controller;
 
+import com.trasportManagement.transportservice.model.Discount;
 import com.trasportManagement.transportservice.model.Package;
 import com.trasportManagement.transportservice.model.PassWithMemberDetails;
+import com.trasportManagement.transportservice.model.SubscriptionType;
 import com.trasportManagement.transportservice.response.Result;
 import com.trasportManagement.transportservice.service.PackageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,13 @@ public class PackageController {
         return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @GetMapping("/packages/{id}")
+    public ResponseEntity<Result<List<Package>>> findPackageById(@PathVariable int id){
+        Result<List<Package>> passResult = packageService.findPackageById(id);
+        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/packages/{id}")
     public ResponseEntity<Result<Package>> updatePass(@PathVariable int id,@RequestBody(required=true) Package p) {
@@ -45,4 +54,10 @@ public class PackageController {
         return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @GetMapping("/packages/subscription_type")
+    public ResponseEntity<Result<List<SubscriptionType>>> findAllSubscriptionType(){
+        Result<List<SubscriptionType>> result = packageService.findAllSubscriptionType();
+        return new ResponseEntity<>(result, HttpStatus.valueOf(result.getCode()));
+    }
 }
