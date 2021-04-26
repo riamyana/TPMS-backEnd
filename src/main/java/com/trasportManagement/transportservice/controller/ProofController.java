@@ -18,13 +18,14 @@ public class ProofController {
     @Autowired
     ProofService proofService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/proofs")
     public ResponseEntity<Result<Proof>> addProof(@RequestBody(required=true) Proof p) {
         Result<Proof> proofResult = proofService.addProof(p);
         return new ResponseEntity<>(proofResult, HttpStatus.valueOf(proofResult.getCode()));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/proofs")
     public ResponseEntity<Result<List<ProofWithMemberType>>> getAllProofs(){
         Result<List<ProofWithMemberType>> proofResult =proofService.findAllProofs();
@@ -32,21 +33,21 @@ public class ProofController {
         return new ResponseEntity<>(proofResult, HttpStatus.valueOf(proofResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/proofs/member-types/{memberTypeId}")
     public ResponseEntity<Result<List<Proof>>> getProofsByMemberTypeId(@PathVariable int memberTypeId){
         Result<List<Proof>> proofResult=proofService.findProofsByMemberTypeId(memberTypeId);
         return new ResponseEntity<>(proofResult,HttpStatus.valueOf(proofResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/proofs/{proofId}")
     public ResponseEntity<Result<Proof>> updateProof(@PathVariable int proofId, @RequestBody(required=true) Proof p) {
         Result<Proof> proofResult = proofService.updateProof(proofId, p);
         return new ResponseEntity<>(proofResult, HttpStatus.valueOf(proofResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/proofs/{proofId}")
     public ResponseEntity<Result<Proof>> deleteProof(@PathVariable int proofId) {
         Result<Proof> proofResult = proofService.deleteProof(proofId);
