@@ -23,7 +23,6 @@ public class TransportPackageRepoImpl implements TransportPackageRepo {
         if (n > 0) {
             return holder.getKey().intValue();
         }
-
         return 0;
     }
 
