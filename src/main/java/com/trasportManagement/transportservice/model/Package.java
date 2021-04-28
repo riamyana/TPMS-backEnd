@@ -12,7 +12,10 @@ import java.util.Date;
 public class Package {
 
     private int id;
+    private int memberType;
     private String name;
+    private int subscriptionType;
+    private int counts;
     private int validity;
     private int balance;
     private int price;
