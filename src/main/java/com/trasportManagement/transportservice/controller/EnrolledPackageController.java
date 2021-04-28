@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -47,4 +50,11 @@ public class EnrolledPackageController {
         Result<EnrolledPackage> enrolledResult = enrolledPackageService.deleteEnrolledPackage(id);
         return new ResponseEntity<>(enrolledResult, HttpStatus.valueOf(enrolledResult.getCode()));
     }
+
+//    @GetMapping("/enrolled-packages/demo")
+//    public void demo(){
+//        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Date curDate = new Date();
+//        System.out.println("date"+df.format(curDate));
+//    }
 }

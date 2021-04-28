@@ -86,7 +86,25 @@ public class PackageRepoImpl implements PackageRopo{
         final String SQL = "select * from SubscriptionType";
         return jdbcTemplate.query(SQL, (rs, i) ->
                 new SubscriptionType(
+                        rs.getInt("id"),
                         rs.getString("type")
+                )
+        );
+    }
+
+    @Override
+    public List<Package> findPackageBySubTypeId(int subTypeid){
+        final String SQL = "SELECT * FROM Package where subscriptionType="+subTypeid;
+        return jdbcTemplate.query(SQL, (rs, i) ->
+                new Package(
+                        rs.getInt("id"),
+                        rs.getInt("memberType"),
+                        rs.getString("name"),
+                        rs.getInt("subscriptionType"),
+                        rs.getInt("counts"),
+                        rs.getInt("validity"),
+                        rs.getInt("balance"),
+                        rs.getInt("price")
                 )
         );
     }

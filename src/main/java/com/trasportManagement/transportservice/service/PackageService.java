@@ -79,4 +79,14 @@ public class PackageService {
         }
     }
 
+    public Result<List<Package>> findPackageBySubTypeId(int subTypeId){
+        List<Package> packages = packageRopo.findPackageBySubTypeId(subTypeId);
+        if(packages.size() > 0){
+            return new Result<>(200, packages);
+        }
+        else{
+            return new Result<>(400, "No package found.");
+        }
+    }
+
 }

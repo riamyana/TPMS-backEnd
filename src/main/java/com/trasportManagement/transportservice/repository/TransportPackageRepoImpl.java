@@ -47,10 +47,10 @@ public class TransportPackageRepoImpl implements TransportPackageRepo {
 
     @Override
     public List<PackageByTransportDTO> findAllTransportModePackages() {
-        final String SQL = "SELECT tp.id, p.id AS packageId, p.name AS packageName,p.validity as validity," + "" +
-                "p.balance AS balance,p.price AS price,t.id AS transportId, t.name as transportMode FROM " + "" +
-                "Package AS p LEFT OUTER JOIN TransportPackage AS tp ON p.id = tp.packageId LEFT OUTER JOIN " + "" +
-                "TransportMode AS t ON t.id = tp.transModetId";
+        final String SQL = "SELECT tp.id, p.id AS packageId, p.name AS packageName,p.validity as validity,p.balance AS " +
+                            "balance,p.price AS price,t.id AS transportId, t.name as transportMode FROM Package AS p " +
+                            "INNER JOIN TransportPackage AS tp ON p.id = tp.packageId INNER JOIN TransportMode AS t " +
+                            "ON t.id = tp.transModetId";
         List<PackageByTransportDTO> result = (List<PackageByTransportDTO>) jdbcTemplate.query(SQL, new PackageByTransportExtractor());
         return result;
     }

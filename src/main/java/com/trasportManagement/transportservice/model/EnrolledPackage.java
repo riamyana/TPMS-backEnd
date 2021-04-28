@@ -14,6 +14,7 @@ public class EnrolledPackage {
     private int id;
     private int passId;
     private int packageId;
-    private int transModeId;
-    private Date date;
+    private Date start;
+    private Date end;
+    private int isActive;
 }

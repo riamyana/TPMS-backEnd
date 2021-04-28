@@ -37,7 +37,7 @@ public class EnrolledPackageService {
             return new Result<>(201, e);
         }
 
-        return new Result<>(400, "Unable to update. Given Transport Mode id : " + e.getId()   + " not found.");
+        return new Result<>(400, "Unable to update. Given Entrolled package id : " + e.getId()   + " not found.");
     }
 
     public Result<EnrolledPackage> deleteEnrolledPackage(int id) {

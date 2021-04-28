@@ -40,6 +40,13 @@ public class PackageController {
         return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @GetMapping("/packages/sub-type-id/{subTypeId}")
+    public ResponseEntity<Result<List<Package>>> findPackageBySubTypeId(@PathVariable int subTypeId){
+        Result<List<Package>> passResult = packageService.findPackageBySubTypeId(subTypeId);
+        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/packages/{id}")
     public ResponseEntity<Result<Package>> updatePass(@PathVariable int id,@RequestBody(required=true) Package p) {

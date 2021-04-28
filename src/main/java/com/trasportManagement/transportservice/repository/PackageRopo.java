@@ -14,4 +14,5 @@ public interface PackageRopo {
     public List<Package> findAllPackage();
     public List<Package> findPackageById(int id);
     public List<SubscriptionType> findAllSubscriptionType();
+    public List<Package> findPackageBySubTypeId(int subTypeid);
 }
