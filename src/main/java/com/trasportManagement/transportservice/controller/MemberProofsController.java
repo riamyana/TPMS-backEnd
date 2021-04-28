@@ -19,13 +19,14 @@ public class MemberProofsController {
     @Autowired
     MemberProofService memberProofService;
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/member-proofs")
     public ResponseEntity<Result<MemberProof>> addMemberProof(@RequestBody(required=true) MemberProof mp) {
         Result<MemberProof> memProofResult = memberProofService.addMemberProof(mp);
         return new ResponseEntity<>(memProofResult, HttpStatus.valueOf(memProofResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/member-proofs")
     public ResponseEntity<Result<List<MemberProofsWithMemberDetails>>> getAllMembersProofDetails(){
         Result<List<MemberProofsWithMemberDetails>> proofDetailResult =memberProofService.findAllMembersProofDetails();
@@ -33,8 +34,8 @@ public class MemberProofsController {
         return new ResponseEntity<>(proofDetailResult, HttpStatus.valueOf(proofDetailResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/member/{memberId}/member-proofs")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("hasAuthority")
     public ResponseEntity<Result<List<MemberProofsWithMemberDetails>>> getMemberProofById(@PathVariable int memberId){
         Result<List<MemberProofsWithMemberDetails>> proofDetailResult =memberProofService.findMemberProofById(memberId);
         System.out.println(proofDetailResult.getMessage());

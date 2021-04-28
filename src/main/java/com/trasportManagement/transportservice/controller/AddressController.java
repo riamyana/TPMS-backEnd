@@ -17,14 +17,14 @@ public class AddressController {
     @Autowired
     AddressService addressService;
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/member/member-address")
     public ResponseEntity<Result<Address>> addAddress(@RequestBody(required=true) Address a) {
         Result<Address> addressResult = addressService.addAddress(a);
         return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/member/{memberId}/member-address/{addressId}")
 
     public ResponseEntity<Result<Address>> updateAddress(@PathVariable int memberId,@PathVariable int addressId,@RequestBody(required=true) Address a) {
@@ -32,13 +32,14 @@ public class AddressController {
         return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @DeleteMapping("/member/{memberId}/member-address/{addressId}")
     public ResponseEntity<Result<Address>> deleteAddress(@PathVariable int memberId,@PathVariable int addressId) {
         Result<Address> addressResult = addressService.deleteAddress(memberId,addressId);
         return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<Result<List<Address>>> getAllMembersAddress(){
         Result<List<Address>> addressResult =addressService.findAllMembersAddress();
@@ -46,6 +47,7 @@ public class AddressController {
         return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(path="/{memberId}")
     public ResponseEntity<Result<List<Address>>> getMemberAddressById(@PathVariable int memberId) {
         Result<List<Address>> addressResult = addressService.findMemberAddressById(memberId);
