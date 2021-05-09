@@ -66,4 +66,5 @@ public class AddressService {
             return new Result<>(400, "Unable to delete member's address. Given address id : " + addressId + " not found.");
         }
     }
+
 }

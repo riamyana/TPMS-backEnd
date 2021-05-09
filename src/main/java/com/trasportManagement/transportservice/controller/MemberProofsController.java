@@ -35,7 +35,7 @@ public class MemberProofsController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("hasAuthority")
+    @GetMapping("/member/{memberId}/member-proofs")
     public ResponseEntity<Result<List<MemberProofsWithMemberDetails>>> getMemberProofById(@PathVariable int memberId){
         Result<List<MemberProofsWithMemberDetails>> proofDetailResult =memberProofService.findMemberProofById(memberId);
         System.out.println(proofDetailResult.getMessage());

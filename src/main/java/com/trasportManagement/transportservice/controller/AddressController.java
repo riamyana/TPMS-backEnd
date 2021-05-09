@@ -1,6 +1,7 @@
 package com.trasportManagement.transportservice.controller;
 
 import com.trasportManagement.transportservice.model.Address;
+
 import com.trasportManagement.transportservice.response.Result;
 import com.trasportManagement.transportservice.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class AddressController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping
+    @GetMapping("/member/member-address")
     public ResponseEntity<Result<List<Address>>> getAllMembersAddress(){
         Result<List<Address>> addressResult =addressService.findAllMembersAddress();
         System.out.println(addressResult.getMessage());
@@ -48,9 +49,16 @@ public class AddressController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping(path="/{memberId}")
+    @GetMapping("/member/member-address/{memberId}")
     public ResponseEntity<Result<List<Address>>> getMemberAddressById(@PathVariable int memberId) {
         Result<List<Address>> addressResult = addressService.findMemberAddressById(memberId);
         return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
     }
+
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    @GetMapping("/member/member-address/{memberId}")
+//    public ResponseEntity<Result<List<MemberDetailWithAddress>>> getMemAddressById(@PathVariable int memberId) {
+//        Result<List<MemberDetailWithAddress>> addressResult = addressService.findMemAddressById(memberId);
+//        return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
+//    }
 }

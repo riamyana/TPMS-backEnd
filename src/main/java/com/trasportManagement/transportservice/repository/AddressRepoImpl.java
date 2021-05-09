@@ -1,6 +1,8 @@
 package com.trasportManagement.transportservice.repository;
 
 import com.trasportManagement.transportservice.model.Address;
+
+
 import com.trasportManagement.transportservice.repository.mapper.AddressRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -62,4 +64,5 @@ public class AddressRepoImpl implements AddressRepo{
         String sql = "DELETE FROM Address WHERE memberId=:memberId and addressId=:addressId";
         return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(m));
     }
+
 }

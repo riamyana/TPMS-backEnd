@@ -39,14 +39,13 @@ public class StationController {
         return new ResponseEntity<>(stationResult, HttpStatus.valueOf(stationResult.getCode()));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/stations")
     public ResponseEntity<Result<List<Station>>> getStations(){
         Result<List<Station>> stationResult =stationService.findAllStation();
         return new ResponseEntity<>(stationResult, HttpStatus.valueOf(stationResult.getCode()));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     @GetMapping("/stations/{stationId}")
     public ResponseEntity<Result<Station>> getStationById(@PathVariable int stationId){
         Result<Station> stationResult =stationService.findStationById(stationId);

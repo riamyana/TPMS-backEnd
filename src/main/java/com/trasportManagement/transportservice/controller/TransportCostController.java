@@ -38,14 +38,14 @@ public class TransportCostController {
         return new ResponseEntity<>(transportCostResult, HttpStatus.valueOf(transportCostResult.getCode()));
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+
     @GetMapping("/transports-cost")
     public ResponseEntity<Result<List<TransCostWithStationDetails>>> getTransportCost() {
         Result<List<TransCostWithStationDetails>> result = transportCostService.findTransportCost();
         return new ResponseEntity<>(result, HttpStatus.valueOf(result.getCode()));
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+
     @GetMapping("/transports-cost/from-station/{fromStationId}/to-station/{toStationId}")
     public ResponseEntity<Result<List<TransCostFromToStation>>> getCostFromToStation(@PathVariable int fromStationId, @PathVariable int toStationId) {
         Result <List<TransCostFromToStation>> result = transportCostService.findCostFromToStation(fromStationId,toStationId);

@@ -10,6 +10,11 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 @Repository(value = "transportHistoryRepo")
 public class TransportHistoryImpl implements TransportHistoryRepo{
@@ -19,6 +24,12 @@ public class TransportHistoryImpl implements TransportHistoryRepo{
 
     @Override
     public int addTransportHistory(TransportHistory t) {
+
+//        Date date=new Date();
+//        Timestamp startDate = new Timestamp(date.getTime());
+//        System.out.println(startDate);
+//        t.setFromDateTime(startDate);
+
         KeyHolder holder = new GeneratedKeyHolder();
         String sql = "INSERT INTO TransportHistory (passId,fromStationId, toStationId,fromDateTime,toDateTime) VALUES (:passId,:fromStationId,:toStationId,:fromDateTime,:toDateTime)";
         int n =jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(t), holder);

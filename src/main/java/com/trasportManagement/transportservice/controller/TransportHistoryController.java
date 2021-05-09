@@ -29,7 +29,7 @@ public class TransportHistoryController {
         return new ResponseEntity<>(transportHistoryResult, HttpStatus.valueOf(transportHistoryResult.getCode()));
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+
     @GetMapping("/transports-history/members/{memberId}")
     public ResponseEntity<Result<List<TransHistoryWithPassStationDetails>>> getTransHistoryByMemberID(@PathVariable int memberId) {
         Result<List<TransHistoryWithPassStationDetails>> transportHistoryResult = transportHistoryService.findTransHistoryByMemberID(memberId);

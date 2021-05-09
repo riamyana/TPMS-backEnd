@@ -25,7 +25,7 @@ public class ProofController {
         return new ResponseEntity<>(proofResult, HttpStatus.valueOf(proofResult.getCode()));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     @GetMapping("/proofs")
     public ResponseEntity<Result<List<ProofWithMemberType>>> getAllProofs(){
         Result<List<ProofWithMemberType>> proofResult =proofService.findAllProofs();
@@ -33,7 +33,7 @@ public class ProofController {
         return new ResponseEntity<>(proofResult, HttpStatus.valueOf(proofResult.getCode()));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     @GetMapping("/proofs/member-types/{memberTypeId}")
     public ResponseEntity<Result<List<Proof>>> getProofsByMemberTypeId(@PathVariable int memberTypeId){
         Result<List<Proof>> proofResult=proofService.findProofsByMemberTypeId(memberTypeId);

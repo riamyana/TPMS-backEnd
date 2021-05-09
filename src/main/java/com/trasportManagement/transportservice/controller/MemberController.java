@@ -18,14 +18,12 @@ public class MemberController {
     @Autowired
     MemberService memberService;
 
-    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("members")
     public ResponseEntity<Result<Member>> addMember(@RequestBody(required=true) Member m) {
         Result<Member> memberResult = memberService.addMember(m);
         return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("members/{memberId}")
     public ResponseEntity<Result<Member>> updateMember(@PathVariable int memberId, @RequestBody(required=true) Member m) {
         Result<Member> memberResult = memberService.updateMember(memberId, m);
@@ -33,14 +31,14 @@ public class MemberController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("members/{memberId}")
+    @DeleteMapping("/members/{memberId}")
     public ResponseEntity<Result<Member>> deleteMember(@PathVariable int memberId) {
         Result<Member> memberResult = memberService.deleteMember(memberId);
         return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/members")
+    @GetMapping("/members")
     public ResponseEntity<Result<List<MemberWithMemberType>>> getMembers(){
         Result<List<MemberWithMemberType>> memberResult =memberService.findAllMembers();
         System.out.println(memberResult.getMessage());
@@ -53,5 +51,6 @@ public class MemberController {
         Result<MemberWithMemberType> memberResult = memberService.findMemberById(memberId);
         return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
     }
+
 
 }

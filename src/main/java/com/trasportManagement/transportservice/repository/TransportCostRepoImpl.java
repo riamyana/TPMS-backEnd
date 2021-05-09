@@ -3,6 +3,7 @@ package com.trasportManagement.transportservice.repository;
 import com.trasportManagement.transportservice.model.TransCostFromToStation;
 import com.trasportManagement.transportservice.model.TransCostWithStationDetails;
 import com.trasportManagement.transportservice.model.TransportCost;
+import com.trasportManagement.transportservice.repository.mapper.TransCostFromToStationMapper;
 import com.trasportManagement.transportservice.repository.mapper.TransCostWithStationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
