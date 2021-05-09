@@ -21,24 +21,24 @@ public class MemberProofsController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/member-proofs")
-    public ResponseEntity<Result<MemberProof>> addMemberProof(@RequestBody(required=true) MemberProof mp) {
-        Result<MemberProof> memProofResult = memberProofService.addMemberProof(mp);
-        return new ResponseEntity<>(memProofResult, HttpStatus.valueOf(memProofResult.getCode()));
+    public ResponseEntity<MemberProof> addMemberProof(@RequestBody(required=true) MemberProof mp) {
+        MemberProof memProofResult = memberProofService.addMemberProof(mp);
+        return new ResponseEntity<>(memProofResult, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/member-proofs")
-    public ResponseEntity<Result<List<MemberProofsWithMemberDetails>>> getAllMembersProofDetails(){
-        Result<List<MemberProofsWithMemberDetails>> proofDetailResult =memberProofService.findAllMembersProofDetails();
-        System.out.println(proofDetailResult.getMessage());
-        return new ResponseEntity<>(proofDetailResult, HttpStatus.valueOf(proofDetailResult.getCode()));
+    public ResponseEntity<List<MemberProofsWithMemberDetails>> getAllMembersProofDetails(){
+        List<MemberProofsWithMemberDetails> proofDetailResult =memberProofService.findAllMembersProofDetails();
+//        System.out.println(proofDetailResult.getMessage());
+        return new ResponseEntity<>(proofDetailResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("hasAuthority")
-    public ResponseEntity<Result<List<MemberProofsWithMemberDetails>>> getMemberProofById(@PathVariable int memberId){
-        Result<List<MemberProofsWithMemberDetails>> proofDetailResult =memberProofService.findMemberProofById(memberId);
-        System.out.println(proofDetailResult.getMessage());
-        return new ResponseEntity<>(proofDetailResult, HttpStatus.valueOf(proofDetailResult.getCode()));
+    public ResponseEntity<List<MemberProofsWithMemberDetails>> getMemberProofById(@PathVariable int memberId){
+        List<MemberProofsWithMemberDetails> proofDetailResult =memberProofService.findMemberProofById(memberId);
+//        System.out.println(proofDetailResult.getMessage());
+        return new ResponseEntity<>(proofDetailResult, HttpStatus.OK);
     }
 }

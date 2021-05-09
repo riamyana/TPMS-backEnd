@@ -13,7 +13,7 @@ public interface ProofRepo {
 
     int updateProof(int proofId,Proof p);
 
-    int deleteProof(int proofId);
+    boolean deleteProof(int proofId);
 
     List<Proof> findProofsByMemberTypeId(int memberTypeId);
 }

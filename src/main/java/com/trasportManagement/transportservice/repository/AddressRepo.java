@@ -13,6 +13,6 @@ public interface AddressRepo {
 
     int updateAddress(int memberId,int addressId,Address a);
 
-    int deleteAddress(int memberId,int addressId);
+    Boolean deleteAddress(int memberId, int addressId);
 
 }

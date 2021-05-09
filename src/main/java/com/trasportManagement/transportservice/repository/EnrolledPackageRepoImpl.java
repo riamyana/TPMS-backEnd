@@ -1,6 +1,7 @@
 package com.trasportManagement.transportservice.repository;
 
 import com.trasportManagement.transportservice.model.EnrolledPackage;
+import com.trasportManagement.transportservice.service.PackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -22,6 +23,9 @@ public class EnrolledPackageRepoImpl implements EnrolledPackageRepo{
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private PackageService packageService;
+
     @Override
     public int addEnrolledPackage(EnrolledPackage e) {
 
@@ -29,12 +33,7 @@ public class EnrolledPackageRepoImpl implements EnrolledPackageRepo{
         Date startDate = new Date();
         System.out.println("date"+df.format(startDate));
 
-        final String SELECT_VALIDITY = "SELECT validity FROM Package WHERE id=:packageId";
-
-        SqlParameterSource packageId = new MapSqlParameterSource()
-                .addValue("packageId", e.getPackageId());
-
-        int validity = jdbcTemplate.queryForObject(SELECT_VALIDITY, packageId, Integer.class);
+        int validity = packageService.findValidityById(e.getPackageId());
 
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
@@ -42,44 +41,38 @@ public class EnrolledPackageRepoImpl implements EnrolledPackageRepo{
 
         Date endDate = c.getTime();
 
-//        System.out.println("start"+startDate);
-//        System.out.println("validity"+validity);
-//        System.out.println("end"+endDate);
-
         e.setStart(startDate);
         e.setEnd(endDate);
 
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO EnrolledPackage (passId, packageId, start, end, isActive) VALUES (:passId, :packageId, :start, :end, :isActive)";
-        int n = jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(e), holder);
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(e), holder);
 
-        if(n > 0){
-            return holder.getKey().intValue();
-        }
-
-        return 0;
-
-    }
-
-    @Override
-    public int updateEnrolledPackage(int id, EnrolledPackage e) {
-        e.setId(id);
-        final String SQL = "UPDATE EnrolledPackage SET passId = :passId, packageId = :packageId, start=:start, end=:end, isActive=:isActive WHERE id=:id";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(e));
-    }
-
-    @Override
-    public int deleteEnrolledPackage(int id) {
-        EnrolledPackage e = new EnrolledPackage();
-        e.setId(id);
-        final String SQL = "DELETE FROM EnrolledPackage WHERE id=:id";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(e));
     }
 
     @Override
     public List<EnrolledPackage> findAllEnrolledPackage() {
         final String SQL = "SELECT * FROM EnrolledPackage where isActive=1";
         return jdbcTemplate.query(SQL, (rs, i) ->
+                new EnrolledPackage(
+                        rs.getInt("id"),
+                        rs.getInt("passId"),
+                        rs.getInt("packageId"),
+                        rs.getDate("start"),
+                        rs.getDate("end"),
+                        rs.getInt("isActive")
+                )
+        );
+    }
+
+    @Override
+    public List<EnrolledPackage> findEnrolledPackageByPassId(int passId) {
+        final String SQL = "SELECT * FROM EnrolledPackage where isActive=1 and passId=:passId";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("passId", passId);
+
+        return jdbcTemplate.query(SQL, parameters, (rs, i) ->
                 new EnrolledPackage(
                         rs.getInt("id"),
                         rs.getInt("passId"),

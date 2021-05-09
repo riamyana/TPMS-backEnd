@@ -3,13 +3,17 @@ package com.trasportManagement.transportservice.repository;
 import com.trasportManagement.transportservice.model.Package;
 import com.trasportManagement.transportservice.model.SubscriptionType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository(value="packageRepo")
 public class PackageRepoImpl implements PackageRopo{
@@ -23,13 +27,9 @@ public class PackageRepoImpl implements PackageRopo{
 
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO Package (memberType, name, subscriptionType, counts, validity, balance, price) VALUES (:memberType, :name, :subscriptionType, :counts, :validity, :balance, :price)";
-        int n = jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
 
-        if(n > 0){
-            return holder.getKey().intValue();
-        }
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
 
-        return 0;
     }
 
     @Override
@@ -40,11 +40,11 @@ public class PackageRepoImpl implements PackageRopo{
     }
 
     @Override
-    public int deletePackage(int id) {
+    public boolean deletePackage(int id) {
         Package p = new Package();
         p.setId(id);
         final String SQL = "DELETE FROM Package WHERE id=:id";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p));
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p)) > 0;
     }
 
     @Override
@@ -66,8 +66,12 @@ public class PackageRepoImpl implements PackageRopo{
 
     @Override
     public List<Package> findPackageById(int id){
-        final String SQL = "SELECT * FROM Package where id="+id;
-        return jdbcTemplate.query(SQL, (rs, i) ->
+        final String SQL = "SELECT * FROM Package where id=:id";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        return jdbcTemplate.query(SQL, parameters, (rs, i) ->
                 new Package(
                         rs.getInt("id"),
                         rs.getInt("memberType"),
@@ -94,8 +98,12 @@ public class PackageRepoImpl implements PackageRopo{
 
     @Override
     public List<Package> findPackageBySubTypeId(int subTypeid){
-        final String SQL = "SELECT * FROM Package where subscriptionType="+subTypeid;
-        return jdbcTemplate.query(SQL, (rs, i) ->
+        final String SQL = "SELECT * FROM Package where subscriptionType=:subTypeid";
+
+        SqlParameterSource parameter = new MapSqlParameterSource()
+                .addValue("subTypeid", subTypeid);
+
+        return jdbcTemplate.query(SQL, parameter, (rs, i) ->
                 new Package(
                         rs.getInt("id"),
                         rs.getInt("memberType"),
@@ -107,6 +115,22 @@ public class PackageRepoImpl implements PackageRopo{
                         rs.getInt("price")
                 )
         );
+    }
+
+    @Override
+    public Optional<Integer> findValidityById(int id) {
+        final String SELECT_VALIDITY = "SELECT validity FROM Package WHERE id=:packageId";
+
+        SqlParameterSource packageId = new MapSqlParameterSource()
+                .addValue("packageId", id);
+
+        try {
+            Optional<Integer> validity = Optional.ofNullable(jdbcTemplate.queryForObject(SELECT_VALIDITY, packageId, Integer.class));
+            return validity;
+        }catch (EmptyResultDataAccessException e) {
+            System.out.println("No record found in database for "+id);
+            return Optional.empty();
+        }
     }
 
 }

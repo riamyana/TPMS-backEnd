@@ -5,7 +5,9 @@ import com.trasportManagement.transportservice.model.TransportHistory;
 import com.trasportManagement.transportservice.repository.mapper.TransportHistoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -20,31 +22,30 @@ public class TransportHistoryImpl implements TransportHistoryRepo{
     @Override
     public int addTransportHistory(TransportHistory t) {
         KeyHolder holder = new GeneratedKeyHolder();
-        String sql = "INSERT INTO TransportHistory (passId,fromStationId, toStationId,fromDateTime,toDateTime) VALUES (:passId,:fromStationId,:toStationId,:fromDateTime,:toDateTime)";
-        int n =jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(t), holder);
-        if(n > 0){
-            return holder.getKey().intValue();
-        }
-        else {
-            return 0;
-        }
+        final String SQL = "INSERT INTO TransportHistory (passId,fromStationId, toStationId,fromDateTime,toDateTime) VALUES (:passId,:fromStationId,:toStationId,:fromDateTime,:toDateTime)";
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t), holder);
+
     }
 
     @Override
     public List<TransHistoryWithPassStationDetails> findTransportHistory() {
-        String sql="SELECT transHistoryId,t.passId as passID,serialNo,sf.stationName as fromStationName, st.stationName as toStationName, fromDateTime, toDateTime\n" +
-                "FROM TransportHistory as t INNER JOIN Station as sf ON t.fromStationId=sf.stationId\n" +
+        final String SQL = "SELECT transHistoryId,t.passId as passID,serialNo,sf.stationName as fromStationName, st.stationName as toStationName, fromDateTime, toDateTime " +
+                "FROM TransportHistory as t INNER JOIN Station as sf ON t.fromStationId=sf.stationId " +
                 "INNER JOIN Station as st ON t.toStationId=st.stationId INNER JOIN Pass as p ON t.passId=p.id";
-        List<TransHistoryWithPassStationDetails> transHistoryList = jdbcTemplate.query(sql, new TransportHistoryMapper());
+        List<TransHistoryWithPassStationDetails> transHistoryList = jdbcTemplate.query(SQL, new TransportHistoryMapper());
         return transHistoryList;
     }
 
     @Override
     public List<TransHistoryWithPassStationDetails> findTransHistoryByMemberID(int memberId) {
-        String sql="SELECT transHistoryId,t.passId as passID,serialNo,sf.stationName as fromStationName, st.stationName as toStationName, fromDateTime, toDateTime\n" +
-                "FROM TransportHistory as t INNER JOIN Station as sf ON t.fromStationId=sf.stationId\n" +
-                "INNER JOIN Station as st ON t.toStationId=st.stationId INNER JOIN Pass as p ON t.passId=p.id AND memberID="+memberId;
-        List<TransHistoryWithPassStationDetails> transHistoryList = jdbcTemplate.query(sql, new TransportHistoryMapper());
+        final String SQL= "SELECT transHistoryId,t.passId as passID,serialNo,sf.stationName as fromStationName, st.stationName as toStationName, fromDateTime, toDateTime " +
+                "FROM TransportHistory as t INNER JOIN Station as sf ON t.fromStationId=sf.stationId " +
+                "INNER JOIN Station as st ON t.toStationId=st.stationId INNER JOIN Pass as p ON t.passId=p.id AND memberID=:memberId";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("memberId", memberId);
+
+        List<TransHistoryWithPassStationDetails> transHistoryList = jdbcTemplate.query(SQL, parameters, new TransportHistoryMapper());
         return transHistoryList;
     }
 }

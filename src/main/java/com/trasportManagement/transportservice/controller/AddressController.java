@@ -19,38 +19,38 @@ public class AddressController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/member/member-address")
-    public ResponseEntity<Result<Address>> addAddress(@RequestBody(required=true) Address a) {
-        Result<Address> addressResult = addressService.addAddress(a);
-        return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
+    public ResponseEntity<Address> addAddress(@RequestBody(required=true) Address a) {
+        Address addressResult = addressService.addAddress(a);
+        return new ResponseEntity<>(addressResult, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/member/{memberId}/member-address/{addressId}")
 
-    public ResponseEntity<Result<Address>> updateAddress(@PathVariable int memberId,@PathVariable int addressId,@RequestBody(required=true) Address a) {
-        Result<Address> addressResult = addressService.updateAddress(memberId,addressId,a);
-        return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
+    public ResponseEntity<Address> updateAddress(@PathVariable int memberId,@PathVariable int addressId,@RequestBody(required=true) Address a) {
+        Address addressResult = addressService.updateAddress(memberId,addressId,a);
+        return new ResponseEntity<>(addressResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @DeleteMapping("/member/{memberId}/member-address/{addressId}")
-    public ResponseEntity<Result<Address>> deleteAddress(@PathVariable int memberId,@PathVariable int addressId) {
-        Result<Address> addressResult = addressService.deleteAddress(memberId,addressId);
-        return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
+    public ResponseEntity<Boolean> deleteAddress(@PathVariable int memberId,@PathVariable int addressId) {
+        Boolean addressResult = addressService.deleteAddress(memberId,addressId);
+        return new ResponseEntity<>(addressResult, HttpStatus.NO_CONTENT);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public ResponseEntity<Result<List<Address>>> getAllMembersAddress(){
-        Result<List<Address>> addressResult =addressService.findAllMembersAddress();
-        System.out.println(addressResult.getMessage());
-        return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
+    public ResponseEntity<List<Address>> getAllMembersAddress(){
+        List<Address> addressResult =addressService.findAllMembersAddress();
+//        System.out.println(addressResult.getMessage());
+        return new ResponseEntity<>(addressResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(path="/{memberId}")
-    public ResponseEntity<Result<List<Address>>> getMemberAddressById(@PathVariable int memberId) {
-        Result<List<Address>> addressResult = addressService.findMemberAddressById(memberId);
-        return new ResponseEntity<>(addressResult, HttpStatus.valueOf(addressResult.getCode()));
+    public ResponseEntity<List<Address>> getMemberAddressById(@PathVariable int memberId) {
+        List<Address> addressResult = addressService.findMemberAddressById(memberId);
+        return new ResponseEntity<>(addressResult, HttpStatus.OK);
     }
 }

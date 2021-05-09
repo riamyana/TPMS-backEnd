@@ -1,10 +1,12 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.*;
 import com.trasportManagement.transportservice.repository.StationRepo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,54 +17,50 @@ public class StationService {
     @Qualifier("stationRepo")
     StationRepo stationRepo;
 
-    public Result<Station> addStation(Station s) {
-        int stationId = stationRepo.addStation(s);
-        if(stationId == 0){
-            return new Result<>(400, "Error in adding terminal station details.");
-        }else{
-            s.setStationId(stationId);
-            // Code : 201 for Insert (POST)
-            return new Result<>(201, s);
+    public Station addStation(Station s) {
+        int n = stationRepo.addStation(s);
+        if(n == 0){
+            throw new TPMSCustomException("No record inserted for this station", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return s;
     }
 
-    public Result<Station> updateStation(int stationId, Station s) {
-        int rows = stationRepo.updateStation(stationId,s);
-        if(rows > 0){
-            return new Result<>(200, s);
+    public Station updateStation(int stationId, Station s) {
+        int n = stationRepo.updateStation(stationId,s);
+        s.setStationId(stationId);
+
+        if(n == 0){
+            throw new TPMSCustomException("Unable to update. Given station id : " + s.getStationId()   + " not found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "Unable to update. Given station id : " + s.getStationId()   + " not found.");
-        }
+
+        return s;
     }
 
-    public Result<Station> deleteStation(int stationId) {
-        int rows = stationRepo.deleteStation(stationId);
-        if(rows > 0){
-            return new Result<>(200, "Station with id : " + stationId + " deleted successfully.");
+    public Boolean deleteStation(int stationId) {
+        if(!stationRepo.deleteStation(stationId)){
+            throw new TPMSCustomException("Unable to delete. Given station id : " + stationId   + " not found.", HttpStatus.BAD_REQUEST);
         }
-        else{
-            return new Result<>(400, "Unable to delete. Given station id : " + stationId   + " not found.");
-        }
+
+        return true;
     }
 
-    public Result<List<Station>> findAllStation() {
+    public List<Station> findAllStation() {
         List<Station> stations = stationRepo.findAllStation();
-        if(stations.size() > 0){
-            return new Result<>(200, stations);
+        if(stations.isEmpty()){
+            throw  new TPMSCustomException("No station found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No station found.");
-        }
+
+        return stations;
     }
 
-    public Result<Station> findStationById(int stationId) {
+    //single data
+    public List<Station> findStationById(int stationId) {
         List<Station> stationList = stationRepo.findStationById(stationId);
-        if(stationList.size() > 0){
-            return new Result<>(200, stationList.get(0));
+        if(stationList.isEmpty()){
+            throw  new TPMSCustomException("No station found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No station found.");
-        }
+
+        return stationList;
     }
 }

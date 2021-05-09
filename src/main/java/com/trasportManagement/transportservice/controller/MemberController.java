@@ -20,38 +20,38 @@ public class MemberController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("members")
-    public ResponseEntity<Result<Member>> addMember(@RequestBody(required=true) Member m) {
-        Result<Member> memberResult = memberService.addMember(m);
-        return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
+    public ResponseEntity<Member> addMember(@RequestBody(required=true) Member m) {
+        Member memberResult = memberService.addMember(m);
+        return new ResponseEntity<>(memberResult, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("members/{memberId}")
-    public ResponseEntity<Result<Member>> updateMember(@PathVariable int memberId, @RequestBody(required=true) Member m) {
-        Result<Member> memberResult = memberService.updateMember(memberId, m);
-        return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
+    public ResponseEntity<Member> updateMember(@PathVariable int memberId, @RequestBody(required=true) Member m) {
+        Member memberResult = memberService.updateMember(memberId, m);
+        return new ResponseEntity<>(memberResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("members/{memberId}")
-    public ResponseEntity<Result<Member>> deleteMember(@PathVariable int memberId) {
-        Result<Member> memberResult = memberService.deleteMember(memberId);
-        return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
+    public ResponseEntity<Boolean> deleteMember(@PathVariable int memberId) {
+        Boolean memberResult = memberService.deleteMember(memberId);
+        return new ResponseEntity<>(memberResult, HttpStatus.NO_CONTENT);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/members")
-    public ResponseEntity<Result<List<MemberWithMemberType>>> getMembers(){
-        Result<List<MemberWithMemberType>> memberResult =memberService.findAllMembers();
-        System.out.println(memberResult.getMessage());
-        return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
+    public ResponseEntity<List<MemberWithMemberType>> getMembers(){
+        List<MemberWithMemberType> memberResult =memberService.findAllMembers();
+//        System.out.println(memberResult.getMessage());
+        return new ResponseEntity<>(memberResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("members/{memberId}")
-    public ResponseEntity<Result<MemberWithMemberType>> getMemberById(@PathVariable int memberId) {
-        Result<MemberWithMemberType> memberResult = memberService.findMemberById(memberId);
-        return new ResponseEntity<>(memberResult, HttpStatus.valueOf(memberResult.getCode()));
+    public ResponseEntity<List<MemberWithMemberType>> getMemberById(@PathVariable int memberId) {
+        List<MemberWithMemberType> memberResult = memberService.findMemberById(memberId);
+        return new ResponseEntity<>(memberResult, HttpStatus.OK);
     }
 
 }

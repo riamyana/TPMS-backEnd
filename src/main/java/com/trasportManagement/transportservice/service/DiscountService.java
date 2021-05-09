@@ -1,10 +1,11 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.Discount;
 import com.trasportManagement.transportservice.repository.DiscountRepo;
-import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,45 +17,41 @@ public class DiscountService {
     @Autowired
     DiscountRepo discountRepo;
 
-    public Result<Discount> addDiscount(Discount d){
-        int id = discountRepo.addDiscount(d);
+    public Discount addDiscount(Discount d){
+        int n = discountRepo.addDiscount(d);
 
-        if(id == 0){
-            return new Result<>(400, "Error in adding discount.");
-        }else{
-            d.setId(id);
-            return new Result<>(201, d);
+        if (n == 0) {
+            throw new TPMSCustomException("No record inserted of this discount", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return d;
     }
 
-    public Result<Discount> updateDiscount(int id, Discount d){
+    public Discount updateDiscount(int id, Discount d) throws Exception{
         int n = discountRepo.updateDiscount(id,d);
+        d.setId(id);
 
-        if(n > 0){
-            return new Result<>(200, d);
+        if(n == 0){
+            throw new TPMSCustomException("Unable to update. Given Discount id : "+ id, HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "Unable to update the discount for package");
-        }
+
+        return d;
     }
 
-    public Result<Discount> deleteDiscount(int id){
-        int n = discountRepo.deleteDiscount(id);
-        if(n > 0){
-            return new Result<>(200, "Discount of package with discount id : " + id + " deleted successfully.");
+    public Boolean deleteDiscount(int id){
+        if(!discountRepo.deleteDiscount(id)){
+            throw new TPMSCustomException("Unable to delete discount. Given discount id : " + id + " not found.", HttpStatus.BAD_REQUEST);
         }
-        else{
-            return new Result<>(400, "Unable to delete discount. Given discount id : " + id + " not found.");
-        }
+
+        return true;
     }
 
-    public Result<List<Discount>> findAllDiscounts(int packageId){
-        List<Discount> result = discountRepo.findAllDiscounts(packageId);
-        if(result.size() > 0){
-            return new Result<>(200, result);
+    public List<Discount> findAllDiscounts(int packageId) throws TPMSCustomException {
+        List<Discount> result = discountRepo.findAllDiscount(packageId);
+
+        if(result.isEmpty()){
+            throw new TPMSCustomException("No discount found", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No discount found.");
-        }
+
+        return result;
     }
 }

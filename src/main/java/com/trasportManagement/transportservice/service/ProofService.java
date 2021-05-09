@@ -1,11 +1,13 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.Proof;
 import com.trasportManagement.transportservice.model.ProofWithMemberType;
 import com.trasportManagement.transportservice.repository.ProofRepo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,54 +18,50 @@ public class ProofService {
     @Qualifier("proofRepo")
     ProofRepo proofRepo;
 
-    public Result<List<ProofWithMemberType>> findAllProofs(){
+    public List<ProofWithMemberType> findAllProofs(){
         List<ProofWithMemberType> proofList = proofRepo.findAllProofs();
-        if(proofList.size() > 0){
-            return new Result<>(200, proofList);
+        if(proofList.isEmpty()){
+            throw  new TPMSCustomException("No proofs found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No proofs found.");
-        }
+
+        return proofList;
     }
 
-    public Result<List<Proof>> findProofsByMemberTypeId(int memberTypeId) {
+    public List<Proof> findProofsByMemberTypeId(int memberTypeId) {
         List<Proof> proofList = proofRepo.findProofsByMemberTypeId(memberTypeId);
-        if(proofList.size() > 0){
-            return new Result<>(200, proofList);
+        if(proofList.isEmpty()) {
+            throw new TPMSCustomException("No proofs found for MemberType ID : " + memberTypeId, HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400,"No proofs found for MemberType ID : " + memberTypeId);
-        }
+
+        return proofList;
     }
 
-    public Result<Proof> addProof(Proof p) {
-        int proofId = proofRepo.addProof(p);
-        if(proofId == 0){
-            return new Result<>(400, "Error in adding Proof.");
-        }else{
-            p.setProofId(proofId);
-            // Code : 201 for Insert (POST)
-            return new Result<>(201, p);
+    public Proof addProof(Proof p) {
+        int n = proofRepo.addProof(p);
+        if(n == 0){
+            throw new TPMSCustomException("No record inserted for this Proof", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return p;
     }
 
-    public Result<Proof> updateProof(int proofId, Proof p) {
+    public Proof updateProof(int proofId, Proof p) {
         int n = proofRepo.updateProof(proofId, p);
-        if(n > 0){
-            return new Result<>(200, p);
+        p.setProofId(proofId);
+
+        if(n == 0){
+            throw new TPMSCustomException("Unable to update. Given proof id : " + proofId   + " not found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "Unable to update. Given proof id : " + proofId   + " not found.");
-        }
+
+        return p;
     }
 
-    public Result<Proof> deleteProof(int proofId) {
-        int n = proofRepo.deleteProof(proofId);
-        if(n > 0){
-            return new Result<>(200, "Proof with id : " + proofId + " deleted successfully.");
+    public Boolean deleteProof(int proofId) {
+        if(!proofRepo.deleteProof(proofId)){
+            throw new TPMSCustomException("Unable to delete. Given proof id : " + proofId + " not found.", HttpStatus.BAD_REQUEST);
         }
-        else{
-            return new Result<>(400, "Unable to delete. Given proof id : " + proofId + " not found.");
-        }
+
+        return true;
     }
+
 }

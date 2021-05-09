@@ -20,35 +20,35 @@ public class TransportModeController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/transport-modes")
-    public ResponseEntity<Result<TransportMode>> addTransportMode(@RequestBody(required=true) TransportMode t) {
+    public ResponseEntity<TransportMode> addTransportMode(@RequestBody(required=true) TransportMode t) {
 
-        Result<TransportMode>  modeResult= transportModeService.addTransportMode(t);
+        TransportMode  modeResult= transportModeService.addTransportMode(t);
 
-        return new ResponseEntity<>(modeResult, HttpStatus.valueOf(modeResult.getCode()));
+        return new ResponseEntity<>(modeResult, HttpStatus.CREATED);
     }
 
     @GetMapping("/transport-modes")
-    public ResponseEntity<Result<List<TransportMode>>> findAllTransportMode() {
+    public ResponseEntity<List<TransportMode>> findAllTransportMode() {
 
-        Result<List<TransportMode>>  modeResult= transportModeService.findAllTransportMode();
-        return new ResponseEntity<>(modeResult, HttpStatus.valueOf(modeResult.getCode()));
+        List<TransportMode>  modeResult= transportModeService.findAllTransportMode();
+        return new ResponseEntity<>(modeResult, HttpStatus.OK);
 
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/transport-modes/{id}")
-    public ResponseEntity<Result<TransportMode>> updateTransportMode(@PathVariable int id, @RequestBody(required=true) TransportMode t) {
+    public ResponseEntity<TransportMode> updateTransportMode(@PathVariable int id, @RequestBody(required=true) TransportMode t) {
 
-        Result<TransportMode>  modeResult= transportModeService.updateTransportMode(id,t);
-        return new ResponseEntity<>(modeResult, HttpStatus.valueOf(modeResult.getCode()));
+        TransportMode  modeResult= transportModeService.updateTransportMode(id,t);
+        return new ResponseEntity<>(modeResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/transport-modes/{id}")
-    public ResponseEntity<Result<TransportMode>> deleteTransportMode(@PathVariable int id) {
+    public ResponseEntity<Boolean> deleteTransportMode(@PathVariable int id) {
 
-        Result<TransportMode>  modeResult= transportModeService.deleteTransportMode(id);
-        return new ResponseEntity<>(modeResult, HttpStatus.valueOf(modeResult.getCode()));
+        Boolean  modeResult= transportModeService.deleteTransportMode(id);
+        return new ResponseEntity<>(modeResult, HttpStatus.NO_CONTENT);
 
     }
 }
