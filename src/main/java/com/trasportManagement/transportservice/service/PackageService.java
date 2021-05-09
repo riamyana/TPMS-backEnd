@@ -1,12 +1,15 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
+import com.trasportManagement.transportservice.model.Discount;
 import com.trasportManagement.transportservice.model.Package;
-import com.trasportManagement.transportservice.model.Pass;
 import com.trasportManagement.transportservice.model.SubscriptionType;
 import com.trasportManagement.transportservice.repository.PackageRopo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,75 +21,77 @@ public class PackageService {
     @Qualifier("packageRepo")
     PackageRopo packageRopo;
 
-    public Result<Package> addPackage(Package p) {
-        int id = packageRopo.addPackage(p);
-        if(id == 0){
-            return new Result<>(400, "Error in adding package details.");
-        }else{
-            p.setId(id);
-            // Code : 201 for Insert (POST)
-            return new Result<>(201, p);
+    public Package addPackage(Package p) {
+        int n = packageRopo.addPackage(p);
+
+        if (n == 0) {
+            throw new TPMSCustomException("No record inserted of this package.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return p;
     }
 
-    public Result<Package> updatePackage(int id, Package p) {
-        int rows = packageRopo.updatePackage(id,p);
-        if(rows > 0){
-            return new Result<>(200, p);
+    public Package updatePackage(int id, Package p) {
+        int n = packageRopo.updatePackage(id, p);
+        p.setId(id);
+
+        if(n == 0){
+            throw  new TPMSCustomException("Unable to update. Given package id : " + p.getId()   + " not found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "Unable to update. Given package id : " + p.getId()   + " not found.");
-        }
+
+        return p;
     }
 
-    public Result<Package> deletePackage(int id) {
-        int rows = packageRopo.deletePackage(id);
-        if(rows > 0){
-            return new Result<>(200, "Package with id : " + id + " deleted successfully.");
+    public Boolean deletePackage(int id) {
+        if(!packageRopo.deletePackage(id)){
+            throw new TPMSCustomException("Unable to delete. Given package id : " + id   + " not found.", HttpStatus.BAD_REQUEST);
         }
-        else{
-            return new Result<>(400, "Unable to delete. Given package id : " + id   + " not found.");
-        }
+
+        return true;
     }
 
-    public Result<List<Package>> findAllPackage(){
+    public List<Package> findAllPackage(){
         List<Package> packages = packageRopo.findAllPackage();
-        if(packages.size() > 0){
-            return new Result<>(200, packages);
+        if(packages.isEmpty()){
+            throw  new TPMSCustomException("No subscription type found", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No package found.");
-        }
+
+        return packages;
     }
 
-    public Result<List<Package>> findPackageById(int id){
+    public List<Package> findPackageById(int id){
         List<Package> packages = packageRopo.findPackageById(id);
-        if(packages.size() > 0){
-            return new Result<>(200, packages);
+        if(packages.isEmpty()){
+            throw  new TPMSCustomException("No subscription type found", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No package found.");
-        }
+
+        return packages;
     }
 
-    public Result<List<SubscriptionType>> findAllSubscriptionType(){
+    public List<SubscriptionType> findAllSubscriptionType(){
         List<SubscriptionType> types = packageRopo.findAllSubscriptionType();
-        if(types.size() > 0){
-            return new Result<>(200, types);
+
+        if(types.isEmpty()){
+            throw  new TPMSCustomException("No subscription type found", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No subscription type found.");
-        }
+
+        return types;
     }
 
-    public Result<List<Package>> findPackageBySubTypeId(int subTypeId){
+    public List<Package> findPackageBySubTypeId(int subTypeId){
         List<Package> packages = packageRopo.findPackageBySubTypeId(subTypeId);
-        if(packages.size() > 0){
-            return new Result<>(200, packages);
+
+        if(packages.isEmpty()){
+            throw  new TPMSCustomException("No package found for subscription id: "+subTypeId, HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No package found.");
-        }
+        return packages;
+    }
+
+    public int findValidityById(int id){
+
+        return packageRopo.findValidityById(id)
+                .orElseThrow(() ->
+                        new TPMSCustomException("No validity found for id:"+id, HttpStatus.NOT_FOUND));
+
     }
 
 }

@@ -1,11 +1,13 @@
 
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.MemberType;
 import com.trasportManagement.transportservice.repository.MemberTypeRepo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,57 +19,54 @@ public class MemberTypeService {
     @Qualifier("memberTypeRepo")
     MemberTypeRepo memberTypeRepo;
 
-    public Result<List<MemberType>> findAllMemberTypes() {
+    public List<MemberType> findAllMemberTypes() {
         List<MemberType> memberTypeList = memberTypeRepo.findAllMemberTypes();
 //        System.out.println("Size : " + memberList.size());
-        if(memberTypeList.size() > 0){
-            return new Result<>(200,memberTypeList);
+        if(memberTypeList.isEmpty()){
+            throw  new TPMSCustomException("No MemberType found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No MemberType found.");
-        }
+
+        return  memberTypeList;
 
     }
 
-    public Result<MemberType> findMemberTypeById(int memberTypeId) {
+    //single data
+    public List<MemberType> findMemberTypeById(int memberTypeId) {
         List<MemberType> memberTypeList = memberTypeRepo.findMemberTypeById(memberTypeId);
-        if(memberTypeList.size() > 0){
-            return new Result<>(200,memberTypeList.get(0));
+        if(memberTypeList.isEmpty()) {
+            throw new TPMSCustomException("No MemberType found with memberTypeId : " + memberTypeId, HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No MemberType found with memberTypeId : " + memberTypeId);
-        }
+
+        return  memberTypeList;
 
     }
 
-    public Result<MemberType> addMemberType(MemberType m) {
-        int memberTypeId = memberTypeRepo.addMemberType(m);
-        if(memberTypeId == 0){
-            return new Result<>(400, "Error in adding memberTypeId.");
-        }else{
-            m.setMemberTypeId(memberTypeId);
-            // Code : 201 for Insert (POST)
-            return new Result<>(201, m);
+    public MemberType addMemberType(MemberType m) {
+        int n = memberTypeRepo.addMemberType(m);
+        if(n == 0){
+            throw new TPMSCustomException("No record inserted of this Member type", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return m;
     }
 
-    public Result<MemberType> updateMemberType(int memberTypeId, MemberType m) {
+    public MemberType updateMemberType(int memberTypeId, MemberType m) {
         int n = memberTypeRepo.updateMemberType(memberTypeId, m);
-        if(n > 0){
-            return new Result<>(200, m);
+        m.setMemberTypeId(memberTypeId);
+
+        if(n == 0){
+            throw  new TPMSCustomException("Unable to Update. Given memberType id : " + memberTypeId   + " not found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "Unable to Update. Given memberType id : " + memberTypeId   + " not found.");
-        }
+
+        return m;
     }
 
-    public Result<MemberType> deleteMemberType(int memberTypeId) {
-        int n = memberTypeRepo.deleteMemberType(memberTypeId);
-        if(n > 0){
-            return new Result<>(200, "MemberType with id : " + memberTypeId + " deleted successfully.");
+    public Boolean deleteMemberType(int memberTypeId) {
+        if(!memberTypeRepo.deleteMemberType(memberTypeId)){
+            throw new TPMSCustomException("Unable to delete. Given memberType id : " + memberTypeId + " not found.", HttpStatus.BAD_REQUEST);
         }
-        else{
-            return new Result<>(400, "Unable to delete. Given memberType id : " + memberTypeId + " not found.");
-        }
+
+        return true;
     }
+
 }

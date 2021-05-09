@@ -22,12 +22,8 @@ public class TransportPackageRepoImpl implements TransportPackageRepo {
     public int addTransportPackage(TransportPackage tp) {
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO TransportPackage (transModetId, packageId) VALUES (:transModeId, :packageId)";
-        int n = jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(tp), holder);
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(tp), holder);
 
-        if (n > 0) {
-            return holder.getKey().intValue();
-        }
-        return 0;
     }
 
     @Override
@@ -38,11 +34,11 @@ public class TransportPackageRepoImpl implements TransportPackageRepo {
     }
 
     @Override
-    public int deleteTransportPackage(int id) {
+    public boolean deleteTransportPackage(int id) {
         TransportPackage tp = new TransportPackage();
         tp.setId(id);
         final String SQL = "DELETE FROM TransportPackage WHERE id=:id";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(tp));
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(tp)) > 0;
     }
 
     @Override

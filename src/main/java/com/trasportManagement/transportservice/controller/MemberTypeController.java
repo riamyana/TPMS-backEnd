@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.BitSet;
 import java.util.List;
 
 @RestController
@@ -19,37 +20,37 @@ public class MemberTypeController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/member-types")
-    public ResponseEntity<Result<List<MemberType>>> getMemberTypes(){
-        Result<List<MemberType>> memberTypeResult =memberTypeService.findAllMemberTypes();
-        System.out.println(memberTypeResult.getMessage());
-        return new ResponseEntity<>(memberTypeResult, HttpStatus.valueOf(memberTypeResult.getCode()));
+    public ResponseEntity<List<MemberType>> getMemberTypes(){
+        List<MemberType> memberTypeResult =memberTypeService.findAllMemberTypes();
+//        System.out.println(memberTypeResult.getMessage());
+        return new ResponseEntity<>(memberTypeResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping(path="/member-types/{memberTypeId}")
-    public ResponseEntity<Result<MemberType>> getMemberTypeById(@PathVariable int memberTypeId) {
-        Result<MemberType> memberTypeResult = memberTypeService.findMemberTypeById(memberTypeId);
-        return new ResponseEntity<>(memberTypeResult, HttpStatus.valueOf(memberTypeResult.getCode()));
+    public ResponseEntity<List<MemberType>> getMemberTypeById(@PathVariable int memberTypeId) {
+        List<MemberType> memberTypeResult = memberTypeService.findMemberTypeById(memberTypeId);
+        return new ResponseEntity<>(memberTypeResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/member-types")
-    public ResponseEntity<Result<MemberType>> addMemberType(@RequestBody(required=true) MemberType m) {
-        Result<MemberType> memberTypeResult = memberTypeService.addMemberType(m);
-        return new ResponseEntity<>(memberTypeResult, HttpStatus.valueOf(memberTypeResult.getCode()));
+    public ResponseEntity<MemberType> addMemberType(@RequestBody(required=true) MemberType m) {
+        MemberType memberTypeResult = memberTypeService.addMemberType(m);
+        return new ResponseEntity<>(memberTypeResult, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/member-types/{memberTypeId}")
-    public ResponseEntity<Result<MemberType>> updateMemberType(@PathVariable int memberTypeId, @RequestBody(required=true) MemberType m) {
-        Result<MemberType> memberTypeResult = memberTypeService.updateMemberType(memberTypeId, m);
-        return new ResponseEntity<>(memberTypeResult, HttpStatus.valueOf(memberTypeResult.getCode()));
+    public ResponseEntity<MemberType> updateMemberType(@PathVariable int memberTypeId, @RequestBody(required=true) MemberType m) {
+        MemberType memberTypeResult = memberTypeService.updateMemberType(memberTypeId, m);
+        return new ResponseEntity<>(memberTypeResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{memberTypeId}")
-    public ResponseEntity<Result<MemberType>> deleteMemberType(@PathVariable int memberTypeId) {
-        Result<MemberType> memberTypeResult = memberTypeService.deleteMemberType(memberTypeId);
-        return new ResponseEntity<>(memberTypeResult, HttpStatus.valueOf(memberTypeResult.getCode()));
+    public ResponseEntity<Boolean> deleteMemberType(@PathVariable int memberTypeId) {
+        Boolean memberTypeResult = memberTypeService.deleteMemberType(memberTypeId);
+        return new ResponseEntity<>(memberTypeResult, HttpStatus.NO_CONTENT);
     }
 }

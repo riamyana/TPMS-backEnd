@@ -21,28 +21,28 @@ public class TransportPackageController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/transport-modes-packages")
-    public ResponseEntity<Result<TransportPackage>> addTransportPackage(@RequestBody(required=true) TransportPackage tp) {
-        Result<TransportPackage> result = transportPackageService.addTransportPackage(tp);
-        return new ResponseEntity<>(result, HttpStatus.valueOf(result.getCode()));
+    public ResponseEntity<TransportPackage> addTransportPackage(@RequestBody(required=true) TransportPackage tp) {
+        TransportPackage result = transportPackageService.addTransportPackage(tp);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/transport-modes-packages/{id}")
-    public ResponseEntity<Result<TransportPackage>> updateTransportPackage(@PathVariable int id, @RequestBody(required=true) TransportPackage tp) {
-        Result<TransportPackage> result = transportPackageService.updateTransportPackage(id,tp);
-        return new ResponseEntity<>(result, HttpStatus.valueOf(result.getCode()));
+    public ResponseEntity<TransportPackage> updateTransportPackage(@PathVariable int id, @RequestBody(required=true) TransportPackage tp) {
+        TransportPackage result = transportPackageService.updateTransportPackage(id,tp);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/transport-modes-packages/{id}")
-    public ResponseEntity<Result<TransportPackage>> deleteTransportPackage(@PathVariable int id) {
-        Result<TransportPackage> result = transportPackageService.deleteTransportPackage(id);
-        return new ResponseEntity<>(result, HttpStatus.valueOf(result.getCode()));
+    public ResponseEntity<Boolean> deleteTransportPackage(@PathVariable int id) {
+        Boolean result = transportPackageService.deleteTransportPackage(id);
+        return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/transport-modes-packages")
-    public ResponseEntity<Result<List<PackageByTransportDTO>>> findAllTransportModePackages(){
-        Result<List<PackageByTransportDTO>> passResult =transportPackageService.findAllTransportModePackages();
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    public ResponseEntity<List<PackageByTransportDTO>> findAllTransportModePackages(){
+        List<PackageByTransportDTO> passResult =transportPackageService.findAllTransportModePackages();
+        return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
 }

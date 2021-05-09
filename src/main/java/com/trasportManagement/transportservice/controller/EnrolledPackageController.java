@@ -24,32 +24,40 @@ public class EnrolledPackageController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/enrolled-packages")
-    public ResponseEntity<Result<EnrolledPackage>> addEnrolledPackage(@RequestBody(required=true) EnrolledPackage e) {
-        Result<EnrolledPackage> enrolledResult = enrolledPackageService.addEnrolledPackage(e);
-        return new ResponseEntity<>(enrolledResult, HttpStatus.valueOf(enrolledResult.getCode()));
+    public ResponseEntity<EnrolledPackage> addEnrolledPackage(@RequestBody(required=true) EnrolledPackage e) {
+        EnrolledPackage enrolledResult = enrolledPackageService.addEnrolledPackage(e);
+        return new ResponseEntity<>(enrolledResult, HttpStatus.CREATED);
     }
 
     @GetMapping("/enrolled-packages")
-    public ResponseEntity<Result<List<EnrolledPackage>>> findAllEnrolledPackage() {
+    public ResponseEntity<List<EnrolledPackage>> findAllEnrolledPackage() {
 
-        Result<List<EnrolledPackage>> enrolledResult = enrolledPackageService.findAllEnrolledPackage();
-        return new ResponseEntity<>(enrolledResult, HttpStatus.valueOf(enrolledResult.getCode()));
+        List<EnrolledPackage> enrolledResult = enrolledPackageService.findAllEnrolledPackage();
+        return new ResponseEntity<>(enrolledResult, HttpStatus.OK);
 
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/enrolled-packages/{id}")
-    public ResponseEntity<Result<EnrolledPackage>> updateEnrolledPackage(@PathVariable int id, @RequestBody(required=true) EnrolledPackage e) {
-        Result<EnrolledPackage> enrolledResult = enrolledPackageService.updateEnrolledPackage(id,e);
-        return new ResponseEntity<>(enrolledResult, HttpStatus.valueOf(enrolledResult.getCode()));
+    @GetMapping("/enrolled-packages/{passId}")
+    public ResponseEntity<List<EnrolledPackage>> findEnrolledPackageByPassId(@PathVariable int passId) {
+
+        List<EnrolledPackage> enrolledResult = enrolledPackageService.findEnrolledPackageByPassId(passId);
+        return new ResponseEntity<>(enrolledResult, HttpStatus.OK);
+
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/enrolled-packages/{id}")
-    public ResponseEntity<Result<EnrolledPackage>> deleteEnrolledPackage(@PathVariable int id) {
-        Result<EnrolledPackage> enrolledResult = enrolledPackageService.deleteEnrolledPackage(id);
-        return new ResponseEntity<>(enrolledResult, HttpStatus.valueOf(enrolledResult.getCode()));
-    }
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PutMapping("/enrolled-packages/{id}")
+//    public ResponseEntity<Result<EnrolledPackage>> updateEnrolledPackage(@PathVariable int id, @RequestBody(required=true) EnrolledPackage e) {
+//        Result<EnrolledPackage> enrolledResult = enrolledPackageService.updateEnrolledPackage(id,e);
+//        return new ResponseEntity<>(enrolledResult, HttpStatus.valueOf(enrolledResult.getCode()));
+//    }
+//
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    @DeleteMapping("/enrolled-packages/{id}")
+//    public ResponseEntity<Result<EnrolledPackage>> deleteEnrolledPackage(@PathVariable int id) {
+//        Result<EnrolledPackage> enrolledResult = enrolledPackageService.deleteEnrolledPackage(id);
+//        return new ResponseEntity<>(enrolledResult, HttpStatus.valueOf(enrolledResult.getCode()));
+//    }
 
 //    @GetMapping("/enrolled-packages/demo")
 //    public void demo(){

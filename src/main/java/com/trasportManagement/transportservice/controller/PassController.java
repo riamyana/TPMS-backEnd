@@ -27,41 +27,41 @@ public class PassController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/passes/{passId}")
-    public ResponseEntity<Result<Pass>> updatePass(@PathVariable int passId,   Pass p) {
-        Result<Pass> passResult = passService.updatePass(passId,p);
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    public ResponseEntity<Pass> updatePass(@PathVariable int passId,   Pass p) {
+        Pass passResult = passService.updatePass(passId,p);
+        return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/passes/{passId}")
-    public ResponseEntity<Result<Pass>> deletePass(@PathVariable int passId) {
-        Result<Pass> passResult = passService.deletePass(passId);
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    public ResponseEntity<Boolean> deletePass(@PathVariable int passId) {
+        Boolean passResult = passService.deletePass(passId);
+        return new ResponseEntity<>(passResult, HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/passes/{passId}/member")
-    public ResponseEntity<Result<List<PassWithMemberDetails>>> getMemberPassById(@PathVariable int passId){
-        Result<List<PassWithMemberDetails>> passResult =passService.findMemberPassById(passId);
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    public ResponseEntity<List<PassWithMemberDetails>> getMemberPassById(@PathVariable int passId){
+        List<PassWithMemberDetails> passResult =passService.findMemberPassById(passId);
+        return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
 
     @GetMapping("/passes/serial-no/{serialNo}/member")
-    public ResponseEntity<Result<List<PassWithMemberDetails>>> getMemberPassBySerialNo(@PathVariable Long serialNo){
-        Result<List<PassWithMemberDetails>> passResult =passService.findMemberPassBySerialNo(serialNo);
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    public ResponseEntity<List<PassWithMemberDetails>> getMemberPassBySerialNo(@PathVariable Long serialNo){
+        List<PassWithMemberDetails> passResult =passService.findMemberPassBySerialNo(serialNo);
+        return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/passes/member")
-    public ResponseEntity<Result<List<PassWithMemberDetails>>> getMemberPass(){
-        Result<List<PassWithMemberDetails>> passResult =passService.findAllMemberPasses();
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    public ResponseEntity<List<PassWithMemberDetails>> getMemberPass(){
+        List<PassWithMemberDetails> passResult =passService.findAllMemberPasses();
+        return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/passes")
-    public ResponseEntity<Result<List<Pass>>> getPass(){
-        Result<List<Pass>> passResult =passService.findAllPasses();
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    public ResponseEntity<List<Pass>> getPass(){
+        List<Pass> passResult =passService.findAllPasses();
+        return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
 }

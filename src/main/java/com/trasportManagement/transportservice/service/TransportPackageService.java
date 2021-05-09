@@ -1,5 +1,6 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.PackageByTransportDTO;
 import com.trasportManagement.transportservice.model.TransportPackage;
 import com.trasportManagement.transportservice.model.TransportPackageDTO;
@@ -7,6 +8,7 @@ import com.trasportManagement.transportservice.repository.TransportPackageRepo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,35 +20,32 @@ public class TransportPackageService {
     @Qualifier("transportPackageRepo")
     TransportPackageRepo transportPackageRopo;
 
-    public Result<TransportPackage> addTransportPackage(TransportPackage tp) {
-        int id = transportPackageRopo.addTransportPackage(tp);
-        if(id == 0){
-            return new Result<>(400, "Error in adding transport package details.");
-        }else{
-            tp.setId(id);
-            // Code : 201 for Insert (POST)
-            return new Result<>(201, tp);
+    public TransportPackage addTransportPackage(TransportPackage tp) {
+        int n = transportPackageRopo.addTransportPackage(tp);
+        if(n == 0){
+            throw new TPMSCustomException("No record inserted of this Tranport Package", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return tp;
     }
 
-    public Result<TransportPackage> updateTransportPackage(int id, TransportPackage p) {
-        int rows = transportPackageRopo.updateTransportPackage(id,p);
-        if(rows > 0){
-            return new Result<>(200, p);
+    public TransportPackage updateTransportPackage(int id, TransportPackage p) {
+        int n = transportPackageRopo.updateTransportPackage(id,p);
+        p.setId(id);
+
+        if(n == 0){
+            throw new TPMSCustomException("Unable to update. Given transport package id : " + p.getId()   + " not found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "Unable to update. Given transport package id : " + p.getId()   + " not found.");
-        }
+
+        return p;
     }
 
-    public Result<TransportPackage> deleteTransportPackage(int id) {
-        int rows = transportPackageRopo.deleteTransportPackage(id);
-        if(rows > 0){
-            return new Result<>(200, "Transport package with id : " + id + " deleted successfully.");
+    public Boolean deleteTransportPackage(int id) {
+        if(!transportPackageRopo.deleteTransportPackage(id)){
+            throw new TPMSCustomException("Unable to delete. Given transport package id : " + id   + " not found.", HttpStatus.BAD_REQUEST);
         }
-        else{
-            return new Result<>(400, "Unable to delete. Given transport package id : " + id   + " not found.");
-        }
+
+        return true;
     }
 
 //    public Result<List<TransportPackageDTO>> findAllTransportModePackages() {
@@ -59,14 +58,13 @@ public class TransportPackageService {
 //        }
 //    }
 
-    public Result<List<PackageByTransportDTO>> findAllTransportModePackages() {
+    public List<PackageByTransportDTO> findAllTransportModePackages() {
         List<PackageByTransportDTO> result = transportPackageRopo.findAllTransportModePackages();
-        if(result.size() > 0){
-            return new Result<>(200, result);
+        if(result.isEmpty()){
+            throw  new TPMSCustomException("No package found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No pass found.");
-        }
+
+        return result;
     }
 
 

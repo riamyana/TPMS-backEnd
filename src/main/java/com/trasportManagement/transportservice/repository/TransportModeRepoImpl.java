@@ -1,5 +1,6 @@
 package com.trasportManagement.transportservice.repository;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.TransportMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -35,40 +36,28 @@ public class TransportModeRepoImpl implements TransportModeRepo{
 
     @Override
     public int addTransportMode(TransportMode t) {
-        List<TransportMode> tm = findTransportModeByName(t.getName());
-
-        if(tm.size() > 0){
-            return -1;
-        }
 
         KeyHolder holder = new GeneratedKeyHolder();
 
         final String SQL = "INSERT INTO TransportMode (id, name) VALUES (:id, :name)";
 
-        int n = jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t), holder);
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t), holder);
 
-
-        if(n > 0){
-            return holder.getKey().intValue();
-        }
-
-        return 0;
     }
 
     @Override
     public int updateTransportMode(int id, TransportMode t) {
         t.setId(id);
         final String SQL = "UPDATE TransportMode SET name=:name WHERE id=:id";
-        int n = jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t));
-        return n;
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t));
     }
 
     @Override
-    public int deleteTransportMode(int id) {
+    public boolean deleteTransportMode(int id) {
         TransportMode t = new TransportMode();
         t.setId(id);
         final String SQL = "DELETE FROM TransportMode WHERE id=:id";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t));
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t)) > 0;
     }
 
     @Override

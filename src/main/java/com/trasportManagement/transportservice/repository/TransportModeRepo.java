@@ -10,6 +10,6 @@ public interface TransportModeRepo {
 
     public int addTransportMode(TransportMode t);
     public int updateTransportMode(int id, TransportMode t);
-    public int deleteTransportMode(int id);
+    public boolean deleteTransportMode(int id);
     public List<TransportMode> findAllTransportMode();
 }

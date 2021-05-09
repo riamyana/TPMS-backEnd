@@ -1,5 +1,6 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.MemberProof;
 import com.trasportManagement.transportservice.model.MemberProofsWithMemberDetails;
 import com.trasportManagement.transportservice.model.MemberWithMemberType;
@@ -7,6 +8,7 @@ import com.trasportManagement.transportservice.repository.MemberProofRepo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,33 +20,31 @@ public class MemberProofService {
     @Qualifier("memberProofRepo")
     MemberProofRepo memberProofRepo;
 
-    public Result<MemberProof> addMemberProof(MemberProof mp) {
-        int memberProofId = memberProofRepo.addMemberProof(mp);
-        if(memberProofId == 0){
-            return new Result<>(400, "Error in adding member's Proof data.");
-        }else{
-            mp.setMemProofId(memberProofId);
-            return new Result<>(201, mp);
+    public MemberProof addMemberProof(MemberProof mp) {
+        int n =memberProofRepo.addMemberProof(mp);
+
+        if (n == 0) {
+            throw new TPMSCustomException("No record inserted of Member proof", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return mp;
     }
 
-    public Result<List<MemberProofsWithMemberDetails>> findAllMembersProofDetails() {
+    public List<MemberProofsWithMemberDetails> findAllMembersProofDetails() {
         List<MemberProofsWithMemberDetails> memberProofDetailList = memberProofRepo.findAllMembersProofDetails();
-        if(memberProofDetailList.size() > 0){
-            return new Result<>(200, memberProofDetailList);
+        if(memberProofDetailList.isEmpty()){
+            throw  new TPMSCustomException("No Member's proofs details found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No Member's proofs details found.");
-        }
+
+        return memberProofDetailList;
     }
 
-    public Result<List<MemberProofsWithMemberDetails>> findMemberProofById(int memberId) {
+    public List<MemberProofsWithMemberDetails> findMemberProofById(int memberId) {
         List<MemberProofsWithMemberDetails> memberProofList = memberProofRepo.findMemberProofById(memberId);
-        if(memberProofList.size() > 0){
-            return new Result<>(200, memberProofList);
+
+        if(memberProofList.isEmpty()){
+            throw  new TPMSCustomException("No proofs found for member id :"+memberId, HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No proofs found for member id :"+memberId);
-        }
+
+        return  memberProofList;
     }
 }

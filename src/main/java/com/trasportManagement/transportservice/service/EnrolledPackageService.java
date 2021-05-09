@@ -1,11 +1,13 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.EnrolledPackage;
 import com.trasportManagement.transportservice.model.TransportMode;
 import com.trasportManagement.transportservice.repository.EnrolledPackageRepo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,48 +19,36 @@ public class EnrolledPackageService {
     @Autowired
     EnrolledPackageRepo enrolledPackageRepo;
 
-    public Result<EnrolledPackage> addEnrolledPackage(EnrolledPackage e) {
+    public EnrolledPackage addEnrolledPackage(EnrolledPackage e) {
 
-        int result = enrolledPackageRepo.addEnrolledPackage(e);
+        int n = enrolledPackageRepo.addEnrolledPackage(e);
 
-        if(result == 0){
-            return new Result<>(400, "Error in adding enrolled package mode details.");
+        if (n == 0) {
+            throw new TPMSCustomException("No record inserted for this Enrolled Package.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        e.setId(result);
-        return new Result<>(201, e);
+        return e;
     }
 
-    public Result<EnrolledPackage> updateEnrolledPackage(int id, EnrolledPackage e) {
-
-        int rows = enrolledPackageRepo.updateEnrolledPackage(id,e);
-
-        if(rows > 0){
-            return new Result<>(201, e);
-        }
-
-        return new Result<>(400, "Unable to update. Given Entrolled package id : " + e.getId()   + " not found.");
-    }
-
-    public Result<EnrolledPackage> deleteEnrolledPackage(int id) {
-        int rows = enrolledPackageRepo.deleteEnrolledPackage(id);
-
-        if(rows > 0){
-            return new Result<>(200, "Enrolled package with id : " + id + " deleted successfully.");
-        }
-
-        return new Result<>(400, "Unable to delete. Given enrolled package id : " + id   + " not found.");
-    }
-
-    public Result<List<EnrolledPackage>> findAllEnrolledPackage() {
+    public List<EnrolledPackage> findAllEnrolledPackage() {
 
         List<EnrolledPackage> enrolled = enrolledPackageRepo.findAllEnrolledPackage();
 
-        if (enrolled.size() > 0) {
-            return new Result<>(200, enrolled);
+        if(enrolled.isEmpty()){
+            throw  new TPMSCustomException("No enfrolled package found", HttpStatus.NOT_FOUND);
         }
 
-        return new Result<>(400, "No transport mode found.");
+        return  enrolled;
+    }
+
+    public List<EnrolledPackage> findEnrolledPackageByPassId(int passId) {
+
+        List<EnrolledPackage> enrolled = enrolledPackageRepo.findEnrolledPackageByPassId(passId);
+
+        if(enrolled.isEmpty()){
+            throw  new TPMSCustomException("No enfrolled package found", HttpStatus.NOT_FOUND);
+        }
+
+        return  enrolled;
     }
 
 

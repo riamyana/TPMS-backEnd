@@ -1,5 +1,6 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.TransCostFromToStation;
 import com.trasportManagement.transportservice.model.TransCostWithStationDetails;
 import com.trasportManagement.transportservice.model.TransportCost;
@@ -8,6 +9,7 @@ import com.trasportManagement.transportservice.repository.TransportCostRepo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,54 +21,49 @@ public class TransportCostService {
     @Qualifier("transportCostRepo")
     TransportCostRepo transportCostRepo;
 
-    public Result<TransportCost> addTransportCost(TransportCost t) {
-        int transCostId = transportCostRepo.addTransportCost(t);
-        if(transCostId == 0){
-            return new Result<>(400, "Error in adding cost of transport.");
-        }else{
-            t.setTransCostId(transCostId);
-            // Code : 201 for Insert (POST)
-            return new Result<>(201, t);
+    public TransportCost addTransportCost(TransportCost t) {
+        int n = transportCostRepo.addTransportCost(t);
+        if(n == 0){
+            throw new TPMSCustomException("No record inserted for this Transport Cost", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return t;
     }
 
-    public Result<TransportCost> updateTransportCost(int transCostId, TransportCost t) {
-        int rows = transportCostRepo.updateTransportCost(transCostId,t);
-        if(rows > 0){
-            return new Result<>(200, t);
+    public TransportCost updateTransportCost(int transCostId, TransportCost t) {
+        int n = transportCostRepo.updateTransportCost(transCostId,t);
+        t.setTransCostId(transCostId);
+
+        if(n == 0){
+            throw new TPMSCustomException("Unable to update. Given Transport cost id : " + t.getTransCostId()   + " not found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "Unable to update. Given Transport cost id : " + t.getTransCostId()   + " not found.");
-        }
+
+        return t;
     }
 
-    public Result<TransportCost> deleteTransportCost(int transCostId) {
-        int rows = transportCostRepo.deleteTransportCost(transCostId);
-        if(rows > 0){
-            return new Result<>(200, "Transport cost with id : " + transCostId + " deleted successfully.");
+    public Boolean deleteTransportCost(int transCostId) {
+        if(!transportCostRepo.deleteTransportCost(transCostId)){
+            throw new TPMSCustomException("Unable to delete. Given Transport cost id : " + transCostId   + " not found.", HttpStatus.BAD_REQUEST);
         }
-        else{
-            return new Result<>(400, "Unable to delete. Given Transport cost id : " + transCostId   + " not found.");
-        }
+
+        return true;
     }
 
-    public Result<List<TransCostWithStationDetails>> findTransportCost() {
+    public List<TransCostWithStationDetails> findTransportCost() {
         List<TransCostWithStationDetails> transCostList= transportCostRepo.findTransportCost();
-        if(transCostList.size() > 0){
-            return new Result<>(200, transCostList);
+        if(transCostList.isEmpty()){
+            throw  new TPMSCustomException("No details found for Transport cost.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No details found for Transport cost.");
-        }
+
+        return transCostList;
     }
 
-    public Result<List<TransCostFromToStation>> findCostFromToStation(int fromStationId, int toStationId) {
+    public List<TransCostFromToStation> findCostFromToStation(int fromStationId, int toStationId) {
         List<TransCostFromToStation> transCostList=transportCostRepo.findCostFromToStation(fromStationId,toStationId);
-        if(transCostList.size()>0){
-            return new Result<>(200, transCostList);
+        if(transCostList.isEmpty()){
+            throw  new TPMSCustomException("No cost found for given stations", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No cost found for given stations");
-        }
+
+        return transCostList;
     }
 }

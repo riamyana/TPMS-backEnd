@@ -16,5 +16,5 @@ public interface MemberTypeRepo {
 
     int updateMemberType(int memberTypeId,MemberType m);
 
-    int deleteMemberType(int memberTypeId);
+    boolean deleteMemberType(int memberTypeId);
 }
