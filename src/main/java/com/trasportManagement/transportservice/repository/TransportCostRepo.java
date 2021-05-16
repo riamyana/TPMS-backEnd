@@ -11,7 +11,7 @@ public interface TransportCostRepo {
 
     int updateTransportCost(int transCostId, TransportCost t);
 
-    int deleteTransportCost(int transCostId);
+    boolean deleteTransportCost(int transCostId);
 
     List<TransCostWithStationDetails> findTransportCost();
 

@@ -1,11 +1,14 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.Member;
+import com.trasportManagement.transportservice.model.MemberWithAddress;
 import com.trasportManagement.transportservice.model.MemberWithMemberType;
 import com.trasportManagement.transportservice.repository.MemberRepo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,54 +20,73 @@ public class MemberService {
     @Qualifier("memberRepo")
     MemberRepo memberRepo;
 
-    public Result<List<MemberWithMemberType>> findAllMembers(){
+    public List<Member> findMembers(){
+        List<Member> memberList=memberRepo.findMembers();
+
+        if(memberList.isEmpty()){
+            throw new TPMSCustomException("No member found.", HttpStatus.NOT_FOUND);
+        }
+
+        return memberList;
+    }
+
+    public List<MemberWithMemberType> findAllMembers(){
         List<MemberWithMemberType> memberList = memberRepo.findAllMembers();
-        if(memberList.size() > 0){
-            return new Result<>(200, memberList);
+
+        if(memberList.isEmpty()){
+            throw  new TPMSCustomException("No member found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No member found.");
-        }
+
+        return memberList;
     }
 
-    public Result<MemberWithMemberType> findMemberById(int memberId){
+
+    public List<MemberWithAddress> findMemberWithAddress() {
+        List<MemberWithAddress> memberList = memberRepo.findMemberWithAddress();
+
+        if(memberList.isEmpty()){
+            throw new TPMSCustomException("No member's address found.", HttpStatus.NOT_FOUND);
+        }
+        return memberList;
+    }
+
+    public List<MemberWithMemberType> findMemberById(int memberId){
         List<MemberWithMemberType> memberList = memberRepo.findMemberById(memberId);
-        if(memberList.size() > 0){
-            return new Result<>(200, memberList.get(0));
+
+        if(memberList.isEmpty()){
+            throw  new TPMSCustomException("No member found for given member id : " + memberId, HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No member found.");
-        }
+
+        return  memberList;
     }
 
-    public Result<Member> addMember(Member m) {
-        int memberId = memberRepo.addMember(m);
-        if(memberId == 0){
-            return new Result<>(400, "Error in adding member.");
-        }else{
-            m.setMemberId(memberId);
-            // Code : 201 for Insert (POST)
-            return new Result<>(201, m);
+    public Member addMember(Member m) {
+        int n = memberRepo.addMember(m);
+        if(n == 0){
+            throw new TPMSCustomException("No record inserted of this Member", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return m;
     }
 
-    public Result<Member> updateMember(int memberId, Member m) {
+    public Member updateMember(int memberId, Member m) {
         int n = memberRepo.updateMember(memberId, m);
-        if(n > 0){
-            return new Result<>(200, m);
+
+        m.setMemberId(memberId);
+
+        if(n == 0){
+            throw  new TPMSCustomException("Unable to update. Given member id : " + memberId   + " not found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "Unable to update. Given member id : " + memberId   + " not found.");
-        }
+
+        return m;
     }
 
-    public Result<Member> deleteMember(int memberId) {
-        int n = memberRepo.deleteMember(memberId);
-        if(n > 0){
-            return new Result<>(200, "Member with id : " + memberId + " deleted successfully.");
+    public Boolean deleteMember(int memberId) {
+        if(!memberRepo.deleteMember(memberId)){
+            throw new TPMSCustomException("Unable to delete. Given member id : " + memberId + " not found.", HttpStatus.BAD_REQUEST);
         }
-        else{
-            return new Result<>(400, "Unable to delete. Given member id : " + memberId + " not found.");
-        }
+
+        return true;
     }
+
 }

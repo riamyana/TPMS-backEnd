@@ -1,10 +1,12 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.Address;
+import com.trasportManagement.transportservice.model.MemberWithAddress;
 import com.trasportManagement.transportservice.repository.AddressRepo;
-import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,55 +18,54 @@ public class AddressService {
     @Qualifier("addressRepo")
     AddressRepo addressRepo;
 
-    public Result<List<Address>> findAllMembersAddress(){
+    public List<Address> findAllMembersAddress(){
         List<Address> addList = addressRepo.findAllMembersAddress();
-        if(addList.size() > 0){
-            return new Result<>(200, addList);
+
+        if(addList.isEmpty()){
+            throw  new TPMSCustomException("No member's address found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No member's address found.");
-        }
+
+        return  addList;
     }
 
-    public Result<List<Address>> findMemberAddressById(int memberId){
+    public List<Address> findMemberAddressById(int memberId){
         List<Address> addList = addressRepo.findMemberAddressById(memberId);
-        if(addList.size() > 0){
-            return new Result<>(200, addList);
+
+        if(addList.isEmpty()){
+            throw  new TPMSCustomException("No Address found for Member Id :", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No Address found for Member Id :" + memberId);
-        }
+
+        return addList;
     }
 
-    public Result<Address> addAddress(Address a) {
-        int addressId = addressRepo.addAddress(a);
-        if(addressId == 0){
-            return new Result<>(400, "Error in adding address of member.");
-        }else{
-            a.setAddressId(addressId);
-            // Code : 201 for Insert (POST)
-            return new Result<>(201, a);
+    public Address addAddress(Address a) {
+        int n = addressRepo.addAddress(a);
+
+        if (n == 0) {
+            throw new TPMSCustomException("No record inserted of this address", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return a;
     }
 
-    public Result<Address> updateAddress(int memberId,int addressId,Address a) {
+    public Address updateAddress(int memberId,int addressId,Address a) {
         int n = addressRepo.updateAddress(memberId,addressId,a);
-        if(n > 0){
-            return new Result<>(200, a);
+
+        a.setAddressId(addressId);
+        a.setMemberId(memberId);
+
+        if(n == 0){
+            throw new TPMSCustomException("Unable to update the member's address. Given Address id : " + addressId   + " not found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "Unable to update the member's address. Given Address id : " + addressId   + " not found.");
-        }
+
+        return a;
     }
 
-    public Result<Address> deleteAddress(int memberId,int addressId) {
-        int n = addressRepo.deleteAddress(memberId,addressId);
-        if(n > 0){
-            return new Result<>(200, "Address of member with address id : " + addressId + " deleted successfully.");
+    public Boolean deleteAddress(int memberId,int addressId) {
+        if(!addressRepo.deleteAddress(memberId,addressId)){
+            throw new TPMSCustomException("Unable to delete member's address. Given address id : " + addressId + " not found.", HttpStatus.BAD_REQUEST);
         }
-        else{
-            return new Result<>(400, "Unable to delete member's address. Given address id : " + addressId + " not found.");
-        }
-    }
 
+        return true;
+    }
 }

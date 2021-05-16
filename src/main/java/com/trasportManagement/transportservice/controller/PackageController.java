@@ -22,49 +22,56 @@ public class PackageController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/packages")
-    public ResponseEntity<Result<Package>> addPass(@RequestBody(required=true) Package p) {
-        Result<Package> passResult = packageService.addPackage(p);
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
-    }
-
-    @GetMapping("/packages")
-    public ResponseEntity<Result<List<Package>>> getMemberPassById(){
-        Result<List<Package>> passResult = packageService.findAllPackage();
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
-    }
-
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    @GetMapping("/packages/{id}")
-    public ResponseEntity<Result<List<Package>>> findPackageById(@PathVariable int id){
-        Result<List<Package>> passResult = packageService.findPackageById(id);
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
-    }
-
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    @GetMapping("/packages/sub-type-id/{subTypeId}")
-    public ResponseEntity<Result<List<Package>>> findPackageBySubTypeId(@PathVariable int subTypeId){
-        Result<List<Package>> passResult = packageService.findPackageBySubTypeId(subTypeId);
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    public ResponseEntity<Package> addPackage(@RequestBody(required=true) Package p) {
+        Package result = packageService.addPackage(p);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/packages/{id}")
-    public ResponseEntity<Result<Package>> updatePass(@PathVariable int id,@RequestBody(required=true) Package p) {
-        Result<Package> passResult = packageService.updatePackage(id,p);
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    public ResponseEntity<Package> updatePackage(@PathVariable int id,@RequestBody(required=true) Package p) {
+        Package passResult = packageService.updatePackage(id,p);
+        return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/packages/{id}")
-    public ResponseEntity<Result<Package>> deletePass(@PathVariable int id) {
-        Result<Package> passResult = packageService.deletePackage(id);
-        return new ResponseEntity<>(passResult, HttpStatus.valueOf(passResult.getCode()));
+    public ResponseEntity<Boolean> deletePackage(@PathVariable int id) {
+        Boolean passResult = packageService.deletePackage(id);
+        return new ResponseEntity<>(passResult, HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/packages")
+    public ResponseEntity<List<Package>> findAllPackage(){
+        List<Package> result = packageService.findAllPackage();
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @GetMapping("/packages/{id}")
+    public ResponseEntity<List<Package>> findPackageById(@PathVariable int id){
+        List<Package> result = packageService.findPackageById(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @GetMapping("/packages/sub-type-id/{subTypeId}")
+    public ResponseEntity<List<Package>> findPackageBySubTypeId(@PathVariable int subTypeId){
+        List<Package> result = packageService.findPackageBySubTypeId(subTypeId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/packages/subscription_type")
-    public ResponseEntity<Result<List<SubscriptionType>>> findAllSubscriptionType(){
-        Result<List<SubscriptionType>> result = packageService.findAllSubscriptionType();
-        return new ResponseEntity<>(result, HttpStatus.valueOf(result.getCode()));
+    public ResponseEntity<List<SubscriptionType>> findAllSubscriptionType(){
+        List<SubscriptionType> result = packageService.findAllSubscriptionType();
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+//    @GetMapping("/packages/validity")
+//    public int findValidity(){
+//        int result = packageService.findValidityById(10);
+//        return result;
+//    }
 }

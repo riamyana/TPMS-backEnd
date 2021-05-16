@@ -18,21 +18,21 @@ public class TransportHistoryController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/transports-history")
-    public ResponseEntity<Result<TransportHistory>> addTransportHistory(@RequestBody(required=true) TransportHistory t) {
-        Result<TransportHistory> transportHistoryResult = transportHistoryService.addTransportHistory(t);
-        return new ResponseEntity<>(transportHistoryResult, HttpStatus.valueOf(transportHistoryResult.getCode()));
+    public ResponseEntity<TransportHistory> addTransportHistory(@RequestBody(required=true) TransportHistory t) {
+        TransportHistory transportHistoryList = transportHistoryService.addTransportHistory(t);
+        return new ResponseEntity<>(transportHistoryList, HttpStatus.CREATED);
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/transports-history")
-    public ResponseEntity<Result<List<TransHistoryWithPassStationDetails>>> getTransportHistory() {
-        Result<List<TransHistoryWithPassStationDetails>> transportHistoryResult = transportHistoryService.findTransportHistory();
-        return new ResponseEntity<>(transportHistoryResult, HttpStatus.valueOf(transportHistoryResult.getCode()));
+    public ResponseEntity<List<TransHistoryWithPassStationDetails>> getTransportHistory() {
+        List<TransHistoryWithPassStationDetails> transportHistoryList = transportHistoryService.findTransportHistory();
+        return new ResponseEntity<>(transportHistoryList, HttpStatus.OK);
     }
 
 
     @GetMapping("/transports-history/members/{memberId}")
-    public ResponseEntity<Result<List<TransHistoryWithPassStationDetails>>> getTransHistoryByMemberID(@PathVariable int memberId) {
-        Result<List<TransHistoryWithPassStationDetails>> transportHistoryResult = transportHistoryService.findTransHistoryByMemberID(memberId);
-        return new ResponseEntity<>(transportHistoryResult, HttpStatus.valueOf(transportHistoryResult.getCode()));
+    public ResponseEntity<List<TransHistoryWithPassStationDetails>> getTransHistoryByMemberID(@PathVariable int memberId) {
+        List<TransHistoryWithPassStationDetails> transportHistoryList = transportHistoryService.findTransHistoryByMemberID(memberId);
+        return new ResponseEntity<>(transportHistoryList, HttpStatus.OK);
     }
 }

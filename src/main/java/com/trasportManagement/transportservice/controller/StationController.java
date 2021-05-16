@@ -20,35 +20,35 @@ public class StationController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/stations")
-    public ResponseEntity<Result<Station>> addStation(@RequestBody(required=true) Station s) {
-        Result<Station> stationResult = stationService.addStation(s);
-        return new ResponseEntity<>(stationResult, HttpStatus.valueOf(stationResult.getCode()));
+    public ResponseEntity<Station> addStation(@RequestBody(required=true) Station s) {
+        Station stationList = stationService.addStation(s);
+        return new ResponseEntity<>(stationList, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/stations/{stationId}")
-    public ResponseEntity<Result<Station>> updateStation(@PathVariable int stationId, @RequestBody(required=true) Station s) {
-        Result<Station> stationResult = stationService.updateStation(stationId,s);
-        return new ResponseEntity<>(stationResult, HttpStatus.valueOf(stationResult.getCode()));
+    public ResponseEntity<Station> updateStation(@PathVariable int stationId, @RequestBody(required=true) Station s) {
+        Station stationList = stationService.updateStation(stationId,s);
+        return new ResponseEntity<>(stationList, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/stations/{stationId}")
-    public ResponseEntity<Result<Station>> deleteStation(@PathVariable int stationId) {
-        Result<Station> stationResult = stationService.deleteStation(stationId);
-        return new ResponseEntity<>(stationResult, HttpStatus.valueOf(stationResult.getCode()));
+    public ResponseEntity<Boolean> deleteStation(@PathVariable int stationId) {
+        Boolean stationList = stationService.deleteStation(stationId);
+        return new ResponseEntity<>(stationList, HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/stations")
-    public ResponseEntity<Result<List<Station>>> getStations(){
-        Result<List<Station>> stationResult =stationService.findAllStation();
-        return new ResponseEntity<>(stationResult, HttpStatus.valueOf(stationResult.getCode()));
+    public ResponseEntity<List<Station>> getStations(){
+        List<Station> stationList =stationService.findAllStation();
+        return new ResponseEntity<>(stationList, HttpStatus.OK);
     }
 
 
     @GetMapping("/stations/{stationId}")
-    public ResponseEntity<Result<Station>> getStationById(@PathVariable int stationId){
-        Result<Station> stationResult =stationService.findStationById(stationId);
-        return new ResponseEntity<>(stationResult, HttpStatus.valueOf(stationResult.getCode()));
+    public ResponseEntity<List<Station>> getStationById(@PathVariable int stationId){
+        List<Station> stationList =stationService.findStationById(stationId);
+        return new ResponseEntity<>(stationList, HttpStatus.OK);
     }
 }

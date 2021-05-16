@@ -1,11 +1,14 @@
 package com.trasportManagement.transportservice.repository;
 
+import com.trasportManagement.transportservice.model.Discount;
 import com.trasportManagement.transportservice.model.Pass;
 import com.trasportManagement.transportservice.model.PassWithMemberDetails;
 import com.trasportManagement.transportservice.repository.mapper.PassWithMemberDetailsRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -40,15 +43,23 @@ public class PassRepoImpl implements PassRepo{
     @Override
     public List<PassWithMemberDetails> findMemberPassById(int passId) {
         final String SQL = "SELECT id,p.memberId,serialNo,expiryDate,m.firstName as firstName,m.lastName as lastName FROM Pass as p INNER JOIN Member as m ON " +
-                "p.memberId=m.memberId WHERE id = " + passId;
-        List<PassWithMemberDetails> passList = jdbcTemplate.query(SQL, new PassWithMemberDetailsRowMapper());
+                "p.memberId=m.memberId WHERE id=:passId";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("passId", passId);
+
+        List<PassWithMemberDetails> passList = jdbcTemplate.query(SQL, parameters, new PassWithMemberDetailsRowMapper());
         return passList;
     }
 
     @Override
     public List<PassWithMemberDetails> findMemberPassBySerialNo(Long serialNo) {
         final String SQL = "SELECT id,p.memberId,serialNo,expiryDate,m.firstName as firstName,m.lastName as lastName FROM Pass as p INNER JOIN Member as m ON " +
-                "p.memberId=m.memberId WHERE serialNo = '" + serialNo + "'";
+                "p.memberId=m.memberId WHERE serialNo=:serialNo";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("serialNo", serialNo);
+
         List<PassWithMemberDetails> passList = jdbcTemplate.query(SQL, new PassWithMemberDetailsRowMapper());
         return passList;
     }
@@ -73,28 +84,23 @@ public class PassRepoImpl implements PassRepo{
 
         final String SQL = "INSERT INTO Pass (memberId, serialNo, expiryDate) VALUES (:memberId, :SerialNo, :expiry)";
 
-        int n = jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
 
-        if(n > 0){
-            return holder.getKey().intValue();
-        }
-
-        return 0;
     }
 
     @Override
     public int updatePass(int passId, Pass p) {
         p.setPassId(passId);
         final String SQL = "UPDATE Pass SET memberId=:memberId, serialNo=:serialNo, expiryDate=:expiry WHERE id=:passId";
-        int n = jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p));
-        return n;
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p));
     }
 
     @Override
-    public int deletePass(int passId) {
+    public boolean deletePass(int passId) {
         Pass p = new Pass();
         p.setPassId(passId);
         final String SQL = "DELETE FROM Pass WHERE id=:passId";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p));
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p)) > 0;
     }
+
 }

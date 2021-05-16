@@ -1,11 +1,13 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.Pass;
 import com.trasportManagement.transportservice.model.PassWithMemberDetails;
 import com.trasportManagement.transportservice.repository.PassRepo;
 import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,24 +30,23 @@ public class PassService {
         }
     }
 
-    public Result<Pass> updatePass(int passId, Pass p) {
-        int rows = passRepo.updatePass(passId,p);
-        if(rows > 0){
-            return new Result<>(200, p);
+    public Pass updatePass(int passId, Pass p) {
+        int n = passRepo.updatePass(passId,p);
+        p.setPassId(passId);
+
+        if(n == 0){
+            throw new TPMSCustomException("Unable to update. Given pass id : " + p.getPassId()   + " not found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "Unable to update. Given member id : " + p.getPassId()   + " not found.");
-        }
+
+        return p;
     }
 
-    public Result<Pass> deletePass(int passId) {
-        int rows = passRepo.deletePass(passId);
-        if(rows > 0){
-            return new Result<>(200, "Pass with id : " + passId + " deleted successfully.");
+    public Boolean deletePass(int passId) {
+        if(!passRepo.deletePass(passId)){
+            throw new TPMSCustomException("Unable to delete. Given pass id : " + passId   + " not found.", HttpStatus.BAD_REQUEST);
         }
-        else{
-            return new Result<>(400, "Unable to delete. Given pass id : " + passId   + " not found.");
-        }
+
+        return true;
     }
 
 //    public Result<Date> findExpiryBySerialNo(Long serialNo){
@@ -57,43 +58,39 @@ public class PassService {
 //        return new Result<>(200, date);
 //    }
 
-    public Result<List<PassWithMemberDetails>> findMemberPassById(int passId) {
+    public List<PassWithMemberDetails> findMemberPassById(int passId) {
         List<PassWithMemberDetails> memberPass = passRepo.findMemberPassById(passId);
-        if(memberPass.size() > 0){
-            return new Result<>(200, memberPass);
+        if(memberPass.isEmpty()){
+            throw  new TPMSCustomException("No pass found for pass id: "+passId, HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No pass found.");
-        }
+
+        return memberPass;
     }
 
-    public Result<List<PassWithMemberDetails>> findAllMemberPasses() {
+    public List<PassWithMemberDetails> findAllMemberPasses() {
         List<PassWithMemberDetails> memberPasses = passRepo.findAllMemberPasses();
-        if(memberPasses.size() > 0){
-            return new Result<>(200, memberPasses);
+        if(memberPasses.isEmpty()){
+            throw  new TPMSCustomException("No pass found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No pass found.");
-        }
+
+        return memberPasses;
     }
 
-    public Result<List<PassWithMemberDetails>> findMemberPassBySerialNo(Long serialNo) {
+    public List<PassWithMemberDetails> findMemberPassBySerialNo(Long serialNo) {
         List<PassWithMemberDetails> memberPass = passRepo.findMemberPassBySerialNo(serialNo);
-        if(memberPass.size() > 0){
-            return new Result<>(200, memberPass);
+        if(memberPass.isEmpty()){
+            throw  new TPMSCustomException("No pass found for serial no.: "+serialNo, HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No pass found.");
-        }
+
+        return memberPass;
     }
 
-    public Result<List<Pass>> findAllPasses() {
+    public List<Pass> findAllPasses() {
         List<Pass> passes = passRepo.findAllPasses();
-        if(passes.size() > 0){
-            return new Result<>(200, passes);
+        if(passes.isEmpty()){
+            throw  new TPMSCustomException("No pass found.", HttpStatus.NOT_FOUND);
         }
-        else{
-            return new Result<>(400, "No pass found.");
-        }
+
+        return passes;
     }
 }

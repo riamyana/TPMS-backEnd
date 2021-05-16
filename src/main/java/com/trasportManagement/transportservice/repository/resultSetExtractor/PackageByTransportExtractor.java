@@ -1,4 +1,4 @@
-package com.trasportManagement.transportservice.repository.mapper;
+package com.trasportManagement.transportservice.repository.resultSetExtractor;
 
 import com.trasportManagement.transportservice.model.Package;
 import com.trasportManagement.transportservice.model.PackageByTransportDTO;
