@@ -1,9 +1,10 @@
 package com.trasportManagement.transportservice.repository;
 
-import com.trasportManagement.transportservice.model.Discount;
 import com.trasportManagement.transportservice.model.Member;
+import com.trasportManagement.transportservice.model.MemberWithAddress;
 import com.trasportManagement.transportservice.model.MemberWithMemberType;
 import com.trasportManagement.transportservice.repository.mapper.MemberWithMemberTypeRowMapper;
+import com.trasportManagement.transportservice.repository.resultSetExtractor.AddressResultSetExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -28,8 +29,6 @@ public class MemberRepoImpl implements MemberRepo{
         return memberList;
     }
 
-
-    //single data
     @Override
     public List<MemberWithMemberType> findMemberById(int memberId) {
         final String SQL = "SELECT memberId,m.memberTypeId as membertypeid,memberTypeName,firstName,lastName,mobileNo,dob FROM Member as m INNER JOIN MemberType as mt ON " +
@@ -38,7 +37,31 @@ public class MemberRepoImpl implements MemberRepo{
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("memberId", memberId);
 
-        List<MemberWithMemberType> memberList = jdbcTemplate.queryForList(SQL, parameters, MemberWithMemberType.class);
+        List<MemberWithMemberType> memberList = jdbcTemplate.query(SQL, parameters, new MemberWithMemberTypeRowMapper());
+        return memberList;
+    }
+
+    @Override
+    public List<Member> findMembers() {
+        final String SQL = "SELECT * FROM Member";
+        return jdbcTemplate.query(SQL, (rs, i) ->
+                new Member(
+                        rs.getInt("memberId"),
+                        rs.getInt("memberTypeId"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("mobileNo"),
+                        rs.getDate("dob")
+                )
+        );
+    }
+
+    @Override
+    public List<MemberWithAddress> findMemberWithAddress() {
+        final String SQL= "SELECT m.memberId, memberTypeId, firstName, lastName, mobileNo, dob , addressId, addLine1, addLine2, city, zipCode " +
+                "FROM Member as m INNER JOIN Address as a ON m.memberId = a.memberId";
+
+        List<MemberWithAddress> memberList = jdbcTemplate.query(SQL, new AddressResultSetExtractor());
         return memberList;
     }
 
@@ -47,7 +70,6 @@ public class MemberRepoImpl implements MemberRepo{
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO Member (memberTypeId, firstName, lastName, mobileNo, dob) VALUES (:memberTypeId, :firstName, :lastName, :mobileNo, :dob)";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m), holder);
-
     }
 
     @Override

@@ -30,12 +30,12 @@ public class MemberProofService {
     }
 
     public List<MemberProofsWithMemberDetails> findAllMembersProofDetails() {
-        List<MemberProofsWithMemberDetails> memberProofDetailList = memberProofRepo.findAllMembersProofDetails();
-        if(memberProofDetailList.isEmpty()){
+        List<MemberProofsWithMemberDetails> memberProofList = memberProofRepo.findAllMembersProofDetails();
+        if(memberProofList.isEmpty()){
             throw  new TPMSCustomException("No Member's proofs details found.", HttpStatus.NOT_FOUND);
         }
 
-        return memberProofDetailList;
+        return memberProofList;
     }
 
     public List<MemberProofsWithMemberDetails> findMemberProofById(int memberId) {

@@ -22,21 +22,21 @@ public class PackageController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/packages")
-    public ResponseEntity<Package> addPass(@RequestBody(required=true) Package p) {
+    public ResponseEntity<Package> addPackage(@RequestBody(required=true) Package p) {
         Package result = packageService.addPackage(p);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/packages/{id}")
-    public ResponseEntity<Package> updatePass(@PathVariable int id,@RequestBody(required=true) Package p) {
+    public ResponseEntity<Package> updatePackage(@PathVariable int id,@RequestBody(required=true) Package p) {
         Package passResult = packageService.updatePackage(id,p);
         return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/packages/{id}")
-    public ResponseEntity<Boolean> deletePass(@PathVariable int id) {
+    public ResponseEntity<Boolean> deletePackage(@PathVariable int id) {
         Boolean passResult = packageService.deletePackage(id);
         return new ResponseEntity<>(passResult, HttpStatus.NO_CONTENT);
     }

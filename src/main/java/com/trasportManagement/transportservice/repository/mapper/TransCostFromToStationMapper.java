@@ -1,4 +1,4 @@
-package com.trasportManagement.transportservice.repository;
+package com.trasportManagement.transportservice.repository.mapper;
 
 import com.trasportManagement.transportservice.model.TransCostFromToStation;
 import com.trasportManagement.transportservice.model.TransCostWithStationDetails;

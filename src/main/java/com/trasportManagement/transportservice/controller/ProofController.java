@@ -21,23 +21,21 @@ public class ProofController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/proofs")
     public ResponseEntity<Proof> addProof(@RequestBody(required=true) Proof p) {
-        Proof proofResult = proofService.addProof(p);
-        return new ResponseEntity<>(proofResult, HttpStatus.CREATED);
+        Proof proofList = proofService.addProof(p);
+        return new ResponseEntity<>(proofList, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/proofs")
     public ResponseEntity<List<ProofWithMemberType>> getAllProofs(){
-        List<ProofWithMemberType> proofResult =proofService.findAllProofs();
-//        System.out.println(proofResult.getMessage());
-        return new ResponseEntity<>(proofResult, HttpStatus.OK);
+        List<ProofWithMemberType> proofList = proofService.findAllProofs();
+        return new ResponseEntity<>(proofList, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     @GetMapping("/proofs/member-types/{memberTypeId}")
     public ResponseEntity<List<Proof>> getProofsByMemberTypeId(@PathVariable int memberTypeId){
-        List<Proof> proofResult=proofService.findProofsByMemberTypeId(memberTypeId);
-        return new ResponseEntity<>(proofResult,HttpStatus.OK);
+        List<Proof> proofList = proofService.findProofsByMemberTypeId(memberTypeId);
+        return new ResponseEntity<>(proofList,HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -50,8 +48,8 @@ public class ProofController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/proofs/{proofId}")
     public ResponseEntity<Boolean> deleteProof(@PathVariable int proofId) {
-        Boolean proofResult = proofService.deleteProof(proofId);
-        return new ResponseEntity<>(proofResult, HttpStatus.NO_CONTENT);
+        Boolean proofList = proofService.deleteProof(proofId);
+        return new ResponseEntity<>(proofList, HttpStatus.NO_CONTENT);
     }
 
 }

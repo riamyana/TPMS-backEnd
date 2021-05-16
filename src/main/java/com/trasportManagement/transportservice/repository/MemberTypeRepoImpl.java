@@ -27,7 +27,6 @@ public class MemberTypeRepoImpl implements MemberTypeRepo{
         return memberTypeList;
     }
 
-    //single data
     @Override
     public List<MemberType> findMemberTypeById(int memberTypeId) {
         final String SQL = "SELECT * FROM MemberType WHERE memberTypeId = :memberTypeId";

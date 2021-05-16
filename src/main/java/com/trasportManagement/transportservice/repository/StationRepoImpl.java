@@ -56,7 +56,6 @@ public class StationRepoImpl implements StationRepo{
                 ));
     }
 
-    //single data
     @Override
     public List<Station> findStationById(int stationId) {
         final String SQL = "SELECT * FROM Station WHERE stationId=:stationId";

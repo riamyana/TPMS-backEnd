@@ -21,35 +21,34 @@ public class StationController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/stations")
     public ResponseEntity<Station> addStation(@RequestBody(required=true) Station s) {
-        Station stationResult = stationService.addStation(s);
-        return new ResponseEntity<>(stationResult, HttpStatus.CREATED);
+        Station stationList = stationService.addStation(s);
+        return new ResponseEntity<>(stationList, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/stations/{stationId}")
     public ResponseEntity<Station> updateStation(@PathVariable int stationId, @RequestBody(required=true) Station s) {
-        Station stationResult = stationService.updateStation(stationId,s);
-        return new ResponseEntity<>(stationResult, HttpStatus.OK);
+        Station stationList = stationService.updateStation(stationId,s);
+        return new ResponseEntity<>(stationList, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/stations/{stationId}")
     public ResponseEntity<Boolean> deleteStation(@PathVariable int stationId) {
-        Boolean stationResult = stationService.deleteStation(stationId);
-        return new ResponseEntity<>(stationResult, HttpStatus.NO_CONTENT);
+        Boolean stationList = stationService.deleteStation(stationId);
+        return new ResponseEntity<>(stationList, HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/stations")
     public ResponseEntity<List<Station>> getStations(){
-        List<Station> stationResult =stationService.findAllStation();
-        return new ResponseEntity<>(stationResult, HttpStatus.OK);
+        List<Station> stationList =stationService.findAllStation();
+        return new ResponseEntity<>(stationList, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     @GetMapping("/stations/{stationId}")
     public ResponseEntity<List<Station>> getStationById(@PathVariable int stationId){
-        List<Station> stationResult =stationService.findStationById(stationId);
-        return new ResponseEntity<>(stationResult, HttpStatus.OK);
+        List<Station> stationList =stationService.findStationById(stationId);
+        return new ResponseEntity<>(stationList, HttpStatus.OK);
     }
 }

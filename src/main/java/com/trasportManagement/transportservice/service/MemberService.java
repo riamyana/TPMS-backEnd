@@ -2,6 +2,7 @@ package com.trasportManagement.transportservice.service;
 
 import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.Member;
+import com.trasportManagement.transportservice.model.MemberWithAddress;
 import com.trasportManagement.transportservice.model.MemberWithMemberType;
 import com.trasportManagement.transportservice.repository.MemberRepo;
 import com.trasportManagement.transportservice.response.Result;
@@ -19,8 +20,17 @@ public class MemberService {
     @Qualifier("memberRepo")
     MemberRepo memberRepo;
 
-    public List<MemberWithMemberType> findAllMembers(){
+    public List<Member> findMembers(){
+        List<Member> memberList=memberRepo.findMembers();
 
+        if(memberList.isEmpty()){
+            throw new TPMSCustomException("No member found.", HttpStatus.NOT_FOUND);
+        }
+
+        return memberList;
+    }
+
+    public List<MemberWithMemberType> findAllMembers(){
         List<MemberWithMemberType> memberList = memberRepo.findAllMembers();
 
         if(memberList.isEmpty()){
@@ -30,12 +40,21 @@ public class MemberService {
         return memberList;
     }
 
-    //single data
+
+    public List<MemberWithAddress> findMemberWithAddress() {
+        List<MemberWithAddress> memberList = memberRepo.findMemberWithAddress();
+
+        if(memberList.isEmpty()){
+            throw new TPMSCustomException("No member's address found.", HttpStatus.NOT_FOUND);
+        }
+        return memberList;
+    }
+
     public List<MemberWithMemberType> findMemberById(int memberId){
         List<MemberWithMemberType> memberList = memberRepo.findMemberById(memberId);
 
         if(memberList.isEmpty()){
-            throw  new TPMSCustomException("No subscription type found", HttpStatus.NOT_FOUND);
+            throw  new TPMSCustomException("No member found for given member id : " + memberId, HttpStatus.NOT_FOUND);
         }
 
         return  memberList;

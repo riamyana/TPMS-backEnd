@@ -4,7 +4,6 @@ package com.trasportManagement.transportservice.service;
 import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.MemberType;
 import com.trasportManagement.transportservice.repository.MemberTypeRepo;
-import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -27,10 +26,8 @@ public class MemberTypeService {
         }
 
         return  memberTypeList;
-
     }
 
-    //single data
     public List<MemberType> findMemberTypeById(int memberTypeId) {
         List<MemberType> memberTypeList = memberTypeRepo.findMemberTypeById(memberTypeId);
         if(memberTypeList.isEmpty()) {
@@ -38,7 +35,6 @@ public class MemberTypeService {
         }
 
         return  memberTypeList;
-
     }
 
     public MemberType addMemberType(MemberType m) {
