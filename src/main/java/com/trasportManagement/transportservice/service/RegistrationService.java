@@ -1,5 +1,6 @@
 package com.trasportManagement.transportservice.service;
 
+import com.trasportManagement.transportservice.model.CustomLogin;
 import com.trasportManagement.transportservice.model.Login;
 import com.trasportManagement.transportservice.model.RegistrationRequest;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class RegistrationService {
         }
 
         return loginService.signUpUser(
-                new Login(
+                new CustomLogin(
                         request.getUserName(),
                         request.getPassword(),
                         request.getEmail(),

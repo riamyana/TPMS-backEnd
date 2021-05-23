@@ -1,6 +1,7 @@
 package com.trasportManagement.transportservice.service;
 
 import com.trasportManagement.transportservice.model.ChangePasswordRequest;
+import com.trasportManagement.transportservice.model.CustomLogin;
 import com.trasportManagement.transportservice.model.Login;
 import com.trasportManagement.transportservice.repository.LoginRepo;
 import lombok.AllArgsConstructor;
@@ -34,14 +35,16 @@ public class LoginService implements UserDetailsService {
 //        }else{
 //            return loginRepo.findByUsername(name);
 //        }
-        return loginRepo.findByUsername(name)
+        CustomLogin login = loginRepo.findByUsername(name)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
                                 String.format(USER_NOT_FOUND_MSG, name)));
+
+        return new Login(login);
     }
 
-    public String signUpUser(Login login) {
-        boolean userExists = loginRepo.findByUsername(login.getUsername()).isPresent();
+    public String signUpUser(CustomLogin login) {
+        boolean userExists = loginRepo.findByUsername(login.getUserName()).isPresent();
 
         if(userExists){
             throw new IllegalStateException("User name already taken");

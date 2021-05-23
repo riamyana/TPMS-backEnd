@@ -1,8 +1,7 @@
 package com.trasportManagement.transportservice.repository;
 
-import com.trasportManagement.transportservice.model.AppUserRole;
 import com.trasportManagement.transportservice.model.ChangePasswordRequest;
-import com.trasportManagement.transportservice.model.Login;
+import com.trasportManagement.transportservice.model.CustomLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,14 +30,14 @@ public class LoginRepoImpl implements LoginRepo {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public Optional<Login> findByUsername(String name){
+    public Optional<CustomLogin> findByUsername(String name){
         final String SELECT_USER = "SELECT * FROM Login WHERE userName=:name";
 
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("name", name);
         try {
             return namedParameterJdbcTemplate.queryForObject(SELECT_USER, parameters, (rs, rowNum) ->
-                    Optional.of(new Login(
+                    Optional.of(new CustomLogin(
                             rs.getInt("id"),
                             rs.getString("userName"),
                             rs.getString("password"),
@@ -53,14 +52,14 @@ public class LoginRepoImpl implements LoginRepo {
     }
 
     @Override
-    public int save(Login login) {
+    public int save(CustomLogin login) {
         System.out.println(login);
         final String INSERT_LOGIN = "INSERT INTO Login(userName, password, email, role) VALUES(:userName, :password, :email, :role)";
         System.out.println(INSERT_LOGIN);
 
         KeyHolder holder = new GeneratedKeyHolder();
         SqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("userName", login.getUsername())
+                .addValue("userName", login.getUserName())
                 .addValue("password", login.getPassword())
                 .addValue("email", login.getEmail())
                 .addValue("role", login.getRole());
