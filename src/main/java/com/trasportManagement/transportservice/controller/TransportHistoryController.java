@@ -19,20 +19,20 @@ public class TransportHistoryController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/transports-history")
     public ResponseEntity<TransportHistory> addTransportHistory(@RequestBody(required=true) TransportHistory t) {
-        TransportHistory transportHistoryResult = transportHistoryService.addTransportHistory(t);
-        return new ResponseEntity<>(transportHistoryResult, HttpStatus.CREATED);
+        TransportHistory transportHistoryList = transportHistoryService.addTransportHistory(t);
+        return new ResponseEntity<>(transportHistoryList, HttpStatus.CREATED);
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/transports-history")
     public ResponseEntity<List<TransHistoryWithPassStationDetails>> getTransportHistory() {
-        List<TransHistoryWithPassStationDetails> transportHistoryResult = transportHistoryService.findTransportHistory();
-        return new ResponseEntity<>(transportHistoryResult, HttpStatus.OK);
+        List<TransHistoryWithPassStationDetails> transportHistoryList = transportHistoryService.findTransportHistory();
+        return new ResponseEntity<>(transportHistoryList, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+
     @GetMapping("/transports-history/members/{memberId}")
     public ResponseEntity<List<TransHistoryWithPassStationDetails>> getTransHistoryByMemberID(@PathVariable int memberId) {
-        List<TransHistoryWithPassStationDetails> transportHistoryResult = transportHistoryService.findTransHistoryByMemberID(memberId);
-        return new ResponseEntity<>(transportHistoryResult, HttpStatus.OK);
+        List<TransHistoryWithPassStationDetails> transportHistoryList = transportHistoryService.findTransHistoryByMemberID(memberId);
+        return new ResponseEntity<>(transportHistoryList, HttpStatus.OK);
     }
 }

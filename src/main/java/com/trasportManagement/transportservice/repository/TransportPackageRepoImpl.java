@@ -2,7 +2,7 @@ package com.trasportManagement.transportservice.repository;
 
 import com.trasportManagement.transportservice.model.PackageByTransportDTO;
 import com.trasportManagement.transportservice.model.TransportPackage;
-import com.trasportManagement.transportservice.repository.mapper.PackageByTransportExtractor;
+import com.trasportManagement.transportservice.repository.resultSetExtractor.PackageByTransportExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

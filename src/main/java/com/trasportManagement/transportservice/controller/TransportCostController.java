@@ -20,35 +20,35 @@ public class TransportCostController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/transports-cost")
     public ResponseEntity<TransportCost> addTransportCost(@RequestBody(required=true) TransportCost t) {
-        TransportCost transportCostResult = transportCostService.addTransportCost(t);
-        return new ResponseEntity<>(transportCostResult, HttpStatus.CREATED);
+        TransportCost transportCostList = transportCostService.addTransportCost(t);
+        return new ResponseEntity<>(transportCostList, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/transports-costs/{transCostId}")
     public ResponseEntity<TransportCost> updateTransportCost(@PathVariable int transCostId, @RequestBody(required=true) TransportCost t) {
-        TransportCost transportCostResult = transportCostService.updateTransportCost(transCostId,t);
-        return new ResponseEntity<>(transportCostResult, HttpStatus.OK);
+        TransportCost transportCostList = transportCostService.updateTransportCost(transCostId,t);
+        return new ResponseEntity<>(transportCostList, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/transports-cost/{transCostId}")
     public ResponseEntity<Boolean> deleteTransportCost(@PathVariable int transCostId) {
-        Boolean transportCostResult = transportCostService.deleteTransportCost(transCostId);
-        return new ResponseEntity<>(transportCostResult, HttpStatus.NO_CONTENT);
+        Boolean transportCostList = transportCostService.deleteTransportCost(transCostId);
+        return new ResponseEntity<>(transportCostList, HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+
     @GetMapping("/transports-cost")
     public ResponseEntity<List<TransCostWithStationDetails>> getTransportCost() {
-        List<TransCostWithStationDetails> result = transportCostService.findTransportCost();
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        List<TransCostWithStationDetails> transportCostList = transportCostService.findTransportCost();
+        return new ResponseEntity<>(transportCostList, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+
     @GetMapping("/transports-cost/from-station/{fromStationId}/to-station/{toStationId}")
     public ResponseEntity<List<TransCostFromToStation>> getCostFromToStation(@PathVariable int fromStationId, @PathVariable int toStationId) {
-        List<TransCostFromToStation> result = transportCostService.findCostFromToStation(fromStationId,toStationId);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        List<TransCostFromToStation> transportCostList = transportCostService.findCostFromToStation(fromStationId,toStationId);
+        return new ResponseEntity<>(transportCostList, HttpStatus.OK);
     }
 }

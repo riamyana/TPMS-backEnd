@@ -52,7 +52,7 @@ public class PackageService {
     public List<Package> findAllPackage(){
         List<Package> packages = packageRopo.findAllPackage();
         if(packages.isEmpty()){
-            throw  new TPMSCustomException("No subscription type found", HttpStatus.NOT_FOUND);
+            throw  new TPMSCustomException("No packages found", HttpStatus.NOT_FOUND);
         }
 
         return packages;
@@ -61,7 +61,7 @@ public class PackageService {
     public List<Package> findPackageById(int id){
         List<Package> packages = packageRopo.findPackageById(id);
         if(packages.isEmpty()){
-            throw  new TPMSCustomException("No subscription type found", HttpStatus.NOT_FOUND);
+            throw  new TPMSCustomException("No package found", HttpStatus.NOT_FOUND);
         }
 
         return packages;

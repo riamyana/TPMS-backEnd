@@ -1,9 +1,7 @@
-package com.trasportManagement.transportservice.repository.mapper;
+package com.trasportManagement.transportservice.repository.resultSetExtractor;
 
 import com.trasportManagement.transportservice.model.Package;
 import com.trasportManagement.transportservice.model.PackageByTransportDTO;
-import com.trasportManagement.transportservice.model.TransportMode;
-import com.trasportManagement.transportservice.model.TransportPackageDTO;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 

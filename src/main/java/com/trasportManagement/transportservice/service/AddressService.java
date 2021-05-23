@@ -2,8 +2,8 @@ package com.trasportManagement.transportservice.service;
 
 import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.Address;
+import com.trasportManagement.transportservice.model.MemberWithAddress;
 import com.trasportManagement.transportservice.repository.AddressRepo;
-import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -68,5 +68,4 @@ public class AddressService {
 
         return true;
     }
-
 }

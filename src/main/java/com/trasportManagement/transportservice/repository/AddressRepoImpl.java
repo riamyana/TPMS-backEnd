@@ -1,7 +1,11 @@
 package com.trasportManagement.transportservice.repository;
 
 import com.trasportManagement.transportservice.model.Address;
+
+
+import com.trasportManagement.transportservice.model.MemberWithAddress;
 import com.trasportManagement.transportservice.repository.mapper.AddressRowMapper;
+import com.trasportManagement.transportservice.repository.resultSetExtractor.AddressResultSetExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -24,8 +28,8 @@ public class AddressRepoImpl implements AddressRepo{
     @Override
     public List<Address> findAllMembersAddress() {
         final String SQL = "SELECT * FROM Address";
-        List<Address> memberList = jdbcTemplate.query(SQL, new AddressRowMapper());
-        return memberList;
+        List<Address> addressList = jdbcTemplate.query(SQL, new AddressRowMapper());
+        return addressList;
     }
 
     @Override
@@ -35,8 +39,8 @@ public class AddressRepoImpl implements AddressRepo{
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("memberId", memberId);
 
-        List<Address> memberList = jdbcTemplate.query(SQL, parameters, new AddressRowMapper());
-        return memberList;
+        List<Address> addressList = jdbcTemplate.query(SQL, parameters, new AddressRowMapper());
+        return addressList;
     }
 
     @Override
