@@ -8,13 +8,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.naming.AuthenticationException;
+import java.nio.file.AccessDeniedException;
+
 @ControllerAdvice
-public class TPMSCustomExceptionHandler extends ResponseEntityExceptionHandler{
+public class TPMSCustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -66,9 +71,39 @@ public class TPMSCustomExceptionHandler extends ResponseEntityExceptionHandler{
         return new ResponseEntity<>(TPMSCutomExceptionModel, notFound);
     }
 
+    @ExceptionHandler(value = {AccessDeniedException.class})
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex){
+        HttpStatus notFound = HttpStatus.FORBIDDEN;
+        TPMSCutomExceptionModel TPMSCutomExceptionModel = new TPMSCutomExceptionModel(
+                ex.getMessage(),
+                notFound
+        );
+        return new ResponseEntity<>(TPMSCutomExceptionModel, notFound);
+    }
+
+    @ExceptionHandler(value = {AuthenticationException.class})
+    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex){
+        HttpStatus notFound = HttpStatus.UNAUTHORIZED;
+        TPMSCutomExceptionModel TPMSCutomExceptionModel = new TPMSCutomExceptionModel(
+                ex.getMessage(),
+                notFound
+        );
+        return new ResponseEntity<>(TPMSCutomExceptionModel, notFound);
+    }
+
+    @ExceptionHandler(value = {BadCredentialsException.class})
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex){
+        HttpStatus notFound = HttpStatus.UNAUTHORIZED;
+        TPMSCutomExceptionModel TPMSCutomExceptionModel = new TPMSCutomExceptionModel(
+                ex.getMessage(),
+                notFound
+        );
+        return new ResponseEntity<>(TPMSCutomExceptionModel, notFound);
+    }
+
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleException(Exception ex){
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        HttpStatus badRequest = HttpStatus.INTERNAL_SERVER_ERROR;
         TPMSCutomExceptionModel TPMSCutomExceptionModel = new TPMSCutomExceptionModel(
                 ex.getMessage(),
                 badRequest
@@ -113,5 +148,4 @@ public class TPMSCustomExceptionHandler extends ResponseEntityExceptionHandler{
         );
         return new ResponseEntity<>(TPMSCutomExceptionModel, badRequest);
     }
-
 }

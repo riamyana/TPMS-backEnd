@@ -11,22 +11,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class Login implements UserDetails {
-    private int id;
-    private String userName;
-    private String password;
-    private String email;
-    private String role;
+//    private int id;
+//    private String userName;
+//    private String password;
+//    private String email;
+//    private String role;
 
-    public Login(String userName, String password, String email, String role) {
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-        this.role = role;
+    CustomLogin customLogin;
+
+    public Login(CustomLogin customLogin) {
+//        this.userName = userName;
+//        this.password = password;
+//        this.email = email;
+//        this.role = role;
+
+        this.customLogin = customLogin;
     }
 
     @Override
@@ -35,17 +37,17 @@ public class Login implements UserDetails {
 //                new SimpleGrantedAuthority(role.name());
 //        return Collections.singletonList(authority);
 
-        return Collections.singleton(new SimpleGrantedAuthority(getRole()));
+        return Collections.singleton(new SimpleGrantedAuthority(customLogin.getRole()));
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return customLogin.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userName;
+        return customLogin.getUserName();
     }
 
     @Override
