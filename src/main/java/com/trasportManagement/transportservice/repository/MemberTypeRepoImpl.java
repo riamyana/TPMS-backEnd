@@ -42,7 +42,9 @@ public class MemberTypeRepoImpl implements MemberTypeRepo{
     public int addMemberType(MemberType m) {
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO MemberType (memberTypeName) VALUES (:memberTypeName)";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m), holder);
+        int param =  jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m), holder);
+        m.setMemberTypeId(holder.getKey().intValue());
+        return param;
     }
 
     @Override

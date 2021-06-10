@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.BitSet;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class MemberTypeController {
 
@@ -45,7 +46,7 @@ public class MemberTypeController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/{memberTypeId}")
+    @DeleteMapping("/member-types/{memberTypeId}")
     public ResponseEntity<Boolean> deleteMemberType(@PathVariable int memberTypeId) {
         Boolean memberTypeList = memberTypeService.deleteMemberType(memberTypeId);
         return new ResponseEntity<>(memberTypeList, HttpStatus.NO_CONTENT);

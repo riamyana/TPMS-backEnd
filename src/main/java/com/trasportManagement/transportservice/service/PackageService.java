@@ -3,6 +3,7 @@ package com.trasportManagement.transportservice.service;
 import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.Discount;
 import com.trasportManagement.transportservice.model.Package;
+import com.trasportManagement.transportservice.model.PackageDTO;
 import com.trasportManagement.transportservice.model.SubscriptionType;
 import com.trasportManagement.transportservice.repository.PackageRopo;
 import com.trasportManagement.transportservice.response.Result;
@@ -23,6 +24,7 @@ public class PackageService {
 
     public Package addPackage(Package p) {
         int n = packageRopo.addPackage(p);
+        p.setId(n);
 
         if (n == 0) {
             throw new TPMSCustomException("No record inserted of this package.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -43,14 +45,14 @@ public class PackageService {
 
     public Boolean deletePackage(int id) {
         if(!packageRopo.deletePackage(id)){
-            throw new TPMSCustomException("Unable to delete. Given package id : " + id   + " not found.", HttpStatus.BAD_REQUEST);
+            throw new TPMSCustomException("Unable to delete. Given package id : " + id   + " not found.", HttpStatus.NOT_FOUND);
         }
 
         return true;
     }
 
-    public List<Package> findAllPackage(){
-        List<Package> packages = packageRopo.findAllPackage();
+    public List<PackageDTO> findAllPackage(){
+        List<PackageDTO> packages = packageRopo.findAllPackage();
         if(packages.isEmpty()){
             throw  new TPMSCustomException("No packages found", HttpStatus.NOT_FOUND);
         }
@@ -77,11 +79,11 @@ public class PackageService {
         return types;
     }
 
-    public List<Package> findPackageBySubTypeId(int subTypeId){
-        List<Package> packages = packageRopo.findPackageBySubTypeId(subTypeId);
+    public List<Package> findPackageBySubTypeId(String subType){
+        List<Package> packages = packageRopo.findPackageBySubTypeId(subType);
 
         if(packages.isEmpty()){
-            throw  new TPMSCustomException("No package found for subscription id: "+subTypeId, HttpStatus.NOT_FOUND);
+            throw  new TPMSCustomException("No package found for subscription id: "+subType, HttpStatus.NOT_FOUND);
         }
         return packages;
     }

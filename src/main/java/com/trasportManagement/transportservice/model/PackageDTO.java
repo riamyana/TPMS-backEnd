@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class Package {
-
+public class PackageDTO {
     private int id;
     private String name;
     private String subscriptionType;
@@ -18,4 +15,5 @@ public class Package {
     private int validity;
     private int balance;
     private int price;
+    private String memberTypeName;
 }

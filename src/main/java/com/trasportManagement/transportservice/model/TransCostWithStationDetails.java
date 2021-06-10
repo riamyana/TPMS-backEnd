@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TransCostWithStationDetails{
+    private int id;
     private Double cost;
     private String fromStationName;
     private String toStationName;

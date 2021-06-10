@@ -11,5 +11,6 @@ public class JWTResponse {
     private int id;
     private String jwtToken;
     private String userName;
+    private String email;
     private String role;
 }

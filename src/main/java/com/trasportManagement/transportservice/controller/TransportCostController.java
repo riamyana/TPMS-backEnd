@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class TransportCostController {
 
@@ -25,7 +26,7 @@ public class TransportCostController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/transports-costs/{transCostId}")
+    @PutMapping("/transports-cost/{transCostId}")
     public ResponseEntity<TransportCost> updateTransportCost(@PathVariable int transCostId, @RequestBody(required=true) TransportCost t) {
         TransportCost transportCostList = transportCostService.updateTransportCost(transCostId,t);
         return new ResponseEntity<>(transportCostList, HttpStatus.OK);
