@@ -47,7 +47,7 @@ public class TransportCostRepoImpl implements TransportCostRepo{
 
     @Override
     public List<TransCostWithStationDetails> findTransportCost() {
-        final String SQL = "SELECT sf.stationName as fromStationName, st.stationName as toStationName, cost " +
+        final String SQL = "SELECT t.transCostId, sf.stationName as fromStationName, st.stationName as toStationName, cost " +
                 "FROM TransportCost as t INNER JOIN Station as sf ON t.fromStationId=sf.stationId " +
                 "INNER JOIN Station as st ON t.toStationId=st.stationId";
         List<TransCostWithStationDetails> transCostList = jdbcTemplate.query(SQL, new TransCostWithStationMapper());

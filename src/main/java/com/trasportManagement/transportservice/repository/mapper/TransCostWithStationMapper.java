@@ -11,6 +11,7 @@ public class TransCostWithStationMapper implements RowMapper<TransCostWithStatio
     @Override
     public TransCostWithStationDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
         TransCostWithStationDetails t = new TransCostWithStationDetails();
+        t.setId(rs.getInt("transCostId"));
         t.setFromStationName(rs.getString("fromStationName"));
         t.setToStationName(rs.getString("toStationName"));
         t.setCost(rs.getDouble("cost"));

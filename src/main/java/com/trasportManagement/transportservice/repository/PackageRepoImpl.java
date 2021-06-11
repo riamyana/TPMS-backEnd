@@ -1,6 +1,7 @@
 package com.trasportManagement.transportservice.repository;
 
 import com.trasportManagement.transportservice.model.Package;
+import com.trasportManagement.transportservice.model.PackageDTO;
 import com.trasportManagement.transportservice.model.SubscriptionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,16 +27,19 @@ public class PackageRepoImpl implements PackageRopo{
     public int addPackage(Package p) {
 
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO Package (memberType, name, subscriptionType, counts, validity, balance, price) VALUES (:memberType, :name, :subscriptionType, :counts, :validity, :balance, :price)";
+        final String SQL = "INSERT INTO Package (id, name, subscriptionType, counts, validity, balance, price) VALUES (:id, :name, :subscriptionType, :counts, :validity, :balance, :price)";
 
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
 
+        p.setId(holder.getKey().intValue());
+        final int id = holder.getKey().intValue();
+        return id;
     }
 
     @Override
     public int updatePackage(int id, Package p) {
         p.setId(id);
-        final String SQL = "UPDATE Package SET memberType=:memberType, name=:name, subscriptionType=:subscriptionType, counts=:counts, validity=:validity, balance=:balance, price=:price WHERE id=:id";
+        final String SQL = "UPDATE Package SET name=:name, subscriptionType=:subscriptionType, counts=:counts, validity=:validity, balance=:balance, price=:price WHERE id=:id";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p));
     }
 
@@ -48,18 +52,19 @@ public class PackageRepoImpl implements PackageRopo{
     }
 
     @Override
-    public List<Package> findAllPackage(){
-        final String SQL = "SELECT * FROM Package";
+    public List<PackageDTO> findAllPackage(){
+        final String SQL = "SELECT p.*, m.memberTypeName from Package as p, MemberType as m, MemberTypePackage as mp WHERE " +
+                "p.id=mp.packageId and m.memberTypeId=mp.memberTypeId";
         return jdbcTemplate.query(SQL, (rs, i) ->
-                new Package(
+                new PackageDTO(
                         rs.getInt("id"),
-                        rs.getInt("memberType"),
                         rs.getString("name"),
-                        rs.getInt("subscriptionType"),
+                        rs.getString("subscriptionType"),
                         rs.getInt("counts"),
                         rs.getInt("validity"),
                         rs.getInt("balance"),
-                        rs.getInt("price")
+                        rs.getInt("price"),
+                        rs.getString("memberTypeName")
                 )
         );
     }
@@ -74,9 +79,8 @@ public class PackageRepoImpl implements PackageRopo{
         return jdbcTemplate.query(SQL, parameters, (rs, i) ->
                 new Package(
                         rs.getInt("id"),
-                        rs.getInt("memberType"),
                         rs.getString("name"),
-                        rs.getInt("subscriptionType"),
+                        rs.getString("subscriptionType"),
                         rs.getInt("counts"),
                         rs.getInt("validity"),
                         rs.getInt("balance"),
@@ -87,28 +91,26 @@ public class PackageRepoImpl implements PackageRopo{
 
     @Override
     public List<SubscriptionType> findAllSubscriptionType(){
-        final String SQL = "select * from SubscriptionType";
+        final String SQL = "select SubscriptionType from Package";
         return jdbcTemplate.query(SQL, (rs, i) ->
                 new SubscriptionType(
-                        rs.getInt("id"),
                         rs.getString("type")
                 )
         );
     }
 
     @Override
-    public List<Package> findPackageBySubTypeId(int subTypeid){
-        final String SQL = "SELECT * FROM Package where subscriptionType=:subTypeid";
+    public List<Package> findPackageBySubTypeId(String subType){
+        final String SQL = "SELECT * FROM Package where subscriptionType=:subType";
 
         SqlParameterSource parameter = new MapSqlParameterSource()
-                .addValue("subTypeid", subTypeid);
+                .addValue("subType", subType);
 
         return jdbcTemplate.query(SQL, parameter, (rs, i) ->
                 new Package(
                         rs.getInt("id"),
-                        rs.getInt("memberType"),
                         rs.getString("name"),
-                        rs.getInt("subscriptionType"),
+                        rs.getString("subscriptionType"),
                         rs.getInt("counts"),
                         rs.getInt("validity"),
                         rs.getInt("balance"),

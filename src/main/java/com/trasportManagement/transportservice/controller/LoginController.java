@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class LoginController {
     @Autowired
@@ -26,7 +27,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @CrossOrigin
+
     @PostMapping("/authenticate")
     public JWTResponse authenticate(@RequestBody(required=true) JWTRequest jwtRequest) throws Exception{
         try {
@@ -61,16 +62,6 @@ public class LoginController {
 
 //        System.out.println(SecurityContext.class);
 
-        return  new JWTResponse(login.getCustomLogin().getId(),token, userDetails.getUsername(), login.getCustomLogin().getRole());
+        return  new JWTResponse(login.getCustomLogin().getId(),token, userDetails.getUsername(), login.getCustomLogin().getEmail(), login.getCustomLogin().getRole());
     }
-//
-//    @GetMapping("/user")
-//    public String hello(){
-//        return "user";
-//    }
-//
-//    @GetMapping("/admin")
-//    public String admin(){
-//        return "admin";
-//    }
 }
