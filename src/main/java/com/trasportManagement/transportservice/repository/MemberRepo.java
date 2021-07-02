@@ -12,8 +12,6 @@ public interface MemberRepo {
 
     List<MemberWithMemberType> findMemberById(int memberId);
 
-    List<Member> findMemberByUserId(int userId);
-
     int addMember(Member m);
 
     int updateMember(int memberId,Member m);
@@ -24,4 +22,5 @@ public interface MemberRepo {
 
     List<MemberWithAddress> findMemberWithAddress();
 
+    List<Member> findMemberByUserId(int userId);
 }
