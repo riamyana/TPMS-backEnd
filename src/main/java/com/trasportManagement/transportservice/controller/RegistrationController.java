@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/register")
+    @RequestMapping("/register")
 public class RegistrationController {
     @Autowired
     private RegistrationService registrationService;
