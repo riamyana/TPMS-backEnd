@@ -42,6 +42,18 @@ public class MemberRepoImpl implements MemberRepo{
     }
 
     @Override
+    public List<MemberWithMemberType> findMemberByUserId(int userId) {
+        final String SQL = "SELECT memberId,userId,m.memberTypeId as membertypeid,memberTypeName,firstName,lastName,mobileNo,dob FROM Member as m INNER JOIN MemberType as mt ON " +
+                "m.memberTypeId=mt.memberTypeId WHERE userId= :userId";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("userId", userId);
+
+        List<MemberWithMemberType> memberList = jdbcTemplate.query(SQL, parameters, new MemberWithMemberTypeRowMapper());
+        return memberList;
+    }
+
+    @Override
     public List<Member> findMembers() {
         final String SQL = "SELECT * FROM Member";
         return jdbcTemplate.query(SQL, (rs, i) ->

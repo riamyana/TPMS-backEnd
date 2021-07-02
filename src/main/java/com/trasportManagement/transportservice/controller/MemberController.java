@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class MemberController {
     @Autowired
@@ -45,6 +46,7 @@ public class MemberController {
         return new ResponseEntity<>(memberList, HttpStatus.OK);
     }
 
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/members-memberType")
     public ResponseEntity<List<MemberWithMemberType>> getAllMembers() {
@@ -59,6 +61,12 @@ public class MemberController {
         return new ResponseEntity<>(memberList, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("members/user/{userId}")
+    public ResponseEntity<List<MemberWithMemberType>> findMemberByUserId(@PathVariable int userId) {
+        List<MemberWithMemberType> memberList = memberService.findMemberByUserId(userId);
+        return new ResponseEntity<>(memberList, HttpStatus.OK);
+    }
 
     @GetMapping("/members/members-address")
     public ResponseEntity<List<MemberWithAddress>> getMemberWithAddress()
