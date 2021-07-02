@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -84,7 +85,7 @@ public class LoginRepoImpl implements LoginRepo {
         String oldPassword = namedParameterJdbcTemplate.queryForObject(SELECT_PASSWORD,name,String.class);
 
         if(!bCryptPasswordEncoder.matches(data.getOldPassword(),oldPassword)){
-            throw new IllegalStateException("Password is not correct");
+            throw new BadCredentialsException("Password is not correct");
         }
 
         String encodedNewPassword = bCryptPasswordEncoder.encode(data.getNewPassword());

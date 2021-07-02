@@ -3,6 +3,8 @@ package com.trasportManagement.transportservice.controller;
 import com.trasportManagement.transportservice.model.ChangePasswordRequest;
 import com.trasportManagement.transportservice.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -19,11 +21,12 @@ public class UserController {
     }
 
     @PostMapping("/changePassword")
-    public String changePassword(@RequestBody ChangePasswordRequest data){
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest data){
 //        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
 //                .getPrincipal();
 //        String username = userDetails.getUsername();
 //        return username;
-        return loginService.changePassword(data);
+        String msg  = loginService.changePassword(data);
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 }
