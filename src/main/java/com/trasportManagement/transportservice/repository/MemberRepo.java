@@ -23,4 +23,6 @@ public interface MemberRepo {
     List<Member> findMembers();
 
     List<MemberWithAddress> findMemberWithAddress();
+
+    List<Member> findMemberByUserId(int userId);
 }

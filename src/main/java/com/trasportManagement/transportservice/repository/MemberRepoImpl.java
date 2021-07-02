@@ -59,6 +59,7 @@ public class MemberRepoImpl implements MemberRepo{
         return jdbcTemplate.query(SQL, (rs, i) ->
                 new Member(
                         rs.getInt("memberId"),
+                        rs.getInt("userId"),
                         rs.getInt("memberTypeId"),
                         rs.getString("firstName"),
                         rs.getString("lastName"),
@@ -77,10 +78,12 @@ public class MemberRepoImpl implements MemberRepo{
         return memberList;
     }
 
+
+
     @Override
     public int addMember(Member m) {
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO Member (memberTypeId, firstName, lastName, mobileNo, dob) VALUES (:memberTypeId, :firstName, :lastName, :mobileNo, :dob)";
+        final String SQL = "INSERT INTO Member (userId, memberTypeId, firstName, lastName, mobileNo, dob) VALUES (:memberTypeId, :firstName, :lastName, :mobileNo, :dob)";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m), holder);
     }
 

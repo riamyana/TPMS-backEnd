@@ -32,7 +32,7 @@ public class TransportHistoryImpl implements TransportHistoryRepo{
         System.out.println(startDate);
         t.setFromDateTime(startDate);
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO TransportHistory (passId,fromStationId, toStationId,fromDateTime,toDateTime) VALUES (:passId,:fromStationId,:toStationId,:fromDateTime,:toDateTime)";
+        final String SQL = "INSERT INTO TransportHistory (passId,fromStationId, toStationId, toDateTime) VALUES (:passId,:fromStationId,:toStationId, :toDateTime)";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t), holder);
 
     }

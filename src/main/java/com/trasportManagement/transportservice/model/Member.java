@@ -7,8 +7,8 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 public class Member {
-
     private int memberId;
+    private int userId;
     private int memberTypeId;
     private String firstName;
     private String lastName;
