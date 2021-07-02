@@ -60,6 +60,17 @@ public class MemberService {
         return  memberList;
     }
 
+
+    public List<Member> findMemberByUserId(int userId) {
+        List<Member> memberList = memberRepo.findMemberByUserId(userId);
+
+        if(memberList.isEmpty()){
+            throw new TPMSCustomException("No member details found for given user id : " + userId, HttpStatus.NOT_FOUND);
+        }
+
+        return memberList;
+    }
+
     public Member addMember(Member m) {
         int n = memberRepo.addMember(m);
         if(n == 0){

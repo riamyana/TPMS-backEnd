@@ -42,11 +42,33 @@ public class MemberRepoImpl implements MemberRepo{
     }
 
     @Override
+    public List<Member> findMemberByUserId(int userId) {
+        final String SQL = "SELECT * from Member WHERE userId= :userId";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("userId", userId);
+
+        List<Member> memberList = jdbcTemplate.query(SQL, parameters, (rs, i) ->
+                new Member(
+                        rs.getInt("memberId"),
+                        rs.getInt("userId"),
+                        rs.getInt("memberTypeId"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("mobileNo"),
+                        rs.getDate("dob")
+                )
+                );
+        return memberList;
+    }
+
+    @Override
     public List<Member> findMembers() {
         final String SQL = "SELECT * FROM Member";
         return jdbcTemplate.query(SQL, (rs, i) ->
                 new Member(
                         rs.getInt("memberId"),
+                        rs.getInt("userId"),
                         rs.getInt("memberTypeId"),
                         rs.getString("firstName"),
                         rs.getString("lastName"),
@@ -65,10 +87,12 @@ public class MemberRepoImpl implements MemberRepo{
         return memberList;
     }
 
+
+
     @Override
     public int addMember(Member m) {
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO Member (memberTypeId, firstName, lastName, mobileNo, dob) VALUES (:memberTypeId, :firstName, :lastName, :mobileNo, :dob)";
+        final String SQL = "INSERT INTO Member (userId, memberTypeId, firstName, lastName, mobileNo, dob) VALUES (:memberTypeId, :firstName, :lastName, :mobileNo, :dob)";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m), holder);
     }
 

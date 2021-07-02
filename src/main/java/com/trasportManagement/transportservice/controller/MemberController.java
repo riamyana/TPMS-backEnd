@@ -59,6 +59,10 @@ public class MemberController {
         return new ResponseEntity<>(memberList, HttpStatus.OK);
     }
 
+    public ResponseEntity<List<Member>> getMemberByUserId(@PathVariable int userId) {
+        List<Member> memberList = memberService.findMemberByUserId(userId);
+        return new ResponseEntity<>(memberList, HttpStatus.OK);
+    }
 
     @GetMapping("/members/members-address")
     public ResponseEntity<List<MemberWithAddress>> getMemberWithAddress()
