@@ -63,8 +63,8 @@ public class MemberController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("members/user/{userId}")
-    public ResponseEntity<List<MemberWithMemberType>> findMemberByUserId(@PathVariable int userId) {
-        List<MemberWithMemberType> memberList = memberService.findMemberByUserId(userId);
+    public ResponseEntity<List<Member>> getMemberByUserId(@PathVariable int userId) {
+        List<Member> memberList = memberService.findMemberByUserId(userId);
         return new ResponseEntity<>(memberList, HttpStatus.OK);
     }
 

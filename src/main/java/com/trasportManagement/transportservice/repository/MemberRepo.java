@@ -12,7 +12,7 @@ public interface MemberRepo {
 
     List<MemberWithMemberType> findMemberById(int memberId);
 
-    List<MemberWithMemberType> findMemberByUserId(int userId);
+    List<Member> findMemberByUserId(int userId);
 
     int addMember(Member m);
 
@@ -24,5 +24,4 @@ public interface MemberRepo {
 
     List<MemberWithAddress> findMemberWithAddress();
 
-    List<Member> findMemberByUserId(int userId);
 }
