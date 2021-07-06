@@ -1,18 +1,20 @@
 package com.trasportManagement.transportservice.service;
 
-import com.trasportManagement.transportservice.model.ChangePasswordRequest;
-import com.trasportManagement.transportservice.model.CustomLogin;
-import com.trasportManagement.transportservice.model.Login;
+import com.trasportManagement.transportservice.exception.TPMSCustomException;
+import com.trasportManagement.transportservice.model.*;
 import com.trasportManagement.transportservice.repository.LoginRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -61,5 +63,15 @@ public class LoginService implements UserDetailsService {
 
     public String changePassword(ChangePasswordRequest data) {
         return loginRepo.changePassword(data);
+    }
+
+    public List<RegistrationRequest> findUserByUserId(int id) {
+        List<RegistrationRequest> userList = loginRepo.findUserById(id);
+
+        if(userList.isEmpty()){
+            throw new TPMSCustomException("No user details found for given user id : " + id, HttpStatus.NOT_FOUND);
+        }
+
+        return userList;
     }
 }
