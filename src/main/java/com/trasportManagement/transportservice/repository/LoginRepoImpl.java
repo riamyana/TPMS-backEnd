@@ -2,6 +2,8 @@ package com.trasportManagement.transportservice.repository;
 
 import com.trasportManagement.transportservice.model.ChangePasswordRequest;
 import com.trasportManagement.transportservice.model.CustomLogin;
+
+import com.trasportManagement.transportservice.model.RegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository(value="loginRepoImpl")
@@ -98,5 +101,25 @@ public class LoginRepoImpl implements LoginRepo {
         namedParameterJdbcTemplate.update(CHANGE_PASSWORD, parameters);
 
         return "Password changed successfully";
+    }
+
+    @Override
+    public List<RegistrationRequest> findUserById(int id) {
+
+        final String SELECT_USER_DETAIL = "SELECT * FROM Login WHERE id=:id";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        List<RegistrationRequest> userList = namedParameterJdbcTemplate.query(SELECT_USER_DETAIL, parameters, (rs, i) ->
+                new RegistrationRequest(
+                        rs.getInt("id"),
+                        rs.getString("userName"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("role")
+                )
+        );
+        return userList;
     }
 }

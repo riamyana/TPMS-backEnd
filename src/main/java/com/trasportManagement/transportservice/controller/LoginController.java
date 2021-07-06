@@ -1,12 +1,12 @@
 package com.trasportManagement.transportservice.controller;
 
-import com.trasportManagement.transportservice.model.CustomLogin;
-import com.trasportManagement.transportservice.model.JWTRequest;
-import com.trasportManagement.transportservice.model.JWTResponse;
-import com.trasportManagement.transportservice.model.Login;
+import com.trasportManagement.transportservice.model.*;
 import com.trasportManagement.transportservice.service.LoginService;
 import com.trasportManagement.transportservice.utility.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -27,6 +29,12 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<List<RegistrationRequest>> findByUserId(@PathVariable int id) {
+        List<RegistrationRequest> userList = loginService.findUserByUserId(id);
+        return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
 
     @PostMapping("/authenticate")
     public JWTResponse authenticate(@RequestBody(required=true) JWTRequest jwtRequest) throws Exception{
