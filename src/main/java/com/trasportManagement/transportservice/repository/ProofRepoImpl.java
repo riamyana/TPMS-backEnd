@@ -1,10 +1,10 @@
 package com.trasportManagement.transportservice.repository;
 
-import com.trasportManagement.transportservice.model.Discount;
 import com.trasportManagement.transportservice.model.Proof;
-import com.trasportManagement.transportservice.model.ProofWithMemberType;
+import com.trasportManagement.transportservice.model.ProofRequirement;
 import com.trasportManagement.transportservice.repository.mapper.ProofByMemberTypeIdRowMapper;
-import com.trasportManagement.transportservice.repository.mapper.ProofWithMemberTypeRowMapper;
+import com.trasportManagement.transportservice.repository.mapper.ProofMapper;
+import com.trasportManagement.transportservice.repository.mapper.ProofRequirementMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -24,9 +24,9 @@ public class ProofRepoImpl implements ProofRepo{
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
-    public List<ProofWithMemberType> findAllProofs() {
-        final String SQL = "SELECT proofId,proofName,p.memberTypeId as membertypeid,mt.memberTypeName as membertypename FROM Proof as p INNER JOIN MemberType as mt ON p.memberTypeId=mt.memberTypeId";
-        List<ProofWithMemberType> proofList = jdbcTemplate.query(SQL, new ProofWithMemberTypeRowMapper());
+    public List<Proof> findAllProofs() {
+        final String SQL = "SELECT * FROM Proof";
+        List<Proof> proofList = jdbcTemplate.query(SQL, new ProofMapper());
         return proofList;
     }
 
@@ -37,7 +37,7 @@ public class ProofRepoImpl implements ProofRepo{
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("memberTypeId", memberTypeId);
 
-        List<Proof> proofList = jdbcTemplate.query(SQL, new ProofByMemberTypeIdRowMapper());
+        List<Proof> proofList = jdbcTemplate.query(SQL, parameters, new ProofByMemberTypeIdRowMapper());
         return proofList;
     }
 
@@ -45,7 +45,7 @@ public class ProofRepoImpl implements ProofRepo{
     @Override
     public int addProof(Proof p) {
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO Proof (proofName,memberTypeId) VALUES (:proofName,:memberTypeId)";
+        final String SQL = "INSERT INTO Proof (proofName) VALUES (:proofName)";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
 
     }
@@ -53,7 +53,7 @@ public class ProofRepoImpl implements ProofRepo{
     @Override
     public int updateProof(int proofId, Proof p) {
         p.setProofId(proofId);
-        final String SQL = "UPDATE Proof SET proofName=:proofName, memberTypeId=:memberTypeId WHERE proofId=:proofId";
+        final String SQL = "UPDATE Proof SET proofName=:proofName WHERE proofId=:proofId";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p));
     }
 
@@ -62,6 +62,36 @@ public class ProofRepoImpl implements ProofRepo{
         Proof p = new Proof();
         p.setProofId(proofId);
         final String SQL = "DELETE FROM Proof WHERE proofId=:proofId";
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p)) > 0;
+    }
+
+    @Override
+    public int addProofRequirement(ProofRequirement p) {
+        KeyHolder holder = new GeneratedKeyHolder();
+        final String SQL = "INSERT INTO MemberTypeProof (proofId, memberTypeId) VALUES (:proofId, :memberTypeId)";
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
+    }
+
+    @Override
+    public List<ProofRequirement> findAllProofRequirement() {
+        final String SQL = "SELECT mp.id, m.memberTypeId, m.memberTypeName, p.proofId, p.proofName from MemberType as m, Proof as p, " +
+                "MemberTypeProof as mp where m.memberTypeId = mp.memberTypeId and p.proofId = mp.proofId";
+        List<ProofRequirement> proofList = jdbcTemplate.query(SQL, new ProofRequirementMapper());
+        return proofList;
+    }
+
+    @Override
+    public int updateProofRequirement(int id, ProofRequirement p) {
+        p.setId(id);
+        final String SQL = "UPDATE MemberTypeProof SET memberTypeId=:memberTypeId, proofId=:proofId WHERE id=:id";
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p));
+    }
+
+    @Override
+    public boolean deleteProofRequirement(int id) {
+        ProofRequirement p = new ProofRequirement();
+        p.setId(id);
+        final String SQL = "DELETE FROM MemberTypeProof WHERE id=:id";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p)) > 0;
     }
 

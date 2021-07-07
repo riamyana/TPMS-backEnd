@@ -1,8 +1,7 @@
 package com.trasportManagement.transportservice.controller;
 
 import com.trasportManagement.transportservice.model.Proof;
-import com.trasportManagement.transportservice.model.ProofWithMemberType;
-import com.trasportManagement.transportservice.response.Result;
+import com.trasportManagement.transportservice.model.ProofRequirement;
 import com.trasportManagement.transportservice.service.ProofService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,8 +26,8 @@ public class ProofController {
     }
 
     @GetMapping("/proofs")
-    public ResponseEntity<List<ProofWithMemberType>> getAllProofs(){
-        List<ProofWithMemberType> proofList = proofService.findAllProofs();
+    public ResponseEntity<List<Proof>> getAllProofs(){
+        List<Proof> proofList = proofService.findAllProofs();
         return new ResponseEntity<>(proofList, HttpStatus.OK);
     }
 
@@ -50,6 +49,33 @@ public class ProofController {
     @DeleteMapping("/proofs/{proofId}")
     public ResponseEntity<Boolean> deleteProof(@PathVariable int proofId) {
         Boolean proofList = proofService.deleteProof(proofId);
+        return new ResponseEntity<>(proofList, HttpStatus.NO_CONTENT);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/proofs/requirement")
+    public ResponseEntity<ProofRequirement> addProofRequirement(@RequestBody(required=true) ProofRequirement p) {
+        ProofRequirement proofList = proofService.addProofRequirement(p);
+        return new ResponseEntity<>(proofList, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/proofs/requirement")
+    public ResponseEntity<List<ProofRequirement>> findAllProofRequirement(){
+        List<ProofRequirement> proofList = proofService.findAllProofRequirement();
+        return new ResponseEntity<>(proofList, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("/proofs/requirement/{id}")
+    public ResponseEntity<ProofRequirement> updateProofRequirement(@PathVariable int id, @RequestBody(required=true) ProofRequirement p) {
+        ProofRequirement proofResult = proofService.updateProofRequirement(id, p);
+        return new ResponseEntity<>(proofResult, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/proofs/requirement/{id}")
+    public ResponseEntity<Boolean> deleteProofRequirement(@PathVariable int id) {
+        Boolean proofList = proofService.deleteProofRequirement(id);
         return new ResponseEntity<>(proofList, HttpStatus.NO_CONTENT);
     }
 
