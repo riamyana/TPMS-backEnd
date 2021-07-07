@@ -11,7 +11,6 @@ public class ProofWithMemberTypeRowMapper implements RowMapper<ProofWithMemberTy
     public ProofWithMemberType mapRow(ResultSet rs, int rowNum) throws SQLException {
 
         ProofWithMemberType p = new ProofWithMemberType();
-        p.setMemberTypeId(rs.getInt("membertypeid"));
         p.setMemberTypeName(rs.getString("membertypename"));   // memberTypeName is the alias in select join query
         p.setProofId(rs.getInt("proofId"));
         p.setProofName(rs.getString("proofName"));
