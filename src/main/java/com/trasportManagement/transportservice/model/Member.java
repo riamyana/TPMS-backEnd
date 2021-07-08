@@ -12,6 +12,7 @@ public class Member {
     private int memberTypeId;
     private String firstName;
     private String lastName;
+    private String gender;
     private String mobileNo;
     private Date dob;
 }

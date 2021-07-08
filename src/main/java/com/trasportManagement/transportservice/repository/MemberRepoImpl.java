@@ -24,14 +24,14 @@ public class MemberRepoImpl implements MemberRepo{
 
     @Override
     public List<MemberWithMemberType> findAllMembers() {
-        final String SQL = "SELECT memberId,m.memberTypeId as membertypeid,memberTypeName,firstName,lastName,mobileNo,dob FROM Member as m INNER JOIN MemberType as mt ON m.memberTypeId=mt.memberTypeId";
+        final String SQL = "SELECT memberId,m.memberTypeId as membertypeid,memberTypeName,firstName,lastName,gender,mobileNo,dob FROM Member as m INNER JOIN MemberType as mt ON m.memberTypeId=mt.memberTypeId";
         List<MemberWithMemberType> memberList = jdbcTemplate.query(SQL, new MemberWithMemberTypeRowMapper());
         return memberList;
     }
 
     @Override
     public List<MemberWithMemberType> findMemberById(int memberId) {
-        final String SQL = "SELECT memberId,m.memberTypeId as membertypeid,memberTypeName,firstName,lastName,mobileNo,dob FROM Member as m INNER JOIN MemberType as mt ON " +
+        final String SQL = "SELECT memberId,m.memberTypeId as membertypeid,memberTypeName,firstName,lastName,gender,mobileNo,dob FROM Member as m INNER JOIN MemberType as mt ON " +
                 "m.memberTypeId=mt.memberTypeId WHERE memberId= :memberId";
 
         SqlParameterSource parameters = new MapSqlParameterSource()
@@ -55,6 +55,7 @@ public class MemberRepoImpl implements MemberRepo{
                         rs.getInt("memberTypeId"),
                         rs.getString("firstName"),
                         rs.getString("lastName"),
+                        rs.getString("gender"),
                         rs.getString("mobileNo"),
                         rs.getDate("dob")
                 )
@@ -72,6 +73,7 @@ public class MemberRepoImpl implements MemberRepo{
                         rs.getInt("memberTypeId"),
                         rs.getString("firstName"),
                         rs.getString("lastName"),
+                        rs.getString("gender"),
                         rs.getString("mobileNo"),
                         rs.getDate("dob")
                 )
@@ -80,7 +82,7 @@ public class MemberRepoImpl implements MemberRepo{
 
     @Override
     public List<MemberWithAddress> findMemberWithAddress() {
-        final String SQL= "SELECT m.memberId, memberTypeId, firstName, lastName, mobileNo, dob , addressId, addLine1, addLine2, city, zipCode " +
+        final String SQL= "SELECT m.memberId, memberTypeId, firstName, lastName, gender, mobileNo, dob , addressId, addLine1, addLine2, city, zipCode " +
                 "FROM Member as m INNER JOIN Address as a ON m.memberId = a.memberId";
 
         List<MemberWithAddress> memberList = jdbcTemplate.query(SQL, new AddressResultSetExtractor());
@@ -92,14 +94,14 @@ public class MemberRepoImpl implements MemberRepo{
     @Override
     public int addMember(Member m) {
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO Member (userId, memberTypeId, firstName, lastName, mobileNo, dob) VALUES (:memberTypeId, :firstName, :lastName, :mobileNo, :dob)";
+        final String SQL = "INSERT INTO Member (userId, memberTypeId, firstName, lastName, gender, mobileNo, dob) VALUES (:memberTypeId, :firstName, :lastName, :gender, :mobileNo, :dob)";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m), holder);
     }
 
     @Override
     public int updateMember(int memberId, Member m) {
         m.setMemberId(memberId);
-        final String SQL = "UPDATE Member SET memberTypeId=:memberTypeId, firstName=:firstName, lastName=:lastName, mobileNo=:mobileNo, dob=:dob WHERE memberId=:memberId";
+        final String SQL = "UPDATE Member SET memberTypeId=:memberTypeId, firstName=:firstName, lastName=:lastName, gender=:gender, mobileNo=:mobileNo, dob=:dob WHERE memberId=:memberId";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m));
     }
 

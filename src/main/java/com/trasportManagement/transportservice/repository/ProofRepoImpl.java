@@ -32,7 +32,8 @@ public class ProofRepoImpl implements ProofRepo{
 
     @Override
     public List<Proof> findProofsByMemberTypeId(int memberTypeId) {
-        final String SQL = "SELECT proofId,proofName, mt.memberTypeName FROM Proof as p INNER JOIN MemberType as mt ON p.memberTypeId=mt.memberTypeId AND mt.memberTypeId=:memberTypeId";
+        final String SQL = "SELECT p.proofId, p.proofName FROM MemberTypeProof as mp, Proof as p WHERE " +
+                "mp.memberTypeId = :memberTypeId and mp.proofId=p.proofId";
 
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("memberTypeId", memberTypeId);
