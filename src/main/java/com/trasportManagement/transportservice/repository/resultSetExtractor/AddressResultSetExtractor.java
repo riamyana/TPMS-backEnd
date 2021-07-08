@@ -31,6 +31,7 @@ public class AddressResultSetExtractor implements ResultSetExtractor<List<Member
                 member.setMemberTypeId(resultSet.getInt("memberTypeId"));
                 member.setFirstName(resultSet.getString("firstName"));
                 member.setLastName(resultSet.getString("lastName"));
+                member.setGender(resultSet.getString("gender"));
                 member.setMobileNo(resultSet.getString("mobileNo"));
                 member.setDob(resultSet.getDate("dob"));
                 member.setAddressList(new ArrayList<Address>());
