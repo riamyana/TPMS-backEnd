@@ -57,7 +57,8 @@ public class MemberRepoImpl implements MemberRepo{
                         rs.getString("lastName"),
                         rs.getString("gender"),
                         rs.getString("mobileNo"),
-                        rs.getDate("dob")
+                        rs.getDate("dob"),
+                        rs.getString("profileImage")
                 )
         );
         return memberList;
@@ -75,7 +76,9 @@ public class MemberRepoImpl implements MemberRepo{
                         rs.getString("lastName"),
                         rs.getString("gender"),
                         rs.getString("mobileNo"),
-                        rs.getDate("dob")
+                        rs.getDate("dob"),
+                        rs.getString("profileImage")
+
                 )
         );
     }
@@ -94,14 +97,14 @@ public class MemberRepoImpl implements MemberRepo{
     @Override
     public int addMember(Member m) {
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO Member (userId, memberTypeId, firstName, lastName, gender, mobileNo, dob) VALUES (:memberTypeId, :firstName, :lastName, :gender, :mobileNo, :dob)";
+        final String SQL = "INSERT INTO Member (userId, memberTypeId, firstName, lastName, gender, mobileNo, dob, profileImage) VALUES (:userId, :memberTypeId, :firstName, :lastName, :gender, :mobileNo, :dob, :profileImage)";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m), holder);
     }
 
     @Override
     public int updateMember(int memberId, Member m) {
         m.setMemberId(memberId);
-        final String SQL = "UPDATE Member SET memberTypeId=:memberTypeId, firstName=:firstName, lastName=:lastName, gender=:gender, mobileNo=:mobileNo, dob=:dob WHERE memberId=:memberId";
+        final String SQL = "UPDATE Member SET memberTypeId=:memberTypeId, firstName=:firstName, lastName=:lastName, gender=:gender, mobileNo=:mobileNo, dob=:dob, profileImage=:profileImage WHERE memberId=:memberId";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m));
     }
 

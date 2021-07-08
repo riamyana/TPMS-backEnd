@@ -46,7 +46,7 @@ public class AddressRepoImpl implements AddressRepo{
     @Override
     public int addAddress(Address a) {
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO Address (addressId, memberId, addLine1, addLine2, city, zipCode) VALUES (:addressId, :memberId, :addLine1, :addLine2, :city, :zipCode)";
+        final String SQL = "INSERT INTO Address (addressId, memberId, addLine1, addLine2, city, zipCode, postalAddLine1, postalAddLine2, postalCity, postalZipCode) VALUES (:addressId, :memberId, :addLine1, :addLine2, :city, :zipCode, :postalAddLine1, :postalAddLine2, :postalCity, :postalZipCode)";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(a), holder);
 
     }
@@ -55,7 +55,7 @@ public class AddressRepoImpl implements AddressRepo{
     public int updateAddress(int memberId,int addressId,Address a) {
         a.setAddressId(addressId);
         a.setMemberId(memberId);
-        final String SQL = "UPDATE Address SET addLine1=:addLine1, addLine2=:addLine2, city=:city, zipCode=:zipCode WHERE memberId=:memberId and addressId=:addressId";
+        final String SQL = "UPDATE Address SET addLine1=:addLine1, addLine2=:addLine2, city=:city, zipCode=:zipCode, postalAddLine1=:postalAddLine1, postalAddLine2=:postalAddLine2, postalCity=:postalCity, postalZipCode=:postalZipCode WHERE memberId=:memberId and addressId=:addressId";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(a));
     }
 

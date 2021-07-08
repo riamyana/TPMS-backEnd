@@ -17,6 +17,10 @@ public class AddressRowMapper implements RowMapper<Address> {
         a.setAddLine2(rs.getString("addLine2"));
         a.setCity(rs.getString("city"));
         a.setZipCode(rs.getString("zipCode"));
+        a.setPostalAddLine1(rs.getString("postalAddLine1"));
+        a.setPostalAddLine2(rs.getString("postalAddLine2"));
+        a.setPostalCity(rs.getString("postalCity"));
+        a.setPostalZipCode(rs.getString("postalZipCode"));
         return a;
     }
 }
