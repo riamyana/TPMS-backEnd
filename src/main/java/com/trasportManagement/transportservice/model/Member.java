@@ -15,4 +15,5 @@ public class Member {
     private String gender;
     private String mobileNo;
     private Date dob;
+    private String profileImage;
 }

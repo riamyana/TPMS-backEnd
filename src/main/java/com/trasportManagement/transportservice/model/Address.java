@@ -15,4 +15,8 @@ public class Address {
     private String addLine2;
     private String city;
     private String zipCode;
+    private String postalAddLine1;
+    private String postalAddLine2;
+    private String postalCity;
+    private String postalZipCode;
 }
