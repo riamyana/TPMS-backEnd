@@ -124,4 +124,34 @@ public class MemberRepoImpl implements MemberRepo{
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m)) > 0;
     }
 
+    @Override
+    public List<Member> findMembersWithPassRequest() {
+        final String SQL = "SELECT * FROM Member where status=false";
+        return jdbcTemplate.query(SQL, (rs, i) ->
+                new Member(
+                        rs.getInt("memberId"),
+                        rs.getInt("userId"),
+                        rs.getInt("memberTypeId"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("gender"),
+                        rs.getString("mobileNo"),
+                        rs.getDate("dob"),
+                        rs.getString("profileImage"),
+                        rs.getBoolean("status")
+
+                )
+        );
+    }
+
+    @Override
+    public int changePassRequestStatus(int memberId, Boolean status) {
+        final String SQL = "UPDATE Member SET status=:status WHERE memberId=:memberId";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("memberId", memberId)
+                .addValue("status", status);
+        return jdbcTemplate.update(SQL, parameters);
+    }
+
 }
