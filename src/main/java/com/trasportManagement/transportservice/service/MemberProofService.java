@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 @Service
@@ -20,7 +22,25 @@ public class MemberProofService {
     @Qualifier("memberProofRepo")
     MemberProofRepo memberProofRepo;
 
-    public MemberProof addMemberProof(MemberProof mp) {
+    @Autowired
+    ImageUploadService imageUploadService;
+
+    public MemberProof addMemberProof(MemberProof mp, MultipartFile multipartFile) {
+
+        if(multipartFile != null){
+            File file = imageUploadService.uploadImage(multipartFile);
+            if(file.getName() != null) {
+                mp.setProofImage(file.getName());
+            }
+            else
+            {
+                throw  new TPMSCustomException("Unable to upload User Proofs.", HttpStatus.BAD_REQUEST);
+            }
+        }
+        else
+        {
+            mp.setProofImage("");
+        }
         int n =memberProofRepo.addMemberProof(mp);
 
         if (n == 0) {
