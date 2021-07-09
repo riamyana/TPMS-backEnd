@@ -16,4 +16,5 @@ public class MemberProofsWithMemberDetails extends MemberProof{
     private String lastName;
     private String mobileNo;
     private Date dob;
+    private String gender;
 }
