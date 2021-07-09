@@ -30,14 +30,14 @@ public class MemberProofRepoImpl implements MemberProofRepo{
 
     @Override
     public List<MemberProofsWithMemberDetails> findAllMembersProofDetails() {
-        final String SQL = "SELECT mp.memberId as memberid,firstName,lastName,mobileNo,dob,memProofId,proofId,uidNo,proofImage FROM MemberProof as mp INNER JOIN Member as m ON mp.memberId=m.memberId";
+        final String SQL = "SELECT mp.memberId as memberid,firstName,lastName,mobileNo,dob,gender, memProofId,proofId,uidNo,proofImage FROM MemberProof as mp INNER JOIN Member as m ON mp.memberId=m.memberId";
         List<MemberProofsWithMemberDetails> memProofDetailList = jdbcTemplate.query(SQL, new MemberProofRowMapper());
         return memProofDetailList;
     }
 
     @Override
     public List<MemberProofsWithMemberDetails> findMemberProofById(int memberId) {
-        final String SQL = "SELECT mp.memberId as memberid,firstName,lastName,mobileNo,dob,memProofId,proofId,uidNo,proofImage FROM MemberProof as mp INNER JOIN Member as m ON mp.memberId=m.memberId AND mp.memberId=:memberId";
+        final String SQL = "SELECT mp.memberId as memberid,firstName,lastName,mobileNo,dob,gender, memProofId,proofId,uidNo,proofImage FROM MemberProof as mp INNER JOIN Member as m ON mp.memberId=m.memberId AND mp.memberId=:memberId";
 
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("memberId", memberId);

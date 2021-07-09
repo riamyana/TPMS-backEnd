@@ -16,10 +16,11 @@ public class MemberProofRowMapper implements RowMapper<MemberProofsWithMemberDet
         m.setLastName(rs.getString("lastName"));
         m.setDob(rs.getDate("dob"));
         m.setMobileNo(rs.getString("mobileNo"));
+        m.setGender(rs.getString("gender"));
         m.setMemProofId(rs.getInt("memProofId"));
         m.setProofId(rs.getInt("proofId"));
         m.setUidNo(rs.getString("uidNo"));
-        m.setProofImage(rs.getString("proofImage"));
+        m.setProofImage("http://localhost:8080/image/"  + rs.getString("proofImage"));
         return m;
     }
 }

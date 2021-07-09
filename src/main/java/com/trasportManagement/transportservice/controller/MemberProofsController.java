@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,8 +23,13 @@ public class MemberProofsController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/member-proofs")
-    public ResponseEntity<MemberProof> addMemberProof(@RequestBody(required=true) MemberProof mp) {
-        MemberProof memProofList = memberProofService.addMemberProof(mp);
+    public ResponseEntity<MemberProof> addMemberProof(@RequestParam("proofId") int proofId, @RequestParam("memberId") int memberId, @RequestParam("uidNo") String uidNo, @RequestParam("proofImage") MultipartFile multipartFile) {
+        MemberProof memberProof = new MemberProof();
+        memberProof.setProofId(proofId);
+        memberProof.setMemberId(memberId);
+        memberProof.setUidNo(uidNo);
+
+        MemberProof memProofList = memberProofService.addMemberProof(memberProof, multipartFile);
         return new ResponseEntity<>(memProofList, HttpStatus.CREATED);
     }
 
