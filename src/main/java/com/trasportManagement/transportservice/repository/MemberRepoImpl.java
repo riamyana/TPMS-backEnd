@@ -24,14 +24,14 @@ public class MemberRepoImpl implements MemberRepo{
 
     @Override
     public List<MemberWithMemberType> findAllMembers() {
-        final String SQL = "SELECT memberId,m.memberTypeId as membertypeid,memberTypeName,firstName,lastName,gender,mobileNo,dob FROM Member as m INNER JOIN MemberType as mt ON m.memberTypeId=mt.memberTypeId";
+        final String SQL = "SELECT memberId,m.memberTypeId as membertypeid,memberTypeName,firstName,lastName,gender,mobileNo,dob, profileImage, status FROM Member as m INNER JOIN MemberType as mt ON m.memberTypeId=mt.memberTypeId";
         List<MemberWithMemberType> memberList = jdbcTemplate.query(SQL, new MemberWithMemberTypeRowMapper());
         return memberList;
     }
 
     @Override
     public List<MemberWithMemberType> findMemberById(int memberId) {
-        final String SQL = "SELECT memberId,m.memberTypeId as membertypeid,memberTypeName,firstName,lastName,gender,mobileNo,dob FROM Member as m INNER JOIN MemberType as mt ON " +
+        final String SQL = "SELECT memberId,m.memberTypeId as membertypeid,memberTypeName,firstName,lastName,gender,mobileNo,dob, profileImage, status FROM Member as m INNER JOIN MemberType as mt ON " +
                 "m.memberTypeId=mt.memberTypeId WHERE memberId= :memberId";
 
         SqlParameterSource parameters = new MapSqlParameterSource()
@@ -58,7 +58,8 @@ public class MemberRepoImpl implements MemberRepo{
                         rs.getString("gender"),
                         rs.getString("mobileNo"),
                         rs.getDate("dob"),
-                        rs.getString("profileImage")
+                        rs.getString("profileImage"),
+                        rs.getBoolean("status")
                 )
         );
         return memberList;
@@ -77,7 +78,8 @@ public class MemberRepoImpl implements MemberRepo{
                         rs.getString("gender"),
                         rs.getString("mobileNo"),
                         rs.getDate("dob"),
-                        rs.getString("profileImage")
+                        rs.getString("profileImage"),
+                        rs.getBoolean("status")
 
                 )
         );
@@ -97,14 +99,20 @@ public class MemberRepoImpl implements MemberRepo{
     @Override
     public int addMember(Member m) {
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO Member (userId, memberTypeId, firstName, lastName, gender, mobileNo, dob, profileImage) VALUES (:userId, :memberTypeId, :firstName, :lastName, :gender, :mobileNo, :dob, :profileImage)";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m), holder);
+        final String SQL = "INSERT INTO Member (userId, memberTypeId, firstName, lastName, gender, mobileNo, dob, profileImage, status)" +
+                " VALUES (:userId, :memberTypeId, :firstName, :lastName, :gender, :mobileNo, :dob, :profileImage, :status)";
+
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m), holder);
+
+        final int id = holder.getKey().intValue();
+        return id;
     }
 
     @Override
     public int updateMember(int memberId, Member m) {
         m.setMemberId(memberId);
-        final String SQL = "UPDATE Member SET memberTypeId=:memberTypeId, firstName=:firstName, lastName=:lastName, gender=:gender, mobileNo=:mobileNo, dob=:dob, profileImage=:profileImage WHERE memberId=:memberId";
+        final String SQL = "UPDATE Member SET memberTypeId=:memberTypeId, firstName=:firstName, lastName=:lastName, gender=:gender, " +
+                "mobileNo=:mobileNo, dob=:dob, profileImage=:profileImage, status=:status WHERE memberId=:memberId";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m));
     }
 

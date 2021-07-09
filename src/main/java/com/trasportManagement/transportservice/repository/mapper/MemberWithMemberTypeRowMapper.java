@@ -19,6 +19,8 @@ public class MemberWithMemberTypeRowMapper implements RowMapper<MemberWithMember
         m.setGender(rs.getString("gender"));
         m.setMobileNo(rs.getString("mobileNo"));
         m.setDob(rs.getDate("dob"));
+        m.setProfileImage(rs.getString("profileImage"));
+        m.setStatus(rs.getBoolean("status"));
 
         return m;
     }

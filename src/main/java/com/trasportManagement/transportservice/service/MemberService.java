@@ -76,6 +76,8 @@ public class MemberService {
             throw new TPMSCustomException("No record inserted of this Member", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+        m.setMemberId(n);
+
         return m;
     }
 
