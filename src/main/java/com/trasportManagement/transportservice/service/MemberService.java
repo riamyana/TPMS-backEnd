@@ -5,7 +5,6 @@ import com.trasportManagement.transportservice.model.Member;
 import com.trasportManagement.transportservice.model.MemberWithAddress;
 import com.trasportManagement.transportservice.model.MemberWithMemberType;
 import com.trasportManagement.transportservice.repository.MemberRepo;
-import com.trasportManagement.transportservice.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -99,6 +98,26 @@ public class MemberService {
         }
 
         return true;
+    }
+
+    public List<Member> findMembersWithPassRequest(){
+        List<Member> memberList=memberRepo.findMembersWithPassRequest();
+
+        if(memberList.isEmpty()){
+            throw new TPMSCustomException("No member found.", HttpStatus.NOT_FOUND);
+        }
+
+        return memberList;
+    }
+
+    public int changePassRequestStatus(int memberId, Boolean status) {
+        int n = memberRepo.changePassRequestStatus(memberId, status);
+
+        if(n == 0){
+            throw  new TPMSCustomException("Unable to update. Given member id : " + memberId   + " not found.", HttpStatus.NOT_FOUND);
+        }
+
+        return n;
     }
 
 }

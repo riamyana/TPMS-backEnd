@@ -23,4 +23,8 @@ public interface MemberRepo {
     List<MemberWithAddress> findMemberWithAddress();
 
     List<Member> findMemberByUserId(int userId);
+
+    List<Member> findMembersWithPassRequest();
+
+    int changePassRequestStatus(int memberId, Boolean status);
 }
