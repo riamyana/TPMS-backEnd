@@ -73,4 +73,18 @@ public class MemberController {
         List<MemberWithAddress> addressList=memberService.findMemberWithAddress();
         return new ResponseEntity<>(addressList, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/members/pass-request")
+    public ResponseEntity<List<Member>> findMembersWithPassRequest() {
+        List<Member> memberList = memberService.findMembersWithPassRequest();
+        return new ResponseEntity<>(memberList, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("members/pass-request/status/{memberId}/{status}")
+    public ResponseEntity<Integer> changePassRequestStatus(@PathVariable int memberId, @PathVariable Boolean status) {
+        int n = memberService.changePassRequestStatus(memberId, status);
+        return new ResponseEntity<>(n, HttpStatus.OK);
+    }
 }
