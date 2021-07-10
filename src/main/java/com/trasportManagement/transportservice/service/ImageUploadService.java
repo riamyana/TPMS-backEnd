@@ -41,8 +41,6 @@ public class ImageUploadService {
         try {
             String fileName = multipartFile.getOriginalFilename();
             fileName = UUID.randomUUID().toString().concat(this.getExtension(fileName));
-            //File file = this.convertToFile(multipartFile, fileName);
-
             Files.copy(multipartFile.getInputStream() ,Paths.get(UPLOAD_DIR + File.separator + fileName),StandardCopyOption.REPLACE_EXISTING);
 
             //multipartFile.transferTo(new File(UPLOAD_DIR + File.separator + multipartFile.getOriginalFilename()));
