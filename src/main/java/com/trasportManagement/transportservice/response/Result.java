@@ -69,6 +69,11 @@ public class Result<T> {
         this.errors = error;
     }
 
+    public Result(String message) {
+        super();
+        this.message = message;
+    }
+
     public int getCode() {
         return code;
     }
