@@ -65,6 +65,10 @@ public class LoginService implements UserDetailsService {
         return loginRepo.changePassword(data);
     }
 
+    public String changeForgotPassword(ForgotPassword data) {
+        return loginRepo.changeForgotPassword(data);
+    }
+
     public List<RegistrationRequest> findUserByUserId(int id) {
         List<RegistrationRequest> userList = loginRepo.findUserById(id);
 

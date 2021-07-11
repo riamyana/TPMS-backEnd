@@ -2,6 +2,7 @@ package com.trasportManagement.transportservice.repository;
 
 import com.trasportManagement.transportservice.model.ChangePasswordRequest;
 import com.trasportManagement.transportservice.model.CustomLogin;
+import com.trasportManagement.transportservice.model.ForgotPassword;
 import com.trasportManagement.transportservice.model.RegistrationRequest;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,8 @@ public interface LoginRepo{
     int save(CustomLogin login);
 
     String changePassword(ChangePasswordRequest data);
+
+    String changeForgotPassword(ForgotPassword data);
 
     List<RegistrationRequest> findUserById(int id);
 }
