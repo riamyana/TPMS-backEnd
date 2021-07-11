@@ -23,13 +23,13 @@ public class EmailSenderService {
     @Autowired
     Configuration fmConfiguration;
 
-    public void sendSimpleEmail(String toEmail, String body, String subject) {
+    public void sendSimpleEmail(EmailData mail) {
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setFrom(fromEmail);
-        message.setTo(toEmail);
-        message.setText(body);
-        message.setSubject(subject);
+        message.setTo(mail.getToEmail());
+        message.setText(mail.getBody());
+        message.setSubject(mail.getSubject());
 
         mailSender.send(message);
     }
@@ -57,7 +57,7 @@ public class EmailSenderService {
         StringBuffer content = new StringBuffer();
 
         try {
-            content.append(FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email-template.flth"), model));
+            content.append(FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("forgot-password-email-template.flth"), model));
         } catch (Exception e) {
             e.printStackTrace();
         }
