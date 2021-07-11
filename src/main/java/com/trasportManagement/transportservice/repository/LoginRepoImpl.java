@@ -3,6 +3,7 @@ package com.trasportManagement.transportservice.repository;
 import com.trasportManagement.transportservice.model.ChangePasswordRequest;
 import com.trasportManagement.transportservice.model.CustomLogin;
 
+import com.trasportManagement.transportservice.model.ForgotPassword;
 import com.trasportManagement.transportservice.model.RegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -96,6 +97,21 @@ public class LoginRepoImpl implements LoginRepo {
 
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("userName", username)
+                .addValue("newPassword", encodedNewPassword);
+
+        namedParameterJdbcTemplate.update(CHANGE_PASSWORD, parameters);
+
+        return "Password changed successfully";
+    }
+
+    @Override
+    public String changeForgotPassword(ForgotPassword data) {
+
+        String encodedNewPassword = bCryptPasswordEncoder.encode(data.getNewPassword());
+        final String CHANGE_PASSWORD = "UPDATE Login SET password=:newPassword WHERE userName=:userName";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("userName", data.getUserName())
                 .addValue("newPassword", encodedNewPassword);
 
         namedParameterJdbcTemplate.update(CHANGE_PASSWORD, parameters);
