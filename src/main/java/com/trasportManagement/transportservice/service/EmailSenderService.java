@@ -34,7 +34,7 @@ public class EmailSenderService {
         mailSender.send(message);
     }
 
-    public void sendEmailWithTemplate(EmailData mail) {
+    public void sendEmailWithTemplate(EmailData mail, String template) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
         try {
@@ -44,7 +44,7 @@ public class EmailSenderService {
             mimeMessageHelper.setSubject(mail.getSubject());
             mimeMessageHelper.setFrom(fromEmail);
             mimeMessageHelper.setTo(mail.getToEmail());
-            mail.setBody(geContentFromTemplate(mail.getModel()));
+            mail.setBody(geContentFromTemplate(mail.getModel(), template));
             mimeMessageHelper.setText(mail.getBody(), true);
 
             mailSender.send(mimeMessageHelper.getMimeMessage());
@@ -53,11 +53,11 @@ public class EmailSenderService {
         }
     }
 
-    public String geContentFromTemplate(Map< String, Object > model)     {
+    public String geContentFromTemplate(Map< String, Object > model, String template)     {
         StringBuffer content = new StringBuffer();
 
         try {
-            content.append(FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("forgot-password-email-template.flth"), model));
+            content.append(FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate(template), model));
         } catch (Exception e) {
             e.printStackTrace();
         }

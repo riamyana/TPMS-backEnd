@@ -21,6 +21,8 @@ import java.util.Map;
 @RestController
 public class EmailSenderController {
 
+    private static final String tpms = "TPMS";
+
     @Autowired
     private EmailSenderService emailSenderService;
 
@@ -54,9 +56,9 @@ public class EmailSenderController {
     @PostMapping("/forgot-password/send-email")
     public ResponseEntity<Result<String>> forgotPasswordEmail(@RequestBody(required=true) String userName) {
 
-        Result<String> response = new Result(201, "Success");
+        String templateName = "forgot-password-email-template.flth";
 
-        String tpms = "TPMS";
+        Result<String> response = new Result(201, "Success");
 
         final UserDetails userDetails
                 = loginService.loadUserByUsername(userName);
@@ -77,7 +79,7 @@ public class EmailSenderController {
 
         EmailData e = new EmailData(toEmail, subject, model);
 
-        emailSenderService.sendEmailWithTemplate(e);
+        emailSenderService.sendEmailWithTemplate(e, templateName);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -94,6 +96,34 @@ public class EmailSenderController {
             otpService.clearOTP(data.getUserName());
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/pass-request-email")
+    public ResponseEntity<Result<String>> passRequestEmail(@RequestBody(required=true) String userName) {
+
+        String templateName = "pass-request-sent-email-template.flth";
+
+        Result<String> response = new Result(201, "Success");
+
+        final UserDetails userDetails
+                = loginService.loadUserByUsername(userName);
+
+        Login login = (Login) userDetails;
+
+        Map<String, Object> model = new HashMap<String, Object>();
+
+        model.put("userName", userName);
+        model.put("tpms", tpms);
+        model.put("tpmsUrl", "http://localhost:4200/user/login");
+
+        String toEmail = login.getCustomLogin().getEmail();
+        String subject = "Pass Request Placed Successfully.";
+
+        EmailData e = new EmailData(toEmail, subject, model);
+
+        emailSenderService.sendEmailWithTemplate(e, templateName);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -20,7 +20,7 @@ public class MemberWithMemberTypeRowMapper implements RowMapper<MemberWithMember
         m.setMobileNo(rs.getString("mobileNo"));
         m.setDob(rs.getDate("dob"));
         m.setProfileImage(rs.getString("profileImage"));
-        m.setStatus(rs.getBoolean("status"));
+        m.setStatus(rs.getInt("status"));
 
         return m;
     }
