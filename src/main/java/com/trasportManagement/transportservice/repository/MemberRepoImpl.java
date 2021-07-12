@@ -59,7 +59,7 @@ public class MemberRepoImpl implements MemberRepo{
                         rs.getString("mobileNo"),
                         rs.getDate("dob"),
                         rs.getString("profileImage"),
-                        rs.getBoolean("status")
+                        rs.getInt("status")
                 )
         );
         return memberList;
@@ -79,7 +79,7 @@ public class MemberRepoImpl implements MemberRepo{
                         rs.getString("mobileNo"),
                         rs.getDate("dob"),
                         rs.getString("profileImage"),
-                        rs.getBoolean("status")
+                        rs.getInt("status")
 
                 )
         );
@@ -138,7 +138,7 @@ public class MemberRepoImpl implements MemberRepo{
                         rs.getString("mobileNo"),
                         rs.getDate("dob"),
                         rs.getString("profileImage"),
-                        rs.getBoolean("status")
+                        rs.getInt("status")
 
                 )
         );

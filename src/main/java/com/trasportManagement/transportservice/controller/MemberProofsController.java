@@ -21,7 +21,6 @@ public class MemberProofsController {
     @Autowired
     MemberProofService memberProofService;
 
-    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/member-proofs")
     public ResponseEntity<MemberProof> addMemberProof(@RequestParam("proofId") int proofId, @RequestParam("memberId") int memberId, @RequestParam("uidNo") String uidNo, @RequestParam("proofImage") MultipartFile multipartFile) {
         MemberProof memberProof = new MemberProof();

@@ -16,5 +16,5 @@ public class Member {
     private String mobileNo;
     private Date dob;
     private String profileImage;
-    private boolean status;
+    private int status;
 }
