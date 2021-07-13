@@ -83,8 +83,8 @@ public class MemberController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("members/pass-request/status/{memberId}/{status}")
-    public ResponseEntity<Integer> changePassRequestStatus(@PathVariable int memberId, @PathVariable Boolean status) {
-        int n = memberService.changePassRequestStatus(memberId, status);
+    public ResponseEntity<Integer> changePassRequestStatus(@PathVariable int memberId, @PathVariable int status, @RequestBody String description) {
+        int n = memberService.changePassRequestStatus(memberId, status, description);
         return new ResponseEntity<>(n, HttpStatus.OK);
     }
 }

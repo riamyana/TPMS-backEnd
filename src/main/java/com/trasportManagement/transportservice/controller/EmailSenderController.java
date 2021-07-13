@@ -3,6 +3,7 @@ package com.trasportManagement.transportservice.controller;
 import com.trasportManagement.transportservice.model.EmailData;
 import com.trasportManagement.transportservice.model.ForgotPassword;
 import com.trasportManagement.transportservice.model.Login;
+import com.trasportManagement.transportservice.model.RequestStatus;
 import com.trasportManagement.transportservice.response.Result;
 import com.trasportManagement.transportservice.service.EmailSenderService;
 import com.trasportManagement.transportservice.service.LoginService;
@@ -20,6 +21,8 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class EmailSenderController {
+
+    private static final String tpms = "TPMS";
 
     @Autowired
     private EmailSenderService emailSenderService;
@@ -54,9 +57,9 @@ public class EmailSenderController {
     @PostMapping("/forgot-password/send-email")
     public ResponseEntity<Result<String>> forgotPasswordEmail(@RequestBody(required=true) String userName) {
 
-        Result<String> response = new Result(201, "Success");
+        String templateName = "forgot-password-email-template.flth";
 
-        String tpms = "TPMS";
+        Result<String> response = new Result(201, "Success");
 
         final UserDetails userDetails
                 = loginService.loadUserByUsername(userName);
@@ -77,7 +80,7 @@ public class EmailSenderController {
 
         EmailData e = new EmailData(toEmail, subject, model);
 
-        emailSenderService.sendEmailWithTemplate(e);
+        emailSenderService.sendEmailWithTemplate(e, templateName);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -94,6 +97,69 @@ public class EmailSenderController {
             otpService.clearOTP(data.getUserName());
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/pass-request-email")
+    public ResponseEntity<Result<String>> passRequestEmail(@RequestBody(required=true) String userName) {
+
+        String templateName = "pass-request-sent-email-template.flth";
+
+        Result<String> response = new Result(201, "Success");
+
+        final UserDetails userDetails
+                = loginService.loadUserByUsername(userName);
+
+        Login login = (Login) userDetails;
+
+        Map<String, Object> model = new HashMap<String, Object>();
+
+        model.put("userName", userName);
+        model.put("tpms", tpms);
+        model.put("tpmsUrl", "http://localhost:4200/user/login");
+
+        String toEmail = login.getCustomLogin().getEmail();
+        String subject = "Pass Request Placed Successfully";
+
+        EmailData e = new EmailData(toEmail, subject, model);
+
+        emailSenderService.sendEmailWithTemplate(e, templateName);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/pass-status-email")
+    public ResponseEntity<Result<String>> passStatusEmail(@RequestBody(required=true) RequestStatus requestStatus) {
+        Result<String> response = new Result(201, "Success");
+        String status = "";
+        String templateName = "pass-status-email-template.flth";
+
+        final UserDetails userDetails
+                = loginService.loadUserByUsername(requestStatus.getUserName());
+
+        Login login = (Login) userDetails;
+
+        if (requestStatus.getStatus() == 1) {
+            status = "Approved";
+        } else if (requestStatus.getStatus() == 2) {
+            status = "Not Approved";
+        }
+
+        Map<String, Object> model = new HashMap<>();
+
+        model.put("userName", requestStatus.getUserName());
+        model.put("tpms", tpms);
+        model.put("tpmsUrl", "http://localhost:4200/user/login");
+        model.put("status", status);
+        model.put("description", requestStatus.getDescription());
+
+        String toEmail = login.getCustomLogin().getEmail();
+        String subject = "Pass Request Status";
+
+        EmailData e = new EmailData(toEmail, subject, model);
+
+        emailSenderService.sendEmailWithTemplate(e, templateName);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

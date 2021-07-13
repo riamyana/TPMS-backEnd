@@ -110,8 +110,8 @@ public class MemberService {
         return memberList;
     }
 
-    public int changePassRequestStatus(int memberId, Boolean status) {
-        int n = memberRepo.changePassRequestStatus(memberId, status);
+    public int changePassRequestStatus(int memberId, int status, String description) {
+        int n = memberRepo.changePassRequestStatus(memberId, status, description);
 
         if(n == 0){
             throw  new TPMSCustomException("Unable to update. Given member id : " + memberId   + " not found.", HttpStatus.NOT_FOUND);
