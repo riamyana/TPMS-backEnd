@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class PassController {
 
@@ -55,6 +56,12 @@ public class PassController {
     @GetMapping("/passes/member")
     public ResponseEntity<List<PassWithMemberDetails>> getMemberPass(){
         List<PassWithMemberDetails> passResult =passService.findAllMemberPasses();
+        return new ResponseEntity<>(passResult, HttpStatus.OK);
+    }
+
+    @GetMapping("/passes/member/{memberId}")
+    public ResponseEntity<List<PassWithMemberDetails>> findMemberPassesByMemberId(@PathVariable int memberId){
+        List<PassWithMemberDetails> passResult =passService.findMemberPassesByMemberId(memberId);
         return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
 

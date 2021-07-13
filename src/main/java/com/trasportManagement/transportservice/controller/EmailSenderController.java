@@ -132,6 +132,7 @@ public class EmailSenderController {
     public ResponseEntity<Result<String>> passStatusEmail(@RequestBody(required=true) RequestStatus requestStatus) {
         Result<String> response = new Result(201, "Success");
         String status = "";
+        String description = "We will send you your pass soon.";
         String templateName = "pass-status-email-template.flth";
 
         final UserDetails userDetails
@@ -143,6 +144,7 @@ public class EmailSenderController {
             status = "Approved";
         } else if (requestStatus.getStatus() == 2) {
             status = "Not Approved";
+            description = requestStatus.getDescription();
         }
 
         Map<String, Object> model = new HashMap<>();
@@ -151,7 +153,7 @@ public class EmailSenderController {
         model.put("tpms", tpms);
         model.put("tpmsUrl", "http://localhost:4200/user/login");
         model.put("status", status);
-        model.put("description", requestStatus.getDescription());
+        model.put("description", description);
 
         String toEmail = login.getCustomLogin().getEmail();
         String subject = "Pass Request Status";
