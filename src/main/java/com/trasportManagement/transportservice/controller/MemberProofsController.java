@@ -22,12 +22,10 @@ public class MemberProofsController {
     MemberProofService memberProofService;
 
     @PostMapping("/member-proofs")
-    public ResponseEntity<MemberProof> addMemberProof(@RequestParam("proofId") int proofId, @RequestParam("memberId") int memberId, @RequestParam("uidNo") String uidNo, @RequestParam("proofImage") MultipartFile multipartFile) {
+    public ResponseEntity<MemberProof> addMemberProof(@RequestParam("proofId") int proofId, @RequestParam("memberId") int memberId, @RequestParam("proofImage") MultipartFile multipartFile) {
         MemberProof memberProof = new MemberProof();
         memberProof.setProofId(proofId);
         memberProof.setMemberId(memberId);
-        memberProof.setUidNo(uidNo);
-
         MemberProof memProofList = memberProofService.addMemberProof(memberProof, multipartFile);
         return new ResponseEntity<>(memProofList, HttpStatus.CREATED);
     }

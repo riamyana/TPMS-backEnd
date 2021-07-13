@@ -103,8 +103,8 @@ public class MemberRepoImpl implements MemberRepo{
     @Override
     public int addMember(Member m) {
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO Member (userId, memberTypeId, firstName, lastName, gender, mobileNo, dob, profileImage, requestDate, status, description)" +
-                " VALUES (:userId, :memberTypeId, :firstName, :lastName, :gender, :mobileNo, :dob, :profileImage, :requestDate, :status, :description)";
+        final String SQL = "INSERT INTO Member (userId, memberTypeId, firstName, lastName, gender, mobileNo, dob, profileImage, requestDate)" +
+                " VALUES (:userId, :memberTypeId, :firstName, :lastName, :gender, :mobileNo, :dob, :profileImage, :requestDate)";
 
         jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m), holder);
 
@@ -116,7 +116,7 @@ public class MemberRepoImpl implements MemberRepo{
     public int updateMember(int memberId, Member m) {
         m.setMemberId(memberId);
         final String SQL = "UPDATE Member SET memberTypeId=:memberTypeId, firstName=:firstName, lastName=:lastName, gender=:gender, " +
-                "mobileNo=:mobileNo, dob=:dob, profileImage=:profileImage, requestDate=:requestDate, status=:status, description=:description WHERE memberId=:memberId";
+                "mobileNo=:mobileNo, dob=:dob, profileImage=:profileImage, requestDate=:requestDate WHERE memberId=:memberId";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m));
     }
 
