@@ -29,6 +29,16 @@ public class PassRepoImpl implements PassRepo{
     }
 
     @Override
+    public List<PassWithMemberDetails> findMemberPassesByMemberId(int memberId) {
+        final String SQL = "SELECT id,p.memberId,serialNo,expiryDate,m.firstName as firstName,m.lastName as lastName FROM Pass as p INNER JOIN Member as m ON p.memberId=m.memberId and m.memberId=:memberId";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("memberId", memberId);
+        List<PassWithMemberDetails> passList = jdbcTemplate.query(SQL, parameters, new PassWithMemberDetailsRowMapper());
+        return passList;
+    }
+
+    @Override
     public List<Pass> findAllPasses(){
         final String SQL = "SELECT * FROM Pass";
         return jdbcTemplate.query(SQL, (rs, i) ->
