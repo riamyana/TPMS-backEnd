@@ -19,22 +19,21 @@ public class AddressController {
     @Autowired
     AddressService addressService;
 
-    @PreAuthorize("hasAuthority('USER')")
+
     @PostMapping("/member/member-address")
     public ResponseEntity<Address> addAddress(@RequestBody(required=true) Address a) {
         Address addressList = addressService.addAddress(a);
         return new ResponseEntity<>(addressList, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
-    @PutMapping("/member/{memberId}/member-address/{addressId}")
 
+    @PutMapping("/member/{memberId}/member-address/{addressId}")
     public ResponseEntity<Address> updateAddress(@PathVariable int memberId,@PathVariable int addressId,@RequestBody(required=true) Address a) {
         Address addressList = addressService.updateAddress(memberId,addressId,a);
         return new ResponseEntity<>(addressList, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+
     @DeleteMapping("/member/{memberId}/member-address/{addressId}")
     public ResponseEntity<Boolean> deleteAddress(@PathVariable int memberId,@PathVariable int addressId) {
         Boolean addressList = addressService.deleteAddress(memberId,addressId);

@@ -11,6 +11,5 @@ public class MemberProof {
     private int memProofId;
     private int proofId;
     private int memberId;
-    private String uidNo;
     private String proofImage;
 }

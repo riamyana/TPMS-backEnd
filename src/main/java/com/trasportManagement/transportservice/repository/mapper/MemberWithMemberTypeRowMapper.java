@@ -23,7 +23,6 @@ public class MemberWithMemberTypeRowMapper implements RowMapper<MemberWithMember
         m.setRequestDate(rs.getDate("requestDate"));
         m.setStatus(rs.getInt("status"));
         m.setDescription(rs.getString("description"));
-
         return m;
     }
 }
