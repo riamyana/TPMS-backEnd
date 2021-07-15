@@ -19,7 +19,7 @@ public class DiscountService {
 
     public Discount addDiscount(Discount d){
         int n = discountRepo.addDiscount(d);
-
+        d.setId(n);
         if (n == 0) {
             throw new TPMSCustomException("No record inserted of this discount", HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -26,7 +26,10 @@ public class TransportCostRepoImpl implements TransportCostRepo{
     public int addTransportCost(TransportCost t) {
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO TransportCost (fromStationId, toStationId, cost) VALUES (:fromStationId, :toStationId, :cost)";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t), holder);
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t), holder);
+
+        final int id = holder.getKey().intValue();
+        return id;
 
     }
 

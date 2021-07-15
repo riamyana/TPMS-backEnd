@@ -40,6 +40,7 @@ public class AddressService {
 
     public Address addAddress(Address a) {
         int n = addressRepo.addAddress(a);
+        a.setAddressId(n);
 
         if (n == 0) {
             throw new TPMSCustomException("No record inserted of this address", HttpStatus.INTERNAL_SERVER_ERROR);

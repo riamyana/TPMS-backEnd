@@ -94,7 +94,9 @@ public class PassRepoImpl implements PassRepo{
 
         final String SQL = "INSERT INTO Pass (memberId, serialNo, expiryDate) VALUES (:memberId, :SerialNo, :expiry)";
 
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
+        final int id = holder.getKey().intValue();
+        return id;
 
     }
 

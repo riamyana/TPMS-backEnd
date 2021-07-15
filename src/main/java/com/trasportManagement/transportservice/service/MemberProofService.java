@@ -43,6 +43,7 @@ public class MemberProofService {
             throw  new TPMSCustomException("Something went wrong. Please try again to upload documents", HttpStatus.NOT_FOUND);
         }
         int n =memberProofRepo.addMemberProof(mp);
+        mp.setMemProofId(n);
 
         if (n == 0) {
             throw new TPMSCustomException("No record inserted of Member proof", HttpStatus.INTERNAL_SERVER_ERROR);

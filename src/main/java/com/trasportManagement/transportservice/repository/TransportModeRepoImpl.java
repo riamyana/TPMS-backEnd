@@ -41,7 +41,10 @@ public class TransportModeRepoImpl implements TransportModeRepo{
 
         final String SQL = "INSERT INTO TransportMode (id, name) VALUES (:id, :name)";
 
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t), holder);
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(t), holder);
+
+        final int id = holder.getKey().intValue();
+        return id;
 
     }
 

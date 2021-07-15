@@ -23,7 +23,10 @@ public class DiscountRepoImpl implements DiscountRepo{
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO Discount (packageId, startDate, endDate, percentage, description) VALUES (:packageId, :startDate, :endDate, :percentage, :description)";
 
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(d), holder);
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(d), holder);
+
+        final int id = holder.getKey().intValue();
+        return id;
 
     }
 

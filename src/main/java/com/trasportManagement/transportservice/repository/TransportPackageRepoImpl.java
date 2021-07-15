@@ -22,8 +22,9 @@ public class TransportPackageRepoImpl implements TransportPackageRepo {
     public int addTransportPackage(TransportPackage tp) {
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO TransportPackage (transModetId, packageId) VALUES (:transModeId, :packageId)";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(tp), holder);
-
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(tp), holder);
+        final int id = holder.getKey().intValue();
+        return id;
     }
 
     @Override

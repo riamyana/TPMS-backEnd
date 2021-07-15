@@ -22,6 +22,7 @@ public class TransportPackageService {
 
     public TransportPackage addTransportPackage(TransportPackage tp) {
         int n = transportPackageRopo.addTransportPackage(tp);
+        tp.setId(n);
         if(n == 0){
             throw new TPMSCustomException("No record inserted of this Tranport Package", HttpStatus.INTERNAL_SERVER_ERROR);
         }

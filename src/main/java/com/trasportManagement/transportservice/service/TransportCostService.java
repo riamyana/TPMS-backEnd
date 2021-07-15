@@ -22,6 +22,7 @@ public class TransportCostService {
 
     public TransportCost addTransportCost(TransportCost t) {
         int n = transportCostRepo.addTransportCost(t);
+        t.setTransCostId(n);
         if(n == 0){
             throw new TPMSCustomException("No record inserted for this Transport Cost", HttpStatus.INTERNAL_SERVER_ERROR);
         }

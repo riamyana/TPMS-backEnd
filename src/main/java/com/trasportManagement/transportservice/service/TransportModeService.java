@@ -21,6 +21,7 @@ public class TransportModeService {
     public TransportMode addTransportMode(TransportMode t) {
 
         int n = transportModeRepo.addTransportMode(t);
+        t.setId(n);
 
         if(n == 0){
             throw new TPMSCustomException("No record inserted of Transport Mode", HttpStatus.INTERNAL_SERVER_ERROR);

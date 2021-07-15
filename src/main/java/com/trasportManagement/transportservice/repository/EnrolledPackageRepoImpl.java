@@ -46,7 +46,10 @@ public class EnrolledPackageRepoImpl implements EnrolledPackageRepo{
 
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO EnrolledPackage (passId, packageId, start, end, isActive) VALUES (:passId, :packageId, :start, :end, :isActive)";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(e), holder);
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(e), holder);
+
+        final int id = holder.getKey().intValue();
+        return id;
 
     }
 

@@ -19,6 +19,7 @@ public class StationService {
 
     public Station addStation(Station s) {
         int n = stationRepo.addStation(s);
+        s.setStationId(n);
         if(n == 0){
             throw new TPMSCustomException("No record inserted for this station", HttpStatus.INTERNAL_SERVER_ERROR);
         }
