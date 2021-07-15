@@ -12,6 +12,7 @@ import java.util.Date;
 @ToString
 
 public class MemberProofsWithMemberDetails extends MemberProof{
+    private int memberTypeId;
     private String firstName;
     private String lastName;
     private String mobileNo;

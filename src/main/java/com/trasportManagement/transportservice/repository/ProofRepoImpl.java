@@ -47,7 +47,10 @@ public class ProofRepoImpl implements ProofRepo{
     public int addProof(Proof p) {
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO Proof (proofName) VALUES (:proofName)";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
+
+        final int id = holder.getKey().intValue();
+        return id;
 
     }
 
@@ -70,7 +73,10 @@ public class ProofRepoImpl implements ProofRepo{
     public int addProofRequirement(ProofRequirement p) {
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO MemberTypeProof (proofId, memberTypeId) VALUES (:proofId, :memberTypeId)";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
+
+        final int id = holder.getKey().intValue();
+        return id;
     }
 
     @Override

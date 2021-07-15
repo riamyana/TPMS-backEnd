@@ -116,7 +116,7 @@ public class MemberRepoImpl implements MemberRepo{
     public int updateMember(int memberId, Member m) {
         m.setMemberId(memberId);
         final String SQL = "UPDATE Member SET memberTypeId=:memberTypeId, firstName=:firstName, lastName=:lastName, gender=:gender, " +
-                "mobileNo=:mobileNo, dob=:dob, profileImage=:profileImage, requestDate=:requestDate WHERE memberId=:memberId";
+                "mobileNo=:mobileNo, dob=:dob, status=:status, profileImage=:profileImage WHERE userId=:userId";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m));
     }
 
@@ -130,7 +130,7 @@ public class MemberRepoImpl implements MemberRepo{
 
     @Override
     public List<Member> findMembersWithPassRequest() {
-        final String SQL = "SELECT m.*, l.userName FROM Member as m, login as l WHERE status=0 or status=2 AND l.id=m.userId";
+        final String SQL = "SELECT m.*, l.userName FROM Member as m, login as l WHERE l.id=m.userId and (status=0 or status=2 or status=3)";
         return jdbcTemplate.query(SQL, (rs, i) ->
                 new Member(
                         rs.getInt("memberId"),

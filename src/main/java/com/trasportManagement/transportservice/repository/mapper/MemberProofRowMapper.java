@@ -12,6 +12,7 @@ public class MemberProofRowMapper implements RowMapper<MemberProofsWithMemberDet
     public MemberProofsWithMemberDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
         MemberProofsWithMemberDetails m = new MemberProofsWithMemberDetails();
         m.setMemberId(rs.getInt("memberid"));
+        m.setMemberTypeId(rs.getInt("memberTypeId"));
         m.setFirstName(rs.getString("firstName"));   // memberTypeName is the alias in select join query
         m.setLastName(rs.getString("lastName"));
         m.setDob(rs.getDate("dob"));

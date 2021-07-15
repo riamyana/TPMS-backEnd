@@ -22,6 +22,7 @@ public class EnrolledPackageService {
     public EnrolledPackage addEnrolledPackage(EnrolledPackage e) {
 
         int n = enrolledPackageRepo.addEnrolledPackage(e);
+        e.setId(n);
 
         if (n == 0) {
             throw new TPMSCustomException("No record inserted for this Enrolled Package.", HttpStatus.INTERNAL_SERVER_ERROR);

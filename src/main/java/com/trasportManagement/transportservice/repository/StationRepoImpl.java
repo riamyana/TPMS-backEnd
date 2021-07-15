@@ -24,7 +24,10 @@ public class StationRepoImpl implements StationRepo{
     public int addStation(Station s) {
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO Station (stationName,swipeMachineId,latitude,longitude) VALUES (:stationName,:swipeMachineId,:latitude,:longitude)";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(s), holder);
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(s), holder);
+
+        final int id = holder.getKey().intValue();
+        return id;
 
     }
 

@@ -21,6 +21,7 @@ public class PassService {
 
     public Result<Pass> addPass(Pass p) {
         int passId = passRepo.addPass(p);
+        p.setPassId(passId);
         if(passId == 0){
             return new Result<>(400, "Error in adding pass details.");
         }else{

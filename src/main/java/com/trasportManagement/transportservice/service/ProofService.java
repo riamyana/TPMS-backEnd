@@ -37,6 +37,7 @@ public class ProofService {
 
     public Proof addProof(Proof p) {
         int n = proofRepo.addProof(p);
+        p.setProofId(n);
         if(n == 0){
             throw new TPMSCustomException("No record inserted for this Proof", HttpStatus.INTERNAL_SERVER_ERROR);
         }

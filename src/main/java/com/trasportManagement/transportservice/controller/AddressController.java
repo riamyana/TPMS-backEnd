@@ -47,7 +47,6 @@ public class AddressController {
         return new ResponseEntity<>(addressResult, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/member/member-address/{memberId}")
     public ResponseEntity<List<Address>> getMemberAddressById(@PathVariable int memberId) {
         List<Address> addressList = addressService.findMemberAddressById(memberId);

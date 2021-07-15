@@ -37,7 +37,6 @@ public class MemberProofsController {
         return new ResponseEntity<>(memProofList, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/member/{memberId}/member-proofs")
     public ResponseEntity<List<MemberProofsWithMemberDetails>> getMemberProofById(@PathVariable int memberId){
         List<MemberProofsWithMemberDetails> memProofList =memberProofService.findMemberProofById(memberId);

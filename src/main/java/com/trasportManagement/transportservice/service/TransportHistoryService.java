@@ -20,6 +20,7 @@ public class TransportHistoryService {
 
     public TransportHistory addTransportHistory(TransportHistory t) {
         int n = transportHistoryRepo.addTransportHistory(t);
+        t.setTransHistoryId(n);
         if(n == 0){
             throw new TPMSCustomException("No record inserted of this Transport History", HttpStatus.INTERNAL_SERVER_ERROR);
         }

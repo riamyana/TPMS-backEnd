@@ -47,8 +47,9 @@ public class AddressRepoImpl implements AddressRepo{
     public int addAddress(Address a) {
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO Address (addressId, memberId, addLine1, addLine2, city, zipCode, postalAddLine1, postalAddLine2, postalCity, postalZipCode) VALUES (:addressId, :memberId, :addLine1, :addLine2, :city, :zipCode, :postalAddLine1, :postalAddLine2, :postalCity, :postalZipCode)";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(a), holder);
-
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(a), holder);
+        final int id = holder.getKey().intValue();
+        return id;
     }
 
     @Override

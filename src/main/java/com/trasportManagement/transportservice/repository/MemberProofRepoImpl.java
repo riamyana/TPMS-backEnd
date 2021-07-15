@@ -24,7 +24,10 @@ public class MemberProofRepoImpl implements MemberProofRepo{
     public int addMemberProof(MemberProof mp) {
         KeyHolder holder = new GeneratedKeyHolder();
         final String SQL = "INSERT INTO MemberProof(proofId,memberId,proofImage) VALUES (:proofId, :memberId,:proofImage)";
-        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(mp), holder);
+        jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(mp), holder);
+
+        final int id = holder.getKey().intValue();
+        return id;
 
     }
 
@@ -37,7 +40,7 @@ public class MemberProofRepoImpl implements MemberProofRepo{
 
     @Override
     public List<MemberProofsWithMemberDetails> findMemberProofById(int memberId) {
-        final String SQL = "SELECT mp.memberId as memberid,firstName,lastName,mobileNo,dob,gender, memProofId,proofId,proofImage FROM MemberProof as mp INNER JOIN Member as m ON mp.memberId=m.memberId AND mp.memberId=:memberId";
+        final String SQL = "SELECT mp.memberId as memberid,memberTypeId,firstName,lastName,mobileNo,dob,gender, memProofId,proofId,proofImage FROM MemberProof as mp INNER JOIN Member as m ON mp.memberId=m.memberId AND mp.memberId=:memberId";
 
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("memberId", memberId);

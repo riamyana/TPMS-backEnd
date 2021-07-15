@@ -39,6 +39,7 @@ public class MemberTypeService {
 
     public MemberType addMemberType(MemberType m) {
         int n = memberTypeRepo.addMemberType(m);
+        m.setMemberTypeId(n);
         if(n == 0){
             throw new TPMSCustomException("No record inserted of this Member type", HttpStatus.INTERNAL_SERVER_ERROR);
         }

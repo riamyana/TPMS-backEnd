@@ -71,6 +71,7 @@ public class MemberService {
 
     public Member addMember(Member m) {
         int n = memberRepo.addMember(m);
+        m.setMemberId(n);
         if(n == 0){
             throw new TPMSCustomException("No record inserted of this Member", HttpStatus.INTERNAL_SERVER_ERROR);
         }
