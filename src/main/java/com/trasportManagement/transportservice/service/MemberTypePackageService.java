@@ -3,6 +3,7 @@ package com.trasportManagement.transportservice.service;
 import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.MemberTypePackage;
 import com.trasportManagement.transportservice.model.MemberTypePackageDTO;
+import com.trasportManagement.transportservice.model.PackageForMember;
 import com.trasportManagement.transportservice.repository.MemberTypePackageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,6 +52,15 @@ public class MemberTypePackageService {
 
     public List<MemberTypePackageDTO> findMemberPackageById(int packageId) {
         List<MemberTypePackageDTO> result = memberTypePackageRepo.findMemberPackageById(packageId);
+        if(result.isEmpty()){
+            throw  new TPMSCustomException("No package found.", HttpStatus.NOT_FOUND);
+        }
+
+        return result;
+    }
+
+    public List<PackageForMember> findMemberPackageByMemberId(int memberId) {
+        List<PackageForMember> result = memberTypePackageRepo.findMemberPackageByMemberId(memberId);
         if(result.isEmpty()){
             throw  new TPMSCustomException("No package found.", HttpStatus.NOT_FOUND);
         }

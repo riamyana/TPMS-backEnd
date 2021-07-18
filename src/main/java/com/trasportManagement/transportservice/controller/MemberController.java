@@ -86,4 +86,11 @@ public class MemberController {
         int n = memberService.changePassRequestStatus(memberId, status, member.getDescription());
         return new ResponseEntity<>(n, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("members/pass-request/count/status/{status}")
+    public ResponseEntity<Integer> coutsOfStatus(@PathVariable int status) {
+        int n = memberService.coutsOfStatus(status);
+        return new ResponseEntity<>(n, HttpStatus.OK);
+    }
 }

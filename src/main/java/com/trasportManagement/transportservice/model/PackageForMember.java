@@ -6,11 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-public class Package {
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class PackageForMember {
     private int id;
     private String name;
     private String transportMode;
@@ -19,4 +18,9 @@ public class Package {
     private int validity;
     private int balance;
     private int price;
+    private int memberPackgeId;
+    private Date discountStartDate;
+    private Date discountEndDate;
+    private int discountPercentage;
+    private String discountDescription;
 }

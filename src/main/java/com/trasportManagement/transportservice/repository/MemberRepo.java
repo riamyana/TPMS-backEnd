@@ -27,4 +27,6 @@ public interface MemberRepo {
     List<Member> findMembersWithPassRequest();
 
     int changePassRequestStatus(int memberId, int status, String description);
+
+    int coutsOfStatus(int status);
 }
