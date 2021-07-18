@@ -130,7 +130,7 @@ public class MemberRepoImpl implements MemberRepo{
 
     @Override
     public List<Member> findMembersWithPassRequest() {
-        final String SQL = "SELECT m.*, l.userName FROM Member as m, login as l WHERE l.id=m.userId and (status=0 or status=2 or status=3)";
+        final String SQL = "SELECT m.*, l.userName FROM Member as m, Login as l WHERE l.id=m.userId and (status=0 or status=2 or status=3)";
         return jdbcTemplate.query(SQL, (rs, i) ->
                 new Member(
                         rs.getInt("memberId"),
@@ -159,6 +159,17 @@ public class MemberRepoImpl implements MemberRepo{
                 .addValue("status", status)
                 .addValue("description", description);
         return jdbcTemplate.update(SQL, parameters);
+    }
+
+    @Override
+    public int coutsOfStatus(int status) {
+        final String SQL = "SELECT count(*) FROM Member WHERE STATUS=:status";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("status", status);
+
+        int count = jdbcTemplate.queryForObject(SQL, parameters, Integer.class);
+        return count;
     }
 
 }

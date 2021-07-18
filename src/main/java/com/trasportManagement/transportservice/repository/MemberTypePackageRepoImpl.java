@@ -3,7 +3,9 @@ package com.trasportManagement.transportservice.repository;
 import com.trasportManagement.transportservice.exception.TPMSCustomException;
 import com.trasportManagement.transportservice.model.MemberTypePackage;
 import com.trasportManagement.transportservice.model.MemberTypePackageDTO;
+import com.trasportManagement.transportservice.model.PackageForMember;
 import com.trasportManagement.transportservice.repository.mapper.MemberTypePackageExtractor;
+import com.trasportManagement.transportservice.repository.mapper.PackageForMemberRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -60,14 +62,27 @@ public class MemberTypePackageRepoImpl implements MemberTypePackageRepo{
     @Override
     public List<MemberTypePackageDTO> findMemberPackageById(int packageId) {
         final String SQL = "SELECT p.*, mt.id as memberPacakgeId, mt.packageId, mt.memberTypeId, mt.discountStartDate, " +
-                            "mt.discountEndDate, mt.discountPercentage, mt.discountDescription FROM Package AS p, MemberType " +
-                            "as m, MemberTypePackage as mt WHERE p.id=mt.packageId and m.memberTypeId=mt.memberTypeId and " +
-                            "p.id=:packageId ";
+                "mt.discountEndDate, mt.discountPercentage, mt.discountDescription FROM Package AS p, MemberType " +
+                "as m, MemberTypePackage as mt WHERE p.id=mt.packageId and m.memberTypeId=mt.memberTypeId and " +
+                "p.id=:packageId";
 
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("packageId", packageId);
 
         List<MemberTypePackageDTO> result = (List<MemberTypePackageDTO>) jdbcTemplate.query(SQL, parameters, new MemberTypePackageExtractor());
+        return result;
+    }
+
+    @Override
+    public List<PackageForMember> findMemberPackageByMemberId(int memberId) {
+        final String SQL = "SELECT p.*, mt.id as memberPackageId, mt.discountStartDate, mt.discountEndDate, " +
+                "mt.discountPercentage, mt.discountDescription FROM Package AS p, MemberType as m, MemberTypePackage " +
+                "as mt WHERE p.id=mt.packageId and m.memberTypeId=mt.memberTypeId and  mt.memberTypeId =:memberId";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("memberId", memberId);
+
+        List<PackageForMember> result = jdbcTemplate.query(SQL, parameters, new PackageForMemberRowMapper());
         return result;
     }
 }

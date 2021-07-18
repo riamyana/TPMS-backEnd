@@ -27,7 +27,7 @@ public class PackageRepoImpl implements PackageRopo{
     public int addPackage(Package p) {
 
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO Package (id, name, subscriptionType, counts, validity, balance, price) VALUES (:id, :name, :subscriptionType, :counts, :validity, :balance, :price)";
+        final String SQL = "INSERT INTO Package (id, name, transportMode, subscriptionType, counts, validity, balance, price) VALUES (:id, :name, :transportMode, :subscriptionType, :counts, :validity, :balance, :price)";
 
         jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p), holder);
 
@@ -39,7 +39,7 @@ public class PackageRepoImpl implements PackageRopo{
     @Override
     public int updatePackage(int id, Package p) {
         p.setId(id);
-        final String SQL = "UPDATE Package SET name=:name, subscriptionType=:subscriptionType, counts=:counts, validity=:validity, balance=:balance, price=:price WHERE id=:id";
+        final String SQL = "UPDATE Package SET name=:name, transportMode=:transportMode, subscriptionType=:subscriptionType, counts=:counts, validity=:validity, balance=:balance, price=:price WHERE id=:id";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(p));
     }
 
@@ -59,6 +59,7 @@ public class PackageRepoImpl implements PackageRopo{
                 new PackageDTO(
                         rs.getInt("id"),
                         rs.getString("name"),
+                        rs.getString("transportMode"),
                         rs.getString("subscriptionType"),
                         rs.getInt("counts"),
                         rs.getInt("validity"),
@@ -80,6 +81,7 @@ public class PackageRepoImpl implements PackageRopo{
                 new Package(
                         rs.getInt("id"),
                         rs.getString("name"),
+                        rs.getString("transportMode"),
                         rs.getString("subscriptionType"),
                         rs.getInt("counts"),
                         rs.getInt("validity"),
@@ -110,6 +112,7 @@ public class PackageRepoImpl implements PackageRopo{
                 new Package(
                         rs.getInt("id"),
                         rs.getString("name"),
+                        rs.getString("transportMode"),
                         rs.getString("subscriptionType"),
                         rs.getInt("counts"),
                         rs.getInt("validity"),

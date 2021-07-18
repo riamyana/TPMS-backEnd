@@ -25,6 +25,7 @@ public class MemberTypePackageExtractor implements ResultSetExtractor {
                 mpt = new MemberTypePackageDTO();
                 mpt.setId(rs.getInt("id"));
                 mpt.setName(rs.getString("name"));
+                mpt.setTransportMode(rs.getString("transportMode"));
                 mpt.setSubscriptionType(rs.getString("subscriptionType"));
                 mpt.setCounts(rs.getInt("counts"));
                 mpt.setValidity(rs.getInt("validity"));

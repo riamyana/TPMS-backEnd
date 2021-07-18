@@ -2,7 +2,7 @@ package com.trasportManagement.transportservice.controller;
 
 import com.trasportManagement.transportservice.model.MemberTypePackage;
 import com.trasportManagement.transportservice.model.MemberTypePackageDTO;
-import com.trasportManagement.transportservice.model.PackageByTransportDTO;
+import com.trasportManagement.transportservice.model.PackageForMember;
 import com.trasportManagement.transportservice.service.MemberTypePackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +44,13 @@ public class MemberTypePackageController {
     @GetMapping("/member-packages/{packageId}")
     public ResponseEntity<List<MemberTypePackageDTO>> findMemberPackageById(@PathVariable int packageId){
         List<MemberTypePackageDTO> passResult =memberTypePackageService.findMemberPackageById(packageId);
+        return new ResponseEntity<>(passResult, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @GetMapping("/member-packages/memberId/{memberId}")
+    public ResponseEntity<List<PackageForMember>> findMemberPackageByMemberId(@PathVariable int memberId){
+        List<PackageForMember> passResult =memberTypePackageService.findMemberPackageByMemberId(memberId);
         return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
 }

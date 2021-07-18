@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class PackageDTO {
     private int id;
     private String name;
+    private String transportMode;
     private String subscriptionType;
     private int counts;
     private int validity;

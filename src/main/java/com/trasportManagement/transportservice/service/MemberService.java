@@ -121,4 +121,10 @@ public class MemberService {
         return n;
     }
 
+    public int coutsOfStatus(int status) {
+        int n = memberRepo.coutsOfStatus(status);
+
+        return n;
+    }
+
 }
