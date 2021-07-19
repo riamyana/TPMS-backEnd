@@ -81,13 +81,11 @@ public class MemberService {
         return m;
     }
 
-    public Member updateMember(int memberId, Member m) {
-        int n = memberRepo.updateMember(memberId, m);
-
-        m.setMemberId(memberId);
+    public Member updateMember(Member m) {
+        int n = memberRepo.updateMember(m);
 
         if(n == 0){
-            throw  new TPMSCustomException("Unable to update. Given member id : " + memberId   + " not found.", HttpStatus.NOT_FOUND);
+            throw  new TPMSCustomException("Unable to update Member Profile.", HttpStatus.NOT_FOUND);
         }
 
         return m;
