@@ -71,4 +71,11 @@ public class PassController {
         List<Pass> passResult =passService.findAllPasses();
         return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @GetMapping("/passes/userId/{userId}")
+    public ResponseEntity<List<Pass>> findPasseByUserId(@PathVariable int userId){
+        List<Pass> passResult =passService.findPasseByUserId(userId);
+        return new ResponseEntity<>(passResult, HttpStatus.OK);
+    }
 }

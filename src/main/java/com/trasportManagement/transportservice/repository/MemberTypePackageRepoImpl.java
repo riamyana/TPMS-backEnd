@@ -75,7 +75,7 @@ public class MemberTypePackageRepoImpl implements MemberTypePackageRepo{
 
     @Override
     public List<PackageForMember> findMemberPackageByMemberId(int memberId) {
-        final String SQL = "SELECT p.*, mt.id as memberPackageId, mt.discountStartDate, mt.discountEndDate, " +
+        final String SQL = "SELECT p.*, mt.memberTypeId, mt.id as memberPackageId, mt.discountStartDate, mt.discountEndDate, " +
                 "mt.discountPercentage, mt.discountDescription FROM Package AS p, MemberType as m, MemberTypePackage " +
                 "as mt WHERE p.id=mt.packageId and m.memberTypeId=mt.memberTypeId and  mt.memberTypeId =:memberId";
 
@@ -83,6 +83,16 @@ public class MemberTypePackageRepoImpl implements MemberTypePackageRepo{
                 .addValue("memberId", memberId);
 
         List<PackageForMember> result = jdbcTemplate.query(SQL, parameters, new PackageForMemberRowMapper());
+        return result;
+    }
+
+    @Override
+    public List<PackageForMember> findAllMemberPackage() {
+        final String SQL = "SELECT p.*, mt.memberTypeId, mt.id as memberPackageId, mt.discountStartDate, mt.discountEndDate, " +
+                "mt.discountPercentage, mt.discountDescription FROM Package AS p, MemberType as m, MemberTypePackage " +
+                "as mt WHERE p.id=mt.packageId and m.memberTypeId=mt.memberTypeId";
+
+        List<PackageForMember> result = jdbcTemplate.query(SQL, new PackageForMemberRowMapper());
         return result;
     }
 }

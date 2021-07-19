@@ -67,4 +67,13 @@ public class MemberTypePackageService {
 
         return result;
     }
+
+    public List<PackageForMember> findAllMemberPackage() {
+        List<PackageForMember> result = memberTypePackageRepo.findAllMemberPackage();
+        if(result.isEmpty()){
+            throw  new TPMSCustomException("No package found.", HttpStatus.NOT_FOUND);
+        }
+
+        return result;
+    }
 }
