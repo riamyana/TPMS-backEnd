@@ -14,4 +14,5 @@ public interface MemberTypePackageRepo {
     public boolean deleteMemberTypePackage(int id);
     public List<MemberTypePackageDTO> findMemberPackageById(int packageId);
     List<PackageForMember> findMemberPackageByMemberId(int memberId);
+    List<PackageForMember> findAllMemberPackage();
 }

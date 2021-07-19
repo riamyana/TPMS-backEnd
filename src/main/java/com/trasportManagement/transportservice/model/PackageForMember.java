@@ -11,6 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class PackageForMember {
     private int id;
+    private int memberTypeId;
     private String name;
     private String transportMode;
     private String subscriptionType;

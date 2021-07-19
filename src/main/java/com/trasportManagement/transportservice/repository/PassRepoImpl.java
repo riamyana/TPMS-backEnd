@@ -39,6 +39,22 @@ public class PassRepoImpl implements PassRepo{
     }
 
     @Override
+    public List<Pass> findPasseByUserId(int userId) {
+        final String SQL = "SELECT p.* FROM Pass as p, Member AS m WHERE m.memberId=p.memberId AND m.userId=:userId";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("userId", userId);
+        List<Pass> passList = jdbcTemplate.query(SQL, parameters, (rs, i) ->
+                new Pass(
+                        rs.getInt("id"),
+                        rs.getInt("memberId"),
+                        rs.getLong("serialNo"),
+                        rs.getDate("expiryDate")
+                ));
+        return passList;
+    }
+
+    @Override
     public List<Pass> findAllPasses(){
         final String SQL = "SELECT * FROM Pass";
         return jdbcTemplate.query(SQL, (rs, i) ->

@@ -11,6 +11,7 @@ public class PackageForMemberRowMapper implements RowMapper<PackageForMember> {
     public PackageForMember mapRow(ResultSet rs, int i) throws SQLException {
         PackageForMember pm = new PackageForMember();
         pm.setId(rs.getInt("id"));
+        pm.setMemberTypeId(rs.getInt("memberTypeId"));
         pm.setName(rs.getString("name"));
         pm.setTransportMode(rs.getString("transportMode"));
         pm.setSubscriptionType(rs.getString("subscriptionType"));

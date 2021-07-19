@@ -54,6 +54,20 @@ public class EnrolledPackageRepoImpl implements EnrolledPackageRepo{
     }
 
     @Override
+    public int updateIsActive(EnrolledPackage e) {
+        KeyHolder holder = new GeneratedKeyHolder();
+        final String SQL = "Update EnrolledPackage SET isActive=:isActive WHERE passId=:passId";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("isActive", e.getIsActive())
+                .addValue("passId", e.getPassId());
+
+        int n = jdbcTemplate.update(SQL, parameters, holder);
+
+        return n;
+    }
+
+    @Override
     public List<EnrolledPackage> findAllEnrolledPackage() {
         final String SQL = "SELECT * FROM EnrolledPackage where isActive=1";
         return jdbcTemplate.query(SQL, (rs, i) ->
