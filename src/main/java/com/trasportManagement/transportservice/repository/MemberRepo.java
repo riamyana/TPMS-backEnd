@@ -14,7 +14,7 @@ public interface MemberRepo {
 
     int addMember(Member m);
 
-    int updateMember(int memberId,Member m);
+    int updateMember(Member m);
 
     boolean deleteMember(int memberId);
 

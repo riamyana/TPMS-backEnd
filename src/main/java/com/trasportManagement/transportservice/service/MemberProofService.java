@@ -42,11 +42,37 @@ public class MemberProofService {
         {
             throw  new TPMSCustomException("Something went wrong. Please try again to upload documents", HttpStatus.NOT_FOUND);
         }
-        int n =memberProofRepo.addMemberProof(mp);
+        int n = memberProofRepo.addMemberProof(mp);
         mp.setMemProofId(n);
 
         if (n == 0) {
             throw new TPMSCustomException("No record inserted of Member proof", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        mp.setProofImage("http://localhost:8080/image/"  + mp.getProofImage());
+        return mp;
+    }
+
+    public MemberProof updateMemberProof(MemberProof mp, MultipartFile multipartFile) {
+
+        if(multipartFile != null){
+            File file = imageUploadService.uploadImage(multipartFile);
+
+            if(file != null) {
+                mp.setProofImage(file.getName());
+            }
+            else
+            {
+                throw  new TPMSCustomException("Unable to upload Users Proofs.", HttpStatus.BAD_REQUEST);
+            }
+        }
+        else
+        {
+            throw  new TPMSCustomException("Something went wrong. Please try again to upload documents", HttpStatus.NOT_FOUND);
+        }
+        int n = memberProofRepo.updateMemberProof(mp);
+
+        if (n == 0) {
+            throw new TPMSCustomException("No record updated of Member proof", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         mp.setProofImage("http://localhost:8080/image/"  + mp.getProofImage());
         return mp;
