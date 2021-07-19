@@ -68,6 +68,15 @@ public class PassService {
         return memberPass;
     }
 
+    public List<Pass> findPasseByUserId(int userId) {
+        List<Pass> memberPass = passRepo.findPasseByUserId(userId);
+        if(memberPass.isEmpty()){
+            throw  new TPMSCustomException("No pass found for user id: "+userId, HttpStatus.NOT_FOUND);
+        }
+
+        return memberPass;
+    }
+
     public List<PassWithMemberDetails> findAllMemberPasses() {
         List<PassWithMemberDetails> memberPasses = passRepo.findAllMemberPasses();
         if(memberPasses.isEmpty()){

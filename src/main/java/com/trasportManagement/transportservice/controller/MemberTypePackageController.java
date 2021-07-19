@@ -53,4 +53,11 @@ public class MemberTypePackageController {
         List<PackageForMember> passResult =memberTypePackageService.findMemberPackageByMemberId(memberId);
         return new ResponseEntity<>(passResult, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @GetMapping("/member-packages")
+    public ResponseEntity<List<PackageForMember>> findAllMemberPackage(){
+        List<PackageForMember> passResult =memberTypePackageService.findAllMemberPackage();
+        return new ResponseEntity<>(passResult, HttpStatus.OK);
+    }
 }

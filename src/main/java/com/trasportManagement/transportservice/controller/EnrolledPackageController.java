@@ -1,9 +1,6 @@
 package com.trasportManagement.transportservice.controller;
 
 import com.trasportManagement.transportservice.model.EnrolledPackage;
-import com.trasportManagement.transportservice.model.TransportMode;
-import com.trasportManagement.transportservice.model.TransportPackage;
-import com.trasportManagement.transportservice.response.Result;
 import com.trasportManagement.transportservice.service.EnrolledPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,13 +13,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class EnrolledPackageController {
 
     @Autowired
     EnrolledPackageService enrolledPackageService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @PostMapping("/enrolled-packages")
     public ResponseEntity<EnrolledPackage> addEnrolledPackage(@RequestBody(required=true) EnrolledPackage e) {
         EnrolledPackage enrolledResult = enrolledPackageService.addEnrolledPackage(e);
@@ -45,12 +43,12 @@ public class EnrolledPackageController {
 
     }
 
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    @PutMapping("/enrolled-packages/{id}")
-//    public ResponseEntity<Result<EnrolledPackage>> updateEnrolledPackage(@PathVariable int id, @RequestBody(required=true) EnrolledPackage e) {
-//        Result<EnrolledPackage> enrolledResult = enrolledPackageService.updateEnrolledPackage(id,e);
-//        return new ResponseEntity<>(enrolledResult, HttpStatus.valueOf(enrolledResult.getCode()));
-//    }
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @PutMapping("/enrolled-packages/isActive")
+    public ResponseEntity<EnrolledPackage> updateEnrolledPackage(@RequestBody(required=true) EnrolledPackage e) {
+        EnrolledPackage enrolledResult = enrolledPackageService.updateIsActive(e);
+        return new ResponseEntity<>(enrolledResult, HttpStatus.OK);
+    }
 //
 //    @PreAuthorize("hasAuthority('ADMIN')")
 //    @DeleteMapping("/enrolled-packages/{id}")
