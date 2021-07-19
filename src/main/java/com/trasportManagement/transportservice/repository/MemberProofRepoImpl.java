@@ -32,6 +32,13 @@ public class MemberProofRepoImpl implements MemberProofRepo{
     }
 
     @Override
+    public int updateMemberProof(MemberProof mp) {
+        KeyHolder holder = new GeneratedKeyHolder();
+        final String SQL = "UPDATE MemberProof SET proofId=:proofId, memberId=:memberId, proofImage=:proofImage WHERE memProofId=:memProofId";
+        return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(mp), holder);
+    }
+
+    @Override
     public List<MemberProofsWithMemberDetails> findAllMembersProofDetails() {
         final String SQL = "SELECT mp.memberId as memberid,firstName,lastName,mobileNo,dob,gender, memProofId,proofId, proofImage FROM MemberProof as mp INNER JOIN Member as m ON mp.memberId=m.memberId";
         List<MemberProofsWithMemberDetails> memProofDetailList = jdbcTemplate.query(SQL, new MemberProofRowMapper());

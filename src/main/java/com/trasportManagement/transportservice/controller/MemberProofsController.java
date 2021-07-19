@@ -30,6 +30,16 @@ public class MemberProofsController {
         return new ResponseEntity<>(memProofList, HttpStatus.CREATED);
     }
 
+    @PutMapping("/member-proofs")
+    public ResponseEntity<MemberProof> updateMemberProof(@RequestParam("memProofId") int memProofId, @RequestParam("proofId") int proofId, @RequestParam("memberId") int memberId, @RequestParam("proofImage") MultipartFile multipartFile) {
+        MemberProof memberProof = new MemberProof();
+        memberProof.setMemProofId(memProofId);
+        memberProof.setProofId(proofId);
+        memberProof.setMemberId(memberId);
+        MemberProof memProofList = memberProofService.updateMemberProof(memberProof, multipartFile);
+        return new ResponseEntity<>(memProofList, HttpStatus.CREATED);
+    }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/member-proofs")
     public ResponseEntity<List<MemberProofsWithMemberDetails>> getAllMembersProofDetails(){

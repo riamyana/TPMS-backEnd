@@ -113,8 +113,7 @@ public class MemberRepoImpl implements MemberRepo{
     }
 
     @Override
-    public int updateMember(int memberId, Member m) {
-        m.setMemberId(memberId);
+    public int updateMember(Member m) {
         final String SQL = "UPDATE Member SET memberTypeId=:memberTypeId, firstName=:firstName, lastName=:lastName, gender=:gender, " +
                 "mobileNo=:mobileNo, dob=:dob, status=:status, profileImage=:profileImage WHERE userId=:userId";
         return jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(m));

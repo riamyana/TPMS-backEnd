@@ -12,4 +12,6 @@ public interface MemberProofRepo {
     List<MemberProofsWithMemberDetails> findAllMembersProofDetails();
 
     List<MemberProofsWithMemberDetails> findMemberProofById(int memberId);
+
+    public int updateMemberProof(MemberProof mp);
 }
