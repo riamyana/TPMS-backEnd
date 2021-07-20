@@ -24,28 +24,18 @@ public class PaymentController {
         Result<Order> result = new Result<>();
         int amt = Integer.parseInt(data.get("amount").toString());
 
-//        int amt = Integer.parseInt(amount);
-//
         RazorpayClient razorpayClient = new RazorpayClient("rzp_test_7qGLAEB07PuLai", "v50soIJ1jm4fjltmCYmmqlDr");
-//
+
         JSONObject json = new JSONObject();
         json.put("amount", amt*100);
         json.put("currency", "INR");
         json.put("receipt", "txn_123456");
-//
+
         Order order = razorpayClient.Orders.create(json);
 
         result.setData(order);
         result.setCode(200);
 
         return new ResponseEntity<>(order.toString(), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/create-order/demo")
-    public String demo(@RequestBody(required=true) String amount) throws Exception {
-        System.out.println(amount);
-
-        return "running";
     }
 }

@@ -47,7 +47,8 @@ public class LoginRepoImpl implements LoginRepo {
                             rs.getString("userName"),
                             rs.getString("password"),
                             rs.getString("email"),
-                            rs.getString("role")
+                            rs.getString("role"),
+                            rs.getString("profileImage")
                     )));
         }catch (EmptyResultDataAccessException e){
             System.out.println("No record found in database for "+name);
@@ -117,6 +118,18 @@ public class LoginRepoImpl implements LoginRepo {
         namedParameterJdbcTemplate.update(CHANGE_PASSWORD, parameters);
 
         return "Password changed successfully";
+    }
+
+    @Override
+    public int updateUserProfile(CustomLogin login) {
+
+        final String SQL = "UPDATE Login SET profileImage=:profileImage WHERE userName=:userName";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("profileImage", login.getProfileImage())
+                .addValue("userName", login.getUserName());
+
+        return namedParameterJdbcTemplate.update(SQL, parameters);
     }
 
     @Override

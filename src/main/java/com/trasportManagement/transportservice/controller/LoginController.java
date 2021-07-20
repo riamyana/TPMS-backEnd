@@ -6,14 +6,12 @@ import com.trasportManagement.transportservice.utility.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -70,6 +68,14 @@ public class LoginController {
 
 //        System.out.println(SecurityContext.class);
 
-        return  new JWTResponse(login.getCustomLogin().getId(),token, userDetails.getUsername(), login.getCustomLogin().getEmail(), login.getCustomLogin().getRole());
+        return  new JWTResponse(login.getCustomLogin().getId(),token, userDetails.getUsername(), login.getCustomLogin().getEmail(), login.getCustomLogin().getRole(), login.getCustomLogin().getProfileImage());
+    }
+
+    @PutMapping("/user/profile")
+    public ResponseEntity<CustomLogin> updateUserProfile(@RequestParam("userName") String userName, @RequestParam("profileImage") MultipartFile multipartFile) {
+        CustomLogin login = new CustomLogin();
+        login.setUserName(userName);
+        CustomLogin updatedProfile = loginService.updateUserProfile(login, multipartFile);
+        return new ResponseEntity<>(updatedProfile, HttpStatus.CREATED);
     }
 }
