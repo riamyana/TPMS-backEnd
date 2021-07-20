@@ -1,6 +1,10 @@
 package com.trasportManagement.transportservice.repository;
 
+import com.trasportManagement.transportservice.model.EnrolledMemberPackage;
 import com.trasportManagement.transportservice.model.EnrolledPackage;
+import com.trasportManagement.transportservice.model.PackageForMember;
+import com.trasportManagement.transportservice.repository.mapper.EnrolledMemberPackageRowMapper;
+import com.trasportManagement.transportservice.repository.mapper.PackageForMemberRowMapper;
 import com.trasportManagement.transportservice.service.PackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -45,7 +49,7 @@ public class EnrolledPackageRepoImpl implements EnrolledPackageRepo{
         e.setEnd(endDate);
 
         KeyHolder holder = new GeneratedKeyHolder();
-        final String SQL = "INSERT INTO EnrolledPackage (passId, packageId, start, end, isActive) VALUES (:passId, :packageId, :start, :end, :isActive)";
+        final String SQL = "INSERT INTO EnrolledPackage (passId, packageId, start, end, isActive, amount) VALUES (:passId, :packageId, :start, :end, :isActive, :amount)";
         jdbcTemplate.update(SQL, new BeanPropertySqlParameterSource(e), holder);
 
         final int id = holder.getKey().intValue();
@@ -77,7 +81,8 @@ public class EnrolledPackageRepoImpl implements EnrolledPackageRepo{
                         rs.getInt("packageId"),
                         rs.getDate("start"),
                         rs.getDate("end"),
-                        rs.getInt("isActive")
+                        rs.getInt("isActive"),
+                        rs.getDouble("amount")
                 )
         );
     }
@@ -96,8 +101,19 @@ public class EnrolledPackageRepoImpl implements EnrolledPackageRepo{
                         rs.getInt("packageId"),
                         rs.getDate("start"),
                         rs.getDate("end"),
-                        rs.getInt("isActive")
+                        rs.getInt("isActive"),
+                        rs.getDouble("amount")
                 )
         );
     }
+
+    @Override
+    public List<EnrolledMemberPackage> findEnrolledPkgByPassId(int passId) {
+        final String SQL = "SELECT ep.* , p.name, p.transportMode,p.subscriptionType FROM Package AS p, EnrolledPackage as ep WHERE ep.packageId=p.id and ep.isActive=1 and ep.passId=:passId";
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("passId", passId);
+        List<EnrolledMemberPackage> result = jdbcTemplate.query(SQL, parameters, new EnrolledMemberPackageRowMapper());
+        return result;
+    }
+
 }

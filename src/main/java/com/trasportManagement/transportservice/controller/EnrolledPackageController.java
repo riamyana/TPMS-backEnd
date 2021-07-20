@@ -1,5 +1,6 @@
 package com.trasportManagement.transportservice.controller;
 
+import com.trasportManagement.transportservice.model.EnrolledMemberPackage;
 import com.trasportManagement.transportservice.model.EnrolledPackage;
 import com.trasportManagement.transportservice.service.EnrolledPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,17 @@ public class EnrolledPackageController {
         EnrolledPackage enrolledResult = enrolledPackageService.updateIsActive(e);
         return new ResponseEntity<>(enrolledResult, HttpStatus.OK);
     }
+
+
+    @GetMapping("/enrolled-package/{passId}")
+    public ResponseEntity<List<EnrolledMemberPackage>> findEnrolledPkgByPassId(@PathVariable int passId) {
+
+        List<EnrolledMemberPackage> enrolledResult = enrolledPackageService.findEnrolledPkgByPassId(passId);
+        return new ResponseEntity<>(enrolledResult, HttpStatus.OK);
+
+    }
+
+
 //
 //    @PreAuthorize("hasAuthority('ADMIN')")
 //    @DeleteMapping("/enrolled-packages/{id}")

@@ -6,16 +6,15 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-public class EnrolledPackage {
-
-    private int id;
+@NoArgsConstructor
+@AllArgsConstructor
+public class EnrolledMemberPackage {
     private int passId;
     private int packageId;
     private Date start;
     private Date end;
-    private int isActive;
-    private double amount;
+    private Double amount;
+    private String name;
+    private String subscriptionType;
 }

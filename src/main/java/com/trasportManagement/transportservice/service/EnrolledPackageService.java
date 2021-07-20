@@ -1,6 +1,7 @@
 package com.trasportManagement.transportservice.service;
 
 import com.trasportManagement.transportservice.exception.TPMSCustomException;
+import com.trasportManagement.transportservice.model.EnrolledMemberPackage;
 import com.trasportManagement.transportservice.model.EnrolledPackage;
 import com.trasportManagement.transportservice.repository.EnrolledPackageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +61,13 @@ public class EnrolledPackageService {
         return  enrolled;
     }
 
+    public List<EnrolledMemberPackage> findEnrolledPkgByPassId(int passId) {
+        List<EnrolledMemberPackage> enrolled = enrolledPackageRepo.findEnrolledPkgByPassId(passId);
 
+        if(enrolled.isEmpty()){
+            throw  new TPMSCustomException("No enrolled package found", HttpStatus.NOT_FOUND);
+        }
+
+        return  enrolled;
+    }
 }
