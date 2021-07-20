@@ -13,6 +13,7 @@ public class CustomLogin {
     private String password;
     private String email;
     private String role;
+    private String profileImage;
 
     public CustomLogin(String userName, String password, String email, String role) {
         this.userName = userName;

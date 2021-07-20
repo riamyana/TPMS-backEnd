@@ -19,4 +19,6 @@ public interface LoginRepo{
     String changeForgotPassword(ForgotPassword data);
 
     List<RegistrationRequest> findUserById(int id);
+
+    int updateUserProfile(CustomLogin login);
 }
