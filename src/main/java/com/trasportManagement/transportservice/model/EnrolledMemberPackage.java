@@ -17,4 +17,5 @@ public class EnrolledMemberPackage {
     private Double amount;
     private String name;
     private String subscriptionType;
+    private String transportMode;
 }

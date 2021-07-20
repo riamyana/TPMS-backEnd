@@ -18,6 +18,7 @@ public class EnrolledMemberPackageRowMapper implements RowMapper<EnrolledMemberP
         ep.setName(rs.getString("name"));
         ep.setSubscriptionType(rs.getString("subscriptionType"));
         ep.setAmount(rs.getDouble("amount"));
+        ep.setTransportMode(rs.getString("transportMode"));
         return ep;
     }
 }
