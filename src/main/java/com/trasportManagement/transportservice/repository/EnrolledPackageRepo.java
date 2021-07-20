@@ -1,5 +1,6 @@
 package com.trasportManagement.transportservice.repository;
 
+import com.trasportManagement.transportservice.model.EnrolledMemberPackage;
 import com.trasportManagement.transportservice.model.EnrolledPackage;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,6 @@ public interface EnrolledPackageRepo {
 //    public int deleteEnrolledPackage(int id);
     public List<EnrolledPackage> findAllEnrolledPackage();
     public List<EnrolledPackage> findEnrolledPackageByPassId(int passId);
+
+    List<EnrolledMemberPackage> findEnrolledPkgByPassId(int passId);
 }
